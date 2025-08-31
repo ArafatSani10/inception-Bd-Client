@@ -4,16 +4,17 @@ import {
     FiHome, FiShoppingBag, FiUsers, FiSearch, FiBell,
     FiMessageSquare, FiChevronsLeft, FiChevronDown, FiChevronUp, FiMenu
 } from 'react-icons/fi';
-import { FaBlog, FaCertificate, FaChalkboardTeacher, FaCog, FaGraduationCap, FaLock, FaRegUser, FaSignOutAlt, FaWallet } from 'react-icons/fa';
+import { FaBlog, FaBookReader, FaCertificate, FaChalkboardTeacher, FaCog, FaGraduationCap, FaLock, FaRegUser, FaSignOutAlt, FaWallet } from 'react-icons/fa';
 import { NavLink, Outlet, Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { FaUsersGear } from 'react-icons/fa6';
+import { FaChevronDown, FaChevronUp, FaUsersGear } from 'react-icons/fa6';
 import { TbBrandCoinbase } from 'react-icons/tb';
 import { HiSun, HiMoon } from 'react-icons/hi';
 import { FaUserCircle } from 'react-icons/fa';
-import { IoSettings } from 'react-icons/io5';
+import { IoSettings, IoSettingsOutline } from 'react-icons/io5';
 import AuthContext from '../../Content/Authcontext';
 import axios from 'axios';
+import { AiFillSafetyCertificate } from 'react-icons/ai';
 
 const DropdownItem = ({ icon, label, sidebarOpen, subLinks = [] }) => {
     const [open, setOpen] = useState(false);
@@ -95,8 +96,10 @@ const Dashboard = () => {
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
     const [darkMode, setDarkMode] = useState(true);
     const [open, setOpen] = useState(false);
+    const [courseDropdownOpen, setCourseDropdownOpen] = useState(false);
     const { user, signOutUser } = useContext(AuthContext);
     const [dbUser, setDbUser] = useState(null);
+
 
     useEffect(() => {
         const savedTheme = localStorage.getItem("theme");
@@ -136,6 +139,8 @@ const Dashboard = () => {
             localStorage.setItem("theme", "light");
         }
     };
+
+
 
     return (
         <div className={`${darkMode ? 'dark' : ''} font-montserrat`}>
@@ -258,7 +263,7 @@ const Dashboard = () => {
 
 
 
-                          
+
 
                             {/* ---- Student Section (Always Last) ---- */}
                             {dbUser?.role === "student" && (
@@ -276,7 +281,7 @@ const Dashboard = () => {
 
                                         {sidebarOpen && (
                                             <div>
-                                                <p className="font-semibold text-center text-sm text-gray-800 mt-5 dark:text-white">
+                                                <p className="font-semibold text-center text-sm text-[#00baff] mt-3">
                                                     {user?.displayName || dbUser?.name}
                                                 </p>
                                                 <p className="text-xs text-center text-gray-500 dark:text-gray-400">
@@ -295,6 +300,81 @@ const Dashboard = () => {
                                             >
                                                 <span className="text-base"><FiHome /></span>
                                                 {sidebarOpen && <span className="whitespace-nowrap">Dashboard</span>}
+                                            </NavLink>
+                                        </li>
+
+                                        <li className="relative">
+                                            {/* Main button */}
+                                            <button
+                                                onClick={() => setCourseDropdownOpen(!courseDropdownOpen)}
+                                                className={`flex items-center justify-between w-full gap-3 px-4 py-2.5 rounded-lg transition-all
+          ${courseDropdownOpen ? "text-[#00baff] font-semibold shadow-md" : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"}`}
+                                            >
+                                                <div className="flex items-center gap-3">
+                                                    <FaBookReader className="text-base" />
+                                                    {sidebarOpen && <span className="whitespace-nowrap">Course</span>}
+                                                </div>
+                                                <div>{courseDropdownOpen ? <FaChevronUp /> : <FaChevronDown />}</div>
+                                            </button>
+
+                                            {/* Smooth Dropdown */}
+                                            <AnimatePresence>
+                                                {courseDropdownOpen && (
+                                                    <motion.ul
+                                                        initial={{ opacity: 0, y: -5 }}
+                                                        animate={{ opacity: 1, y: 0 }}
+                                                        exit={{ opacity: 0, y: -5 }}
+                                                        transition={{ duration: 0.25 }}
+                                                        className="ml-6 mt-2 flex flex-col gap-2"
+                                                    >
+                                                        <NavLink
+                                                            to="purchase-course"
+                                                            className={({ isActive }) =>
+                                                                `flex items-center gap-2 px-4 py-2 rounded-lg transition-all
+                ${isActive ? "text-[#00baff] font-semibold shadow-md" : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"}`
+                                                            }
+                                                        >
+                                                            My Purchase
+                                                        </NavLink>
+
+                                                        <NavLink
+                                                            to="my-courses"
+                                                            className={({ isActive }) =>
+                                                                `flex items-center gap-2 px-4 py-2 rounded-lg transition-all
+                ${isActive ? "text-[#00baff] font-semibold shadow-md" : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"}`
+                                                            }
+                                                        >
+                                                            My Comment
+                                                        </NavLink>
+                                                    </motion.ul>
+                                                )}
+                                            </AnimatePresence>
+                                        </li>
+
+
+
+                                        {/* certificate */}
+                                        <li className="relative group">
+                                            <NavLink
+                                                to="student-certificate"
+                                                className={({ isActive }) => `group relative flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all
+                    ${isActive ? ' text-[#00baff] shadow-md font-semibold' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+                                            >
+                                                <span className="text-base"><AiFillSafetyCertificate /></span>
+                                                {sidebarOpen && <span className="whitespace-nowrap">Certificate</span>}
+                                            </NavLink>
+                                        </li>
+
+
+                                        {/* setting */}
+                                        <li className="relative group">
+                                            <NavLink
+                                                to="/dashboard/update-profile"
+                                                className={({ isActive }) => `group relative flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all
+                    ${isActive ? ' text-[#00baff] shadow-md font-semibold' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+                                            >
+                                                <span className="text-base"><IoSettingsOutline /></span>
+                                                {sidebarOpen && <span className="whitespace-nowrap">Setting</span>}
                                             </NavLink>
                                         </li>
                                     </ul>

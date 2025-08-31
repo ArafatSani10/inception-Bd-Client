@@ -367,9 +367,11 @@ const Navbar = () => {
             </Link>
           ))}
 
-          <button className="btn text-start mx-3 border  p-4 ">
-            login
-          </button>
+          <Link to="/login">
+            <button className="px-5 py-2 text-sm bg-gradient-to-r from-purple-600 to-blue-500 text-white rounded-md font-semibold hover:from-purple-700 hover:to-blue-600 transition transform hover:-translate-y-0.5 shadow-lg">
+              Login
+            </button>
+          </Link>
         </div>
       </div>
 
