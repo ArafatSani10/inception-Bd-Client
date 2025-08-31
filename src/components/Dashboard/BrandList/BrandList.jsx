@@ -105,8 +105,8 @@ export default function BrandList() {
                         <thead>
                             <tr className="bg-gray-100 dark:bg-gray-700 text-left text-gray-700 dark:text-gray-100 font-semibold">
                                 <th className="py-3 px-4">SN</th>
+                                <th className="py-3 px-4">Logo</th>
                                 <th className="py-3 px-4">Name</th>
-                                <th className="py-3 px-4">Short Description</th>
                                 <th className="py-3 px-4">Status</th>
                                 <th className="py-3 px-4">Actions</th>
                             </tr>

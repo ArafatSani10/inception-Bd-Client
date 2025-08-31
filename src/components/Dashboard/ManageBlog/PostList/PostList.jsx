@@ -1,23 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiEye, FiTrash2 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-
-const usersData = [
-  {
-    id: 1,
-    title: 'Electrical Engineering & Automation Pioneers of Technology',
-    category: 'Electrical engineering',
-    joinedAt: '27 Jan 2025',
-    status: 'Active',
-    showHomePage: 'yes',
-    popular: 'yes',
-  },
-];
+import axios from 'axios';
 
 const PostList = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState(usersData);
+  const [data, setData] = useState([]);
   const usersPerPage = 5;
+
+  const base_url = 'http://localhost:5000/api/v1'; // set your API base URL
+
+  // Fetch posts from API
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const res = await axios.get(`${base_url}/blogs`);
+        // assuming API returns { data: [...] }
+        setData(res.data?.data || []);
+      } catch (err) {
+        console.error("Error fetching posts:", err);
+      }
+    };
+    fetchPosts();
+  }, []);
 
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
@@ -44,49 +49,10 @@ const PostList = () => {
       <div className="bg-white dark:bg-gray-800 p-4 shadow rounded-md">
         {/* Header */}
         <div className="shadow p-4 rounded-lg mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-          <h1 className="text-xl font-semibold text-[#00baff]">Post List</h1>
+          <h1 className="text-xl font-semibold text-[#00baff]">Blog List</h1>
           <Link to="/dashboard/admin-home" className="text-sm text-gray-500 dark:text-gray-400">
             <span className="font-bold">Dashboard</span> / Post List
           </Link>
-        </div>
-
-        {/* Filter Bar */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 mb-6">
-          {['Search', 'Show Homepage', 'Select Popular', 'Select Status', 'Order By', 'Per Page'].map(
-            (placeholder, idx) =>
-              idx === 0 ? (
-                <input
-                  key={idx}
-                  type="text"
-                  placeholder={placeholder}
-                  className="w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500"
-                />
-              ) : (
-                <select
-                  key={idx}
-                  className="w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500"
-                >
-                  <option>{placeholder}</option>
-                  {idx !== 4 && idx !== 5 ? (
-                    <>
-                      <option>Yes</option>
-                      <option>No</option>
-                    </>
-                  ) : idx === 4 ? (
-                    <>
-                      <option>ASC</option>
-                      <option>DESC</option>
-                    </>
-                  ) : (
-                    <>
-                      <option>5</option>
-                      <option>10</option>
-                      <option>20</option>
-                    </>
-                  )}
-                </select>
-              )
-          )}
         </div>
 
         {/* Add Button */}
@@ -105,7 +71,7 @@ const PostList = () => {
               <tr className="bg-gray-100 dark:bg-gray-700 text-left text-sm font-semibold">
                 <th className="py-3 px-4">SN</th>
                 <th className="py-3 px-4">Title</th>
-                <th className="py-3 px-4">Category</th>
+                <th className="py-3 px-4">Slug</th>
                 <th className="py-3 px-4">Joined At</th>
                 <th className="py-3 px-4">Status</th>
                 <th className="py-3 px-4">Action</th>
@@ -114,20 +80,19 @@ const PostList = () => {
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {currentUsers.map((user, index) => (
                 <tr
-                  key={user.id}
+                  key={user._id || user.id}
                   className="text-sm bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
                 >
                   <td className="py-3 px-4">{indexOfFirstUser + index + 1}</td>
                   <td className="py-3 px-4">{user.title}</td>
-                  <td className="py-3 px-4">{user.category}</td>
-                  <td className="py-3 px-4">{user.joinedAt}</td>
+                  <td className="py-3 px-4">{user.category?.name}</td>
+                  <td className="py-3 px-4">{new Date(user.createdAt).toLocaleDateString()}</td>
                   <td className="py-3 px-4">
-                    {/* Toggle Switch */}
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
                         type="checkbox"
                         checked={user.status === 'Active'}
-                        onChange={() => toggleStatus(user.id)}
+                        onChange={() => toggleStatus(user.id || user._id)}
                         className="sr-only peer"
                       />
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-600 peer-checked:bg-green-500 transition-colors"></div>
@@ -138,9 +103,11 @@ const PostList = () => {
                     </label>
                   </td>
                   <td className="py-3 px-4 space-x-2">
-                    <Link to="/dashboard/post-update">   <button className="text-blue-600 dark:text-blue-400 hover:scale-110 transition">
-                      <FiEye size={20} />
-                    </button></Link>
+                    <Link to={`/dashboard/post-update/${user.id || user._id}`}>
+                      <button className="text-blue-600 dark:text-blue-400 hover:scale-110 transition">
+                        <FiEye size={20} />
+                      </button>
+                    </Link>
                     <button className="text-red-600 dark:text-red-400 hover:scale-110 transition">
                       <FiTrash2 size={20} />
                     </button>
@@ -158,8 +125,8 @@ const PostList = () => {
               key={num}
               onClick={() => handlePageChange(num)}
               className={`px-3 py-1 border rounded transition ${currentPage === num
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-white text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600'
+                ? 'bg-blue-500 text-white'
+                : 'bg-white text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600'
                 }`}
             >
               {num}

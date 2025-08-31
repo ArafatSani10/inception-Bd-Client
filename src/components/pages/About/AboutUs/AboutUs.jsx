@@ -150,6 +150,7 @@ const AboutUs = () => {
                                     "Career support and mentorship",
                                     "Flexible learning schedules",
                                     "Hands-on real-world projects",
+                                    "Hands-on real-world projects",
                                    
                              
                                 ].map((item, index) => (

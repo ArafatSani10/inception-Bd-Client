@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+
+import React, { useContext, useEffect, useState } from 'react';
 import {
     FiHome, FiShoppingBag, FiUsers, FiSearch, FiBell,
-    FiMessageSquare, FiChevronsLeft, FiChevronDown, FiChevronUp,
-    FiMenu
+    FiMessageSquare, FiChevronsLeft, FiChevronDown, FiChevronUp, FiMenu
 } from 'react-icons/fi';
 import { FaBlog, FaCertificate, FaChalkboardTeacher, FaCog, FaGraduationCap, FaLock, FaRegUser, FaSignOutAlt, FaWallet } from 'react-icons/fa';
 import { NavLink, Outlet, Link } from 'react-router-dom';
@@ -10,16 +10,14 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { FaUsersGear } from 'react-icons/fa6';
 import { TbBrandCoinbase } from 'react-icons/tb';
 import { HiSun, HiMoon } from 'react-icons/hi';
-
-import { FaUserCircle } from 'react-icons/fa'
+import { FaUserCircle } from 'react-icons/fa';
 import { IoSettings } from 'react-icons/io5';
+import AuthContext from '../../Content/Authcontext';
+import axios from 'axios';
 
 const DropdownItem = ({ icon, label, sidebarOpen, subLinks = [] }) => {
     const [open, setOpen] = useState(false);
-
-    const toggleDropdown = () => {
-        if (sidebarOpen) setOpen(!open);
-    };
+    const toggleDropdown = () => { if (sidebarOpen) setOpen(!open); };
 
     return (
         <div className="relative group w-full">
@@ -31,14 +29,9 @@ const DropdownItem = ({ icon, label, sidebarOpen, subLinks = [] }) => {
                     <span className="text-xl">{icon}</span>
                     {sidebarOpen && <span className="font-medium text-gray-700 dark:text-gray-200">{label}</span>}
                 </div>
-                {sidebarOpen && (
-                    <span className="text-sm text-gray-600 dark:text-gray-300">
-                        {open ? <FiChevronUp /> : <FiChevronDown />}
-                    </span>
-                )}
+                {sidebarOpen && <span className="text-sm text-gray-600 dark:text-gray-300">{open ? <FiChevronUp /> : <FiChevronDown />}</span>}
             </div>
 
-            {/* Tooltip label on collapsed sidebar hover */}
             {!sidebarOpen && (
                 <motion.div
                     initial={{ opacity: 0, x: 10 }}
@@ -67,7 +60,6 @@ const DropdownItem = ({ icon, label, sidebarOpen, subLinks = [] }) => {
                 </motion.div>
             )}
 
-            {/* Dropdown sublinks when sidebar open */}
             <AnimatePresence>
                 {sidebarOpen && open && (
                     <motion.div
@@ -81,7 +73,7 @@ const DropdownItem = ({ icon, label, sidebarOpen, subLinks = [] }) => {
                             <Link
                                 key={index}
                                 to={link.to}
-                                className="text-xs  text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors duration-200"
+                                className="text-xs text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors duration-200"
                             >
                                 {link.label}
                                 {link.count !== undefined && (
@@ -102,7 +94,10 @@ const Dashboard = () => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
     const [darkMode, setDarkMode] = useState(true);
-    // Load theme from localStorage on first render
+    const [open, setOpen] = useState(false);
+    const { user, signOutUser } = useContext(AuthContext);
+    const [dbUser, setDbUser] = useState(null);
+
     useEffect(() => {
         const savedTheme = localStorage.getItem("theme");
         if (savedTheme === "dark") {
@@ -114,7 +109,22 @@ const Dashboard = () => {
         }
     }, []);
 
-    // Toggle theme and save to localStorage
+    useEffect(() => {
+        const fetchUserRole = async () => {
+            try {
+                if (user?.email) {
+                    const res = await axios.get(`http://localhost:5000/api/v1/users`);
+                    // Filter single user by email
+                    const singleUser = res.data.data.find(u => u.email === user.email);
+                    setDbUser(singleUser);
+                }
+            } catch (err) {
+                console.error("Failed to fetch user role:", err);
+            }
+        };
+        fetchUserRole();
+    }, [user]);
+
     const toggleTheme = () => {
         const newMode = !darkMode;
         setDarkMode(newMode);
@@ -126,129 +136,71 @@ const Dashboard = () => {
             localStorage.setItem("theme", "light");
         }
     };
+
     return (
         <div className={`${darkMode ? 'dark' : ''} font-montserrat`}>
             <div className="flex h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 relative">
-
                 {/* Sidebar */}
-                <aside
-                    className={`transition-all duration-300 bg-white dark:bg-gray-900 shadow-xl h-screen
-  ${sidebarOpen ? 'w-60' : 'w-20'} fixed md:static top-0 left-0 z-50
-  overflow-y-auto scrollbar-hide
-  ${sidebarOpen ? 'block' : 'hidden md:block'}`}>
-
-
-
+                <aside className={`transition-all duration-700 bg-white dark:bg-gray-900 shadow-xl h-screen ${sidebarOpen ? 'w-60' : 'w-20'} fixed md:static top-0 left-0 z-50 overflow-y-auto scrollbar-hide ${sidebarOpen ? 'block' : 'hidden md:block'}`}>
                     <div className="flex items-center justify-between p-4">
                         {sidebarOpen && (
                             <Link to="/">
-                                <div className="w-36 h-[50px] 
-                    bg-no-repeat bg-contain bg-left
+                                <div className="w-36 h-[50px] bg-no-repeat bg-contain bg-left
                     bg-[url('https://inceptionbd.com/store/1/Untitled%20design%20(3).png')]
-                    dark:bg-[url('https://i.ibb.co/cKzQyBNk/534732164-2212940409145293-5451801233054972764-n.jpg')]">
-                                </div>
+                    dark:bg-[url('https://i.ibb.co/cKzQyBNk/534732164-2212940409145293-5451801233054972764-n.jpg')]"></div>
                             </Link>
                         )}
-                        <button
-                            onClick={() => setSidebarOpen(!sidebarOpen)}
-                            className="text-gray-600 dark:text-gray-300 text-2xl"
-                        >
+                        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-gray-600 dark:text-gray-300 text-2xl">
                             <FiChevronsLeft />
                         </button>
                     </div>
 
-
-
                     <nav className="mt-4">
                         <ul className="space-y-1 text-sm">
-
-                            {/* Dashboard Link */}
                             <li className="relative group">
                                 <NavLink
                                     to="admin-home"
                                     className={({ isActive }) => `group relative flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all
-                    ${isActive
-                                            ? ' text-[#00baff] shadow-md font-semibold'
-                                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+                    ${isActive ? ' text-[#00baff] shadow-md font-semibold' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
                                 >
                                     <span className="text-base"><FiHome /></span>
                                     {sidebarOpen && <span className="whitespace-nowrap">Dashboard</span>}
-                                    {!sidebarOpen && (
-                                        <motion.div
-                                            initial={{ opacity: 0, x: 10 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            exit={{ opacity: 0, x: 10 }}
-                                            transition={{ duration: 0.2 }}
-                                            className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-50 px-3 py-1 bg-white dark:bg-gray-800 text-sm text-gray-800 dark:text-white shadow-lg rounded-md border border-gray-200 dark:border-gray-700 hidden group-hover:block"
-                                        >
-                                            Dashboard
-                                        </motion.div>
-                                    )}
                                 </NavLink>
                             </li>
 
-                            {/* Section Header */}
-                            {sidebarOpen && (
-                                <li className="text-xs text-gray-400 dark:text-gray-500 py-4 px-3 tracking-wide uppercase">
-                                    Manage Content
-                                </li>
-                            )}
+                            {sidebarOpen && <li className="text-xs text-gray-400 dark:text-gray-500 py-4 px-3 tracking-wide uppercase">Manage Content</li>}
 
-                            {/* Manage Courses Dropdown */}
                             <DropdownItem
                                 icon={<FaGraduationCap />}
                                 label="Manage Courses"
                                 sidebarOpen={sidebarOpen}
                                 subLinks={[
-                                    { label: " Courses List", to: "courses-list" },
+                                    { label: "Courses List", to: "courses-list" },
                                     { label: "Add Course", to: "course-form" },
                                     { label: "Categories", to: "categories" },
                                     { label: "Add Categories", to: "add-category" },
                                 ]}
                             />
 
-                            {/* Certificate Builder */}
                             <li>
-                                <NavLink to="certificate" className={({ isActive }) => `group relative flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all
-                    ${isActive
-                                        ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md font-semibold'
-                                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}`}>
+                                <NavLink to="certificate" className={({ isActive }) => `group relative flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all ${isActive ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md font-semibold' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}`}>
                                     <span className="text-base"><FaCertificate /></span>
                                     {sidebarOpen && <span>Certificate Builder</span>}
-                                    {!sidebarOpen && (
-                                        <motion.div
-                                            initial={{ opacity: 0, x: 10 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            exit={{ opacity: 0, x: 10 }}
-                                            transition={{ duration: 0.2 }}
-                                            className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-50 px-3 py-1 bg-white dark:bg-gray-800 text-sm text-gray-800 dark:text-white shadow-lg rounded-md border border-gray-200 dark:border-gray-700 hidden group-hover:block"
-                                        >
-                                            Certificate Builder
-                                        </motion.div>
-                                    )}
                                 </NavLink>
                             </li>
 
-                            {/* Manage Blogs Dropdown */}
                             <DropdownItem
                                 icon={<FaBlog />}
                                 label="Manage Blogs"
                                 sidebarOpen={sidebarOpen}
                                 subLinks={[
-                                    // { label: "Category List", to: "/category-list" },
-                                    { label: "Post List", to: "post-list" },
-                                    { label: "Post Comment", to: "post-comment" },
+                                    { label: "Blog List", to: "post-list" },
+                                    { label: "Add-Blog", to: "create-post" },
                                 ]}
                             />
 
-                            {/* Section Header */}
-                            {sidebarOpen && (
-                                <li className="text-xs text-gray-400 dark:text-gray-500 py-4 px-3 tracking-wide uppercase">
-                                    Manage Orders
-                                </li>
-                            )}
+                            {sidebarOpen && <li className="text-xs text-gray-400 dark:text-gray-500 py-4 px-3 tracking-wide uppercase">Manage Orders</li>}
 
-                            {/* Manage Order Dropdown */}
                             <DropdownItem
                                 icon={<FaLock />}
                                 label="Manage Order"
@@ -259,7 +211,6 @@ const Dashboard = () => {
                                 ]}
                             />
 
-                            {/* Withdraw Payment Dropdown */}
                             <DropdownItem
                                 icon={<FaWallet />}
                                 label="Withdraw Payment"
@@ -270,23 +221,12 @@ const Dashboard = () => {
                                 ]}
                             />
 
-                            {/* manage user */}
-                            {sidebarOpen && (
-                                <li className="text-xs text-gray-400 dark:text-gray-500 py-4 px-3 tracking-wide uppercase">
-                                    Manage Users
-                                </li>
-                            )}
+                            {sidebarOpen && <li className="text-xs text-gray-400 dark:text-gray-500 py-4 px-3 tracking-wide uppercase">Manage Users</li>}
 
-
-
-
-
-                            {/* manage user dropdown */}
                             <DropdownItem
                                 icon={<FaUsersGear />}
                                 label="Manage Users"
                                 sidebarOpen={sidebarOpen}
-
                                 subLinks={[
                                     { label: "All Student", to: "all-student" },
                                     { label: "Instructor", to: "all-instructor" },
@@ -297,157 +237,131 @@ const Dashboard = () => {
                                 ]}
                             />
 
-
-                            {/* site content */}
-                            {sidebarOpen && (
-                                <li className="text-xs text-gray-400 dark:text-gray-500 py-4 px-3 tracking-wide uppercase">
-                                    Site content
-                                </li>
-                            )}
+                            {sidebarOpen && <li className="text-xs text-gray-400 dark:text-gray-500 py-4 px-3 tracking-wide uppercase">Site content</li>}
 
                             <li>
-                                <NavLink to="Brand-List" className={({ isActive }) => `group relative flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all
-                    ${isActive
-                                        ? ' text-[#00baff] shadow-md font-semibold'
-                                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}`}>
+                                <NavLink to="Brand-List" className={({ isActive }) => `group relative flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all ${isActive ? ' text-[#00baff] shadow-md font-semibold' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}`}>
                                     <span className="text-base"><TbBrandCoinbase /></span>
                                     {sidebarOpen && <span>Brand</span>}
-                                    {!sidebarOpen && (
-                                        <motion.div
-                                            initial={{ opacity: 0, x: 10 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            exit={{ opacity: 0, x: 10 }}
-                                            transition={{ duration: 0.2 }}
-                                            className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-50 px-3 py-1 bg-white dark:bg-gray-800 text-sm text-gray-800 dark:text-white shadow-lg rounded-md border border-gray-200 dark:border-gray-700 hidden group-hover:block"
-                                        >
-                                            Brand
-                                        </motion.div>
-                                    )}
                                 </NavLink>
                             </li>
 
-
-                            {/* settings */}
-                            {sidebarOpen && (
-                                <li className="text-xs text-gray-400 dark:text-gray-500 py-4 px-3 tracking-wide uppercase">
-                                    Settings
-                                </li>
-                            )}
+                            {sidebarOpen && <li className="text-xs text-gray-400 dark:text-gray-500 py-4 px-3 tracking-wide uppercase">Settings</li>}
 
                             <li>
-                                <NavLink to="/setting" className={({ isActive }) => `group relative flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all
-                    ${isActive
-                                        ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md font-semibold'
-                                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}`}>
+                                <NavLink to="/setting" className={({ isActive }) => `group relative flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all ${isActive ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md font-semibold' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}`}>
                                     <span className="text-base"><IoSettings /></span>
                                     {sidebarOpen && <span>Setting</span>}
-                                    {!sidebarOpen && (
-                                        <motion.div
-                                            initial={{ opacity: 0, x: 10 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            exit={{ opacity: 0, x: 10 }}
-                                            transition={{ duration: 0.2 }}
-                                            className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-50 px-3 py-1 bg-white dark:bg-gray-800 text-sm text-gray-800 dark:text-white shadow-lg rounded-md border border-gray-200 dark:border-gray-700 hidden group-hover:block"
-                                        >
-                                            Setting
-                                        </motion.div>
-                                    )}
                                 </NavLink>
                             </li>
 
 
 
 
+                          
 
+                            {/* ---- Student Section (Always Last) ---- */}
+                            {dbUser?.role === "student" && (
+                                <div className="mt-6 border-t border-gray-200 dark:border-gray-700 pt-4">
+                                    <div className="flex-col justify-center items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                                        {user?.photoURL ? (
+                                            <img
+                                                src={user.photoURL}
+                                                alt="Student Avatar"
+                                                className="w-32 h-32 mx-auto rounded-full border-2 border-indigo-400"
+                                            />
+                                        ) : (
+                                            <FaUserCircle className="text-indigo-600 dark:text-indigo-300 text-3xl" />
+                                        )}
 
+                                        {sidebarOpen && (
+                                            <div>
+                                                <p className="font-semibold text-center text-sm text-gray-800 mt-5 dark:text-white">
+                                                    {user?.displayName || dbUser?.name}
+                                                </p>
+                                                <p className="text-xs text-center text-gray-500 dark:text-gray-400">
+                                                    {dbUser?.role}
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <ul className='space-y-1 text-sm'>
+                                        <li className="relative group">
+                                            <NavLink
+                                                to="user-home"
+                                                className={({ isActive }) => `group relative flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all
+                    ${isActive ? ' text-[#00baff] shadow-md font-semibold' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+                                            >
+                                                <span className="text-base"><FiHome /></span>
+                                                {sidebarOpen && <span className="whitespace-nowrap">Dashboard</span>}
+                                            </NavLink>
+                                        </li>
+                                    </ul>
+                                </div>
+                            )}
 
                         </ul>
                     </nav>
                 </aside>
 
-                {/* Sidebar toggle (mobile) */}
                 {!sidebarOpen && (
-                    <button
-                        onClick={() => setSidebarOpen(true)}
-                        className="md:hidden absolute top-4 left-4 text-2xl z-50 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 p-2 rounded-full shadow"
-                    >
+                    <button onClick={() => setSidebarOpen(true)} className="md:hidden absolute top-4 left-4 text-2xl z-50 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 p-2 rounded-full shadow">
                         <FiMenu />
                     </button>
                 )}
 
-                {/* Main content */}
                 <div className="flex-1 flex flex-col overflow-hidden ml-0 md:ml-0">
                     <header className="flex items-center justify-between px-6 py-4 bg-white dark:bg-gray-800 shadow">
                         <div className="relative w-64">
                             <FiSearch className="absolute top-2.5 left-3 text-gray-400" />
-                            <input
-                                type="text"
-                                placeholder="Search..."
-                                className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-black dark:text-white focus:outline-none text-sm"
-                            />
+                            <input type="text" placeholder="Search..." className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-black dark:text-white focus:outline-none text-sm" />
                         </div>
 
-
                         <div className="flex items-center gap-4 md:gap-6">
-                            {/* Theme toggle */}
-                            <button
-                                onClick={toggleTheme}
-                                className="text-xl text-gray-600 dark:text-gray-300 hover:text-indigo-500 dark:hover:text-indigo-400 transition"
-                                title="Toggle Theme"
-                            >
+                            <button onClick={toggleTheme} className="text-xl text-gray-600 dark:text-gray-300 hover:text-indigo-500 dark:hover:text-indigo-400 transition" title="Toggle Theme">
                                 {darkMode ? <HiSun /> : <HiMoon />}
                             </button>
 
-                            {/* Profile dropdown */}
                             <div className="relative">
-                                <button
-                                    onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                                    className="flex items-center gap-2"
-                                >
-                                    <div className="text-indigo-600 dark:text-indigo-300 text-2xl">
-                                        <FaUserCircle />
-                                    </div>
-                                    <div className="hidden md:block text-left">
-                                        <p className="font-semibold text-sm text-gray-800 dark:text-white">John Doe</p>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400">Admin</p>
+                                <button onClick={() => setOpen(!open)} className="flex items-center gap-3 group">
+                                    {user?.photoURL ? (
+                                        <img src={user.photoURL} alt="User Avatar" className="w-9 h-9 rounded-full border-2 border-indigo-400 group-hover:scale-105 transition" />
+                                    ) : (
+                                        <FaUserCircle className="text-indigo-600 dark:text-indigo-300 text-3xl group-hover:scale-110 transition" />
+                                    )}
+                                    <div className="max-sm:flex-col md:block text-left">
+                                        <p className="font-semibold text-sm text-gray-800 dark:text-white">{user?.displayName || dbUser?.name}</p>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">{dbUser?.role}</p>
                                     </div>
                                 </button>
 
-                                {profileDropdownOpen && (
-                                    <div className="absolute right-0 mt-3 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-50 overflow-hidden">
-
-                                        <a
-                                            href="#"
-                                            className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                                <AnimatePresence>
+                                    {open && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                                            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                                            transition={{ duration: 0.2 }}
+                                            className="absolute right-0 mt-3 w-52 bg-white/90 dark:bg-gray-900/90 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl z-50 backdrop-blur-md overflow-hidden"
                                         >
-                                            <FaUserCircle className="text-base" />
-                                            Profile
-                                        </a>
-
-                                        <a
-                                            href="#"
-                                            className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-                                        >
-                                            <FaCog className="text-base" />
-                                            Settings
-                                        </a>
-
-                                        <hr className="border-t dark:border-gray-700" />
-
-                                        <a
-                                            href="#"
-                                            className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 transition"
-                                        >
-                                            <FaSignOutAlt className="text-base" />
-                                            Logout
-                                        </a>
-                                    </div>
-                                )}
+                                            <Link to="profile" className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-indigo-700/50 transition">
+                                                <FaUserCircle className="text-lg text-indigo-500" /> Profile
+                                            </Link>
+                                            <a href="/settings" className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-indigo-700/50 transition">
+                                                <FaCog className="text-lg text-indigo-500" /> Settings
+                                            </a>
+                                            <hr className="border-t dark:border-gray-700" />
+                                            <button onClick={signOutUser} className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 transition">
+                                                <FaSignOutAlt className="text-lg" /> Logout
+                                            </button>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
                             </div>
                         </div>
                     </header>
 
-                    {/* Page Content */}
                     <main className="flex-1 overflow-y-auto bg-gray-100 dark:bg-gray-900">
                         <Outlet />
                     </main>

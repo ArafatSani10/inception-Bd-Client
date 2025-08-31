@@ -7,6 +7,7 @@ import {
     FaGithub,
 } from 'react-icons/fa';
 import { FaGithubAlt, FaTwitter } from 'react-icons/fa6';
+import { Link } from 'react-router';
 
 const paymentLogos = [
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOK-ExH64w4vaz6r2HY7kpEc0SEZKmpq7CKg&s',
@@ -20,6 +21,14 @@ const paymentLogos = [
     'https://images.seeklogo.com/logo-png/35/1/mutual-trust-bank-limited-logo-png_seeklogo-356798.png',
     'https://images.seeklogo.com/logo-png/26/1/brac-bank-logo-png_seeklogo-260716.png',
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFnrT084PQVHd4rRjw06evyCe7WjcqbxM-CA&s',
+];
+
+
+const navItems = [
+    { name: "Verify Certificate", path: "/verify-certificate" },
+    { name: "Terms & Conditions", path: "/terms-and-conditions" },
+    { name: "Privacy & Policy", path: "/privacy-and-policy" },
+    { name: "Refund Policy", path: "/refund-and-policy" },
 ];
 
 const Footer = () => {
@@ -37,13 +46,14 @@ const Footer = () => {
                     </div>
 
                     <nav className="flex flex-wrap gap-5 text-gray-600 dark:text-gray-400 font-medium">
-                        {['Verify Email', 'Facebook Group', 'Make Payment', 'Contact Us'].map((item, i) => (
-                            <span
+                        {navItems.map((item, i) => (
+                            <a
                                 key={i}
+                                href={item.path}
                                 className="cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition"
                             >
-                                {item}
-                            </span>
+                                {item.name}
+                            </a>
                         ))}
                     </nav>
 

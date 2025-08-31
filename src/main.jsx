@@ -49,6 +49,16 @@ import UpdateMethod from "./components/Dashboard/WithdrawMethod/UpdateMethod/Upd
 import UpdateCourse from "./components/Dashboard/CourseList/UpdateCourse/UpdateCourse";
 import Updatecategory from "./components/Dashboard/CategoryList/Updatecategory/Updatecategory";
 import AuthProviders from "./Content/AuthProviders";
+import CategoryCourses from "./components/pages/Home/CourseCategory/CategoryCourses";
+import UserProfile from "./components/Dashboard/UserProfile/UserProfile";
+import CouponCard from "./components/Dashboard/CouponCard/CouponCard";
+import TermsAndCondition from "./components/pages/shared/Footer/TermsAndCondition";
+import PrivacyPolicy from "./components/pages/shared/Footer/PrivacyPolicy";
+import RefundPolicy from "./components/pages/shared/Footer/RefundPolicy";
+import UpdateProfile from "./components/Dashboard/UserProfile/UpdateProfile";
+import CouponCheckout from "./components/Dashboard/CouponCard/CuponCheckOut";
+import PurchaseCourse from "./components/Dashboard/UserDashboard/Course/PurchaseCourse";
+import UserHome from "./components/Dashboard/UserDashboard/UserHome";
 
 const router = createBrowserRouter([
   {
@@ -107,6 +117,32 @@ const router = createBrowserRouter([
         path: '/blogdetails',
         element: <BlogDetails></BlogDetails>
       },
+      {
+        path: "/courses/category/:id",
+        element: <CategoryCourses></CategoryCourses>
+      },
+
+      // footer er infos page
+      {
+        path:'/terms-and-conditions',
+        element:<TermsAndCondition></TermsAndCondition>
+      },
+      {
+        path:'/privacy-and-policy',
+        element:<PrivacyPolicy></PrivacyPolicy>
+      },
+      {
+        path:"/refund-and-policy",
+        element:<RefundPolicy></RefundPolicy>
+      },
+
+
+      // user checkout list page (Cupon)
+      {
+        path:'/checkout',
+        element:<CouponCheckout></CouponCheckout>
+      },
+
     ],
   },
 
@@ -129,8 +165,8 @@ const router = createBrowserRouter([
         element: <CourseForm></CourseForm>
       },
       {
-        path:'update-course',
-        element:<UpdateCourse></UpdateCourse>
+        path: 'update-course',
+        element: <UpdateCourse></UpdateCourse>
       },
 
       // category
@@ -144,9 +180,11 @@ const router = createBrowserRouter([
       },
 
       {
-        path:'update-category',
-        element:<Updatecategory></Updatecategory>
+        path: 'update-category',
+        element: <Updatecategory></Updatecategory>
       },
+
+
 
       // Manage Blog related routes
       {
@@ -247,6 +285,40 @@ const router = createBrowserRouter([
         path: 'update-brand',
         element: <UpdateBrand></UpdateBrand>
       },
+
+
+      // user/instructor both profile
+      {
+        path:'profile',
+        element:<UserProfile></UserProfile>
+      },
+
+      {
+        path:'update-profile',
+        element:<UpdateProfile></UpdateProfile>
+      },
+
+      {
+        path:'cupon',
+        element:<CouponCard></CouponCard>
+      },
+
+
+
+
+
+
+
+      // user/student related panel route.!!
+      {
+        path:'purchase-course',
+        element:<PurchaseCourse></PurchaseCourse>
+      },
+
+      {
+        path:'user-home',
+        element:<UserHome></UserHome>
+      },
     ],
   },
 
@@ -257,8 +329,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-   <AuthProviders>
-     <RouterProvider router={router} />
-   </AuthProviders>
+    <AuthProviders>
+      <RouterProvider router={router} />
+    </AuthProviders>
   </React.StrictMode>
 );
