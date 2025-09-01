@@ -133,18 +133,7 @@ const Footer = () => {
             {/* Bottom */}
             <div className="max-w-full mx-auto flex flex-col md:flex-row justify-between items-center text-xs md:text-sm text-gray-600 dark:text-gray-400 gap-4">
                 <p>© 2025 Inception BD. All rights reserved.</p>
-                <div className="flex flex-wrap gap-4 font-medium">
-                    {['Supported Browsers', 'Terms & Conditions', 'Refund Policy', 'Privacy Policy'].map(
-                        (text, idx) => (
-                            <span
-                                key={idx}
-                                className="hover:underline hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
-                            >
-                                {text}
-                            </span>
-                        )
-                    )}
-                </div>
+                
             </div>
         </footer>
     );
