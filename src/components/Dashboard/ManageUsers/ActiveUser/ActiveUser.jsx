@@ -16,7 +16,7 @@ const ActiveUser = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/v1/users');
+                const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
                 const activeUsers = res.data.data.filter(user => user.status === 'active');
                 setUsers(activeUsers);
             } catch (err) {

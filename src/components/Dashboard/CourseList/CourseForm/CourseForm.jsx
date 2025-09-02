@@ -438,7 +438,7 @@ const CourseForm = () => {
             thumbnail: null,
             demoImage: null,
             coverPhoto: null,
-            instructorImage:null,
+            instructorImage: null,
             price: "",
             description: "",
             startingDate: "",
@@ -460,7 +460,7 @@ const CourseForm = () => {
         const fetchInstructors = async () => {
             try {
                 const res = await axios.get(
-                    "http://localhost:5000/api/v1/users?role=instructor"
+                    `${import.meta.env.VITE_API_URL}/users?role=instructor`
                 );
                 if (res.data?.data) setInstructors(res.data.data);
             } catch (err) {
@@ -469,6 +469,7 @@ const CourseForm = () => {
         };
         fetchInstructors();
     }, []);
+
 
     // Field arrays
     const {
@@ -532,10 +533,11 @@ const CourseForm = () => {
             form_data.append("data", JSON.stringify(payload));
 
             const res = await axios.post(
-                "http://localhost:5000/api/v1/courses",
+                `${import.meta.env.VITE_API_URL}/courses`,
                 form_data,
                 { headers: { "Content-Type": "multipart/form-data" } }
             );
+
 
             if (res.data.success) {
                 toast.success("Course created successfully!");
@@ -670,19 +672,30 @@ const CourseForm = () => {
 
                 {/* Requirements */}
                 <section>
-                    <h3 className="font-semibold mb-2">Requirements*</h3>
+                    <h3 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">
+                        Requirements*
+                    </h3>
                     {requirementFields.map((field, index) => (
-                        <div key={index} className="relative mb-2">
+                        <div
+                            key={index}
+                            className="relative mb-2 bg-white dark:bg-gray-800 border border-gray-300 
+                 dark:border-gray-700 rounded-lg shadow-sm"
+                        >
                             <input
                                 type="text"
                                 {...register(`requirements.${index}`)}
-                                className="w-full p-2 border rounded pr-8"
+                                className="w-full p-2 pr-8 rounded-md border-none 
+                   bg-transparent text-gray-800 dark:text-gray-100 
+                   placeholder-gray-500 dark:placeholder-gray-400 
+                   focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                                placeholder="Enter requirement"
                             />
                             {requirementFields.length > 1 && (
                                 <button
                                     type="button"
                                     onClick={() => removeRequirement(index)}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-red-600"
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 
+                     text-red-600 dark:text-red-400 hover:scale-110 transition"
                                 >
                                     <IoRemoveCircle size={20} />
                                 </button>
@@ -692,33 +705,41 @@ const CourseForm = () => {
                     <button
                         type="button"
                         onClick={() => appendRequirement("")}
-                        className="text-indigo-600 mt-2"
+                        className="text-indigo-600 dark:text-indigo-400 mt-2 hover:underline"
                     >
                         + Add Requirement
                     </button>
                 </section>
 
+
                 {/* FAQ */}
                 <section>
-                    <h3 className="font-semibold mb-2">FAQ</h3>
+                    <h3 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">FAQ</h3>
                     {faqFields.map((field, index) => (
-                        <div key={field.id} className="relative mb-4">
+                        <div
+                            key={field.id}
+                            className="relative mb-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-3 shadow-sm"
+                        >
                             <input
                                 {...register(`faqs.${index}.question`)}
                                 placeholder="Question"
-                                className="w-full p-2 border rounded mb-2"
+                                className="w-full p-2 mb-2 rounded-md border border-gray-300 dark:border-gray-600 
+                   bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 
+                   focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                             />
                             <textarea
                                 {...register(`faqs.${index}.answer`)}
                                 placeholder="Answer"
                                 rows={3}
-                                className="w-full p-2 border rounded"
+                                className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-600 
+                   bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 
+                   focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                             />
                             {faqFields.length > 1 && (
                                 <button
                                     type="button"
                                     onClick={() => removeFaq(index)}
-                                    className="absolute top-2 right-2 text-red-600"
+                                    className="absolute top-2 right-2 text-red-600 dark:text-red-400 hover:scale-110 transition"
                                 >
                                     <IoRemoveCircle size={20} />
                                 </button>
@@ -728,7 +749,7 @@ const CourseForm = () => {
                     <button
                         type="button"
                         onClick={() => appendFaq({ question: "", answer: "" })}
-                        className="text-indigo-600 mt-2"
+                        className="text-indigo-600 dark:text-indigo-400 mt-2 hover:underline"
                     >
                         + Add FAQ
                     </button>
@@ -736,18 +757,19 @@ const CourseForm = () => {
 
                 {/* Tags */}
                 <section>
-                    <h3 className="font-semibold mb-2">Tags*</h3>
-                    <div className="flex flex-wrap gap-2 border rounded p-2">
+                    <h3 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Tags*</h3>
+                    <div className="flex flex-wrap gap-2 border border-gray-300 dark:border-gray-700 rounded-lg p-2 bg-white dark:bg-gray-800">
                         {tags.map((tag, index) => (
                             <span
                                 key={index}
-                                className="flex items-center bg-indigo-100 rounded-full px-3 py-1 text-sm font-medium"
+                                className="flex items-center bg-indigo-100 dark:bg-indigo-900/40 
+                   text-indigo-800 dark:text-indigo-200 rounded-full px-3 py-1 text-sm font-medium"
                             >
                                 {tag}
                                 <button
                                     type="button"
                                     onClick={() => handleRemoveTag(index)}
-                                    className="ml-2 text-indigo-600"
+                                    className="ml-2 text-indigo-600 dark:text-indigo-400 hover:scale-110 transition"
                                 >
                                     <IoRemoveCircle size={18} />
                                 </button>
@@ -758,7 +780,8 @@ const CourseForm = () => {
                             placeholder="Add a tag and press Enter"
                             ref={tagInput}
                             onKeyDown={handleAddTag}
-                            className="flex-grow min-w-[120px] bg-transparent border-none focus:ring-0"
+                            className="flex-grow min-w-[120px] bg-transparent border-none focus:ring-0 
+                 text-gray-800 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400"
                         />
                     </div>
                 </section>
@@ -766,33 +789,73 @@ const CourseForm = () => {
                 {/* File Uploads */}
                 <section className="grid md:grid-cols-2 gap-4 mt-5">
                     <div>
-                        <label>Demo Image</label>
-                        <input type="file" {...register("demoImage", { valueAsFile: true })} />
+                        <label className="block mb-1 text-gray-700 dark:text-gray-300">Demo Image</label>
+                        <input
+                            type="file"
+                            {...register("demoImage", { valueAsFile: true })}
+                            className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md 
+                 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
+                        />
                     </div>
                     <div>
-                        <label>Cover Photo</label>
-                        <input type="file" {...register("coverPhoto", { valueAsFile: true })} />
+                        <label className="block mb-1 text-gray-700 dark:text-gray-300">Cover Photo</label>
+                        <input
+                            type="file"
+                            {...register("coverPhoto", { valueAsFile: true })}
+                            className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md 
+                 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
+                        />
                     </div>
                 </section>
 
                 {/* More Infos */}
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
-                    <input type="date" {...register("startingDate")} className="p-2 border rounded" />
-                    <input type="number" {...register("duration")} placeholder="Duration in minutes" className="p-2 border rounded" />
-                    <input type="number" {...register("sessions")} placeholder="Sessions" className="p-2 border rounded" />
-                    <input type="text" {...register("capacity")} placeholder="Capacity" className="p-2 border rounded" />
+                    <input
+                        type="date"
+                        {...register("startingDate")}
+                        className="p-2 border border-gray-300 dark:border-gray-600 rounded-md 
+               bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
+                    />
+                    <input
+                        type="number"
+                        {...register("duration")}
+                        placeholder="Duration in minutes"
+                        className="p-2 border border-gray-300 dark:border-gray-600 rounded-md 
+               bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
+                    />
+                    <input
+                        type="number"
+                        {...register("sessions")}
+                        placeholder="Sessions"
+                        className="p-2 border border-gray-300 dark:border-gray-600 rounded-md 
+               bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
+                    />
+                    <input
+                        type="text"
+                        {...register("capacity")}
+                        placeholder="Capacity"
+                        className="p-2 border border-gray-300 dark:border-gray-600 rounded-md 
+               bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
+                    />
                 </section>
 
                 {/* Status */}
                 <section className="mt-5">
-                    <label>Status</label>
-                    <select {...register("status")} className="w-full p-3 border rounded-md">
-                        <option value="" disabled>Select status</option>
+                    <label className="block mb-1 text-gray-700 dark:text-gray-300">Status</label>
+                    <select
+                        {...register("status")}
+                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md 
+               bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
+                    >
+                        <option value="" disabled>
+                            Select status
+                        </option>
                         <option value="published">Publish</option>
                         <option value="unPublished">Unpublish</option>
                         <option value="drafted">Draft</option>
                     </select>
                 </section>
+
 
                 <button type="submit" className="mt-5 bg-indigo-600 text-white px-4 py-2 rounded">
                     Submit

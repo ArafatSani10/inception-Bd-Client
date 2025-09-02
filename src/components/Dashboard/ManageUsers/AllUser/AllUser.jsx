@@ -11,12 +11,11 @@ const AllUser = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
 
-  const base_url = "http://localhost:5000/api/v1"; // replace with your API
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get(`${base_url}/users`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
         // Filter only students
         const students = res.data.data.filter(u => u.role === 'student');
         setUsers(students);

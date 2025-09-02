@@ -32,7 +32,7 @@ const CourseDetails = () => {
         const fetchCourse = async () => {
             try {
                 const res = await axios.get(
-                    `http://localhost:5000/api/v1/courses/${idOrSlug}`
+                    `${import.meta.env.VITE_API_URL}/courses/${idOrSlug}`
                 );
                 setCourse(res.data.data || res.data);
             } catch (err) {
@@ -43,6 +43,7 @@ const CourseDetails = () => {
         };
         fetchCourse();
     }, [idOrSlug]);
+
 
     if (loading) return <p className="text-center py-10">Loading...</p>;
     if (!course) return <p className="text-center py-10">Course not found.</p>;
@@ -326,11 +327,11 @@ const CourseDetails = () => {
                                 </h1>
                             </div>
                             <Link to="/checkout">
-                            <div className="flex justify-center">
-                                <button className="p-2 text-center bg-[#00baff] hover:bg-gray-800 transition-all duration-300 rounded-xl my-2 text-white w-full">
-                                    Enroll on course
-                                </button>
-                            </div>
+                                <div className="flex justify-center">
+                                    <button className="p-2 text-center bg-[#00baff] hover:bg-gray-800 transition-all duration-300 rounded-xl my-2 text-white w-full">
+                                        Enroll on course
+                                    </button>
+                                </div>
                             </Link>
 
                             <div className="text-center text-sm opacity-60">

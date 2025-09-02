@@ -51,8 +51,9 @@ const EstimatedCount = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const usersRes = await axios.get('http://localhost:5000/api/v1/users');
-        const coursesRes = await axios.get('http://localhost:5000/api/v1/courses');
+        const usersRes = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
+        const coursesRes = await axios.get(`${import.meta.env.VITE_API_URL}/courses`);
+
 
         const users = usersRes.data.data || [];
         const courses = coursesRes.data.data || [];

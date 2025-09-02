@@ -12,7 +12,7 @@ const AllCoursesList = () => {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const res = await axios.get("http://localhost:5000/api/v1/courses");
+                const res = await axios.get(`${import.meta.env.VITE_API_URL}/courses`);
                 const data = res.data.data || [];
 
                 // Map for instructorImage fallback

@@ -1,28 +1,10 @@
 import React from 'react';
 import {
     FaFacebookF,
-    FaInstagram,
     FaYoutube,
     FaLinkedinIn,
-    FaGithub,
 } from 'react-icons/fa';
-import { FaGithubAlt, FaTwitter } from 'react-icons/fa6';
-import { Link } from 'react-router';
-
-const paymentLogos = [
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOK-ExH64w4vaz6r2HY7kpEc0SEZKmpq7CKg&s',
-    'https://www.shutterstock.com/image-vector/vinnytsia-ukraine-september-04-2023-260nw-2357100277.jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%282018%29.svg/960px-American_Express_logo_%282018%29.svg.png',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdXUkLNEUaZEeKsN7vruOyzKJf7qxFRY2-BA&s',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREnAM5B6kXsn8-mJXp4bMwUE1tK5SVB1D8TA&s',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkvIJELJ5mEGZCQE0tzsovNo8m2LfumnAhJg&s',
-    'https://download.logo.wine/logo/BKash/BKash-Logo.wine.png',
-    'https://download.logo.wine/logo/Nagad/Nagad-Logo.wine.png',
-    'https://images.seeklogo.com/logo-png/35/1/mutual-trust-bank-limited-logo-png_seeklogo-356798.png',
-    'https://images.seeklogo.com/logo-png/26/1/brac-bank-logo-png_seeklogo-260716.png',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFnrT084PQVHd4rRjw06evyCe7WjcqbxM-CA&s',
-];
-
+import { FaGithub, FaGithubAlt, FaTwitter } from 'react-icons/fa6';
 
 const navItems = [
     { name: "Verify Certificate", path: "/verify-certificate" },
@@ -34,17 +16,18 @@ const navItems = [
 const Footer = () => {
     return (
         <footer className="bg-white text-gray-800 dark:bg-[#00091a] dark:text-gray-300 transition-colors duration-500 px-6 md:px-4 py-14 text-sm">
-            <div className="max-w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-                {/* Logo and Links */}
-                <div className="space-y-6">
-                    <div className="flex items-center gap-4">
-                        <div className="w-[150px] max-sm:w-[130px] h-[50px] bg-no-repeat bg-contain bg-center
-                  bg-[url('https://inceptionbd.com/store/1/Untitled%20design%20(3).png')]
-                  dark:bg-[url('https://i.ibb.co/cKzQyBNk/534732164-2212940409145293-5451801233054972764-n.jpg')]">
-                        </div>
+            <div className="max-w-full mx-auto space-y-8">
+                {/* Logo */}
+                <div className="flex items-center">
+                    <div
+                        className="w-[150px] max-sm:w-[130px] h-[50px] bg-no-repeat bg-contain bg-center
+            bg-[url('https://inceptionbd.com/store/1/Untitled%20design%20(3).png')]
+            dark:bg-[url('https://i.ibb.co/cKzQyBNk/534732164-2212940409145293-5451801233054972764-n.jpg')]"
+                    />
+                </div>
 
-                    </div>
-
+                {/* Nav + Social */}
+                <div className="flex items-center justify-between flex-wrap gap-6">
                     <nav className="flex flex-wrap gap-5 text-gray-600 dark:text-gray-400 font-medium">
                         {navItems.map((item, i) => (
                             <a
@@ -54,86 +37,111 @@ const Footer = () => {
                             >
                                 {item.name}
                             </a>
+
+                            
                         ))}
+
+                           <h1>Trade licence no - <span className='text-[#00baff]'>07127</span></h1>
                     </nav>
 
-                    <div className="flex gap-5 mt-6 text-xl text-gray-600 dark:text-gray-300">
+                 
+
+                    <div className="flex gap-4 text-xl text-gray-600 dark:text-gray-300">
                         <a
                             href="https://www.facebook.com/inceptionforfuture"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="hover:text-blue-500 transition"
+                            className="relative w-10 h-10 flex items-center justify-center rounded-full overflow-hidden
+               bg-gray-200 dark:bg-gray-800 transition-colors duration-500 group"
                         >
-                            <FaFacebookF />
+                            <span
+                                className="absolute inset-0 bg-blue-500 scale-0 group-hover:scale-100 rounded-full transition-transform duration-500"
+                            />
+                            <FaFacebookF className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-white transition-colors duration-500" />
                         </a>
-
-
 
                         <a
                             href="https://www.youtube.com/@inceptionbd"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="hover:text-red-500 transition"
+                            className="relative w-10 h-10 flex items-center justify-center rounded-full overflow-hidden
+               bg-gray-200 dark:bg-gray-800 transition-colors duration-500 group"
                         >
-                            <FaYoutube />
+                            <span
+                                className="absolute inset-0 bg-red-500 scale-0 group-hover:scale-100 rounded-full transition-transform duration-500"
+                            />
+                            <FaYoutube className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-white transition-colors duration-500" />
                         </a>
 
                         <a
                             href="https://www.linkedin.com/company/inceptionbd"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="hover:text-blue-600 transition"
+                            className="relative w-10 h-10 flex items-center justify-center rounded-full overflow-hidden
+               bg-gray-200 dark:bg-gray-800 transition-colors duration-500 group"
                         >
-                            <FaLinkedinIn />
+                            <span
+                                className="absolute inset-0 bg-blue-600 scale-0 group-hover:scale-100 rounded-full transition-transform duration-500"
+                            />
+                            <FaLinkedinIn className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-white transition-colors duration-500" />
                         </a>
 
                         <a
-                            href="https://x.com/Inceptionbd2024?t=tQ9mS9JEBUBtQrJnU2nxKQ&s=09"
+                            href="https://x.com/Inceptionbd2024"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="hover:text-gray-400 transition"
+                            className="relative w-10 h-10 flex items-center justify-center rounded-full overflow-hidden
+               bg-gray-200 dark:bg-gray-800 transition-colors duration-500 group"
                         >
-                            <FaTwitter />
+                            <span
+                                className="absolute inset-0 bg-sky-400 scale-0 group-hover:scale-100 rounded-full transition-transform duration-500"
+                            />
+                            <FaTwitter className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-white transition-colors duration-500" />
                         </a>
+
                         <a
-                            href="https://x.com/Inceptionbd2024?t=tQ9mS9JEBUBtQrJnU2nxKQ&s=09"
+                            href="https://github.com/Inceptionbd2024"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="hover:text-gray-400 transition"
+                            className="relative w-10 h-10 flex items-center justify-center rounded-full overflow-hidden
+               bg-gray-200 dark:bg-gray-800 transition-colors duration-500 group"
                         >
-                            <FaGithubAlt />
+                            <span
+                                className="absolute inset-0 bg-gray-500 scale-0 group-hover:scale-100 rounded-full transition-transform duration-500"
+                            />
+                            <FaGithub className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-white transition-colors duration-500" />
                         </a>
                     </div>
+
                 </div>
 
                 {/* Payment Section */}
                 <div>
-                    <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-4">Pay With</h3>
+                    <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-4">
+                        Pay With
+                    </h3>
                     <div className="flex flex-wrap gap-4 items-center">
-                        {paymentLogos.map((logo, i) => (
-                            <div
-                                key={i}
-                                className="w-16 h-16 bg-gray-100 dark:bg-white rounded-xl p-2 flex items-center justify-center shadow-sm hover:shadow-md transition duration-300"
-                            >
-                                <img
-                                    src={logo}
-                                    alt="Payment Logo"
-                                    className="max-w-full max-h-full object-contain"
-                                    loading="lazy"
-                                />
-                            </div>
-                        ))}
-
+                        {/* Light mode */}
+                        <img
+                            src="https://i.ibb.co.com/FbZ1yWRD/Screenshot-2025-09-02-133014.png"
+                            alt="Pay With"
+                            className="dark:hidden w-full h-auto"
+                        />
+                        {/* Dark mode */}
+                        <img
+                            src="https://i.ibb.co.com/hJ1VFVLR/Screenshot-2025-09-02-133149.png"
+                            alt="Pay With"
+                            className="hidden dark:block w-full h-auto"
+                        />
                     </div>
                 </div>
-            </div>
 
-            <hr className="my-10 border-gray-300 dark:border-gray-700" />
+                <hr className="border-gray-300 dark:border-gray-700" />
 
-            {/* Bottom */}
-            <div className="max-w-full mx-auto flex flex-col md:flex-row justify-between items-center text-xs md:text-sm text-gray-600 dark:text-gray-400 gap-4">
-                <p>© 2025 Inception BD. All rights reserved.</p>
-                
+                {/* Bottom */}
+                <div className="flex flex-col md:flex-row justify-between items-center text-xs md:text-sm text-gray-600 dark:text-gray-400 gap-4">
+                    <p>© 2025 Inception BD. All rights reserved.</p>
+                </div>
             </div>
         </footer>
     );

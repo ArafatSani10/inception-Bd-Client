@@ -8,13 +8,12 @@ const PostList = () => {
   const [data, setData] = useState([]);
   const usersPerPage = 5;
 
-  const base_url = 'http://localhost:5000/api/v1'; // set your API base URL
 
   // Fetch posts from API
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get(`${base_url}/blogs`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/blogs`);
         // assuming API returns { data: [...] }
         setData(res.data?.data || []);
       } catch (err) {

@@ -59,6 +59,7 @@ import UpdateProfile from "./components/Dashboard/UserProfile/UpdateProfile";
 import CouponCheckout from "./components/Dashboard/CouponCard/CuponCheckOut";
 import PurchaseCourse from "./components/Dashboard/UserDashboard/Course/PurchaseCourse";
 import UserHome from "./components/Dashboard/UserDashboard/UserHome";
+import ModulePage from "./components/Dashboard/UserDashboard/ModulePage/ModulePage";
 
 const router = createBrowserRouter([
   {
@@ -144,6 +145,13 @@ const router = createBrowserRouter([
       },
 
     ],
+  
+  },
+
+  // student module access video
+  {
+    path:'module-page',
+    element:<ModulePage></ModulePage>
   },
 
   {
@@ -282,7 +290,7 @@ const router = createBrowserRouter([
         element: <CreateBrand></CreateBrand>
       },
       {
-        path: 'update-brand',
+        path: 'update-brand/:id',
         element: <UpdateBrand></UpdateBrand>
       },
 
@@ -320,6 +328,8 @@ const router = createBrowserRouter([
         element:<UserHome></UserHome>
       },
     ],
+
+    
   },
 
 

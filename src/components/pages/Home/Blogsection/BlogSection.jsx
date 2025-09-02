@@ -11,12 +11,12 @@ import "swiper/css/pagination";
 
 const BlogSection = () => {
   const [blogPosts, setBlogPosts] = useState([]);
-  const base_url = "http://localhost:5000/api/v1";
+  
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const res = await axios.get(`${base_url}/blogs`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/blogs`);
         setBlogPosts(res.data.data || []);
       } catch (err) {
         console.error("Error fetching blogs:", err);

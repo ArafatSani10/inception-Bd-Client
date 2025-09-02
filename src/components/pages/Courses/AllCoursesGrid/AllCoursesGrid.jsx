@@ -15,7 +15,7 @@ const AllCoursesGrid = () => {
         const fetchCourses = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get("http://localhost:5000/api/v1/courses"); // backend API
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/courses`); // backend API
                 const data = response.data.data || [];
 
                 // Ensure instructor info & category exists

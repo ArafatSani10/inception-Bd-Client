@@ -143,7 +143,9 @@ export default function TermsAndCondition() {
         <p>
           We reserve the right to suspend or terminate accounts that violate
           these Terms. Users may request account deletion at any time by
-          contacting <strong>learn.inception@gamil.com</strong>.
+          contacting <strong>hello@inceptionbd.com
+
+          </strong>.
         </p>
       ),
     },
@@ -175,10 +177,14 @@ export default function TermsAndCondition() {
           <li>
             <strong>Email:</strong>{" "}
             <a
-              href="mailto:learn.inception@gamil.com"
+              href="mailto:hello@inceptionbd.com
+
+"
               className="text-blue-600 dark:text-blue-400"
             >
-              learn.inception@gamil.com
+              hello@inceptionbd.com
+
+
             </a>
           </li>
           <li className="flex items-center gap-2">
@@ -236,13 +242,11 @@ export default function TermsAndCondition() {
             </motion.section>
           ))}
 
-          <footer className="mt-12 border-t border-gray-200 dark:border-gray-700 pt-6 text-sm text-center text-gray-500 dark:text-gray-400">
-            <p>© {new Date().getFullYear()} InceptionBD. All rights reserved.</p>
-          </footer>
+          
         </article>
 
         {/* Buttons */}
-        <div className="mt-10 flex flex-wrap gap-4 justify-center">
+        <div className="mt-10 flex flex-wrap gap-4 justify-start">
           <button
             onClick={() => window.print()}
             className="inline-flex items-center gap-2 px-6 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm transition"
@@ -250,12 +254,7 @@ export default function TermsAndCondition() {
             🖨 Print
           </button>
 
-          <button
-            onClick={() => navigator.clipboard?.writeText(window.location.href)}
-            className="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-500 text-white hover:opacity-90 rounded-lg shadow-md text-sm transition"
-          >
-            🔗 Share Link
-          </button>
+         
         </div>
       </div>
     </main>

@@ -15,7 +15,7 @@ const UserProfile = () => {
         const fetchUser = async () => {
             try {
                 if (user?.email) {
-                    const res = await axios.get(`http://localhost:5000/api/v1/users`);
+                    const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
                     const singleUser = res.data.data.find(u => u.email === user.email);
                     setDbUser(singleUser);
                 }
@@ -110,13 +110,13 @@ const UserProfile = () => {
                     </div>
 
 
-                   <Link to="/dashboard/update-profile">
-                   
-                    <div className="flex items-center gap-4 bg-white dark:bg-gray-700 p-5 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
-                        <div className="text-2xl"><CiSettings className="text-gray-500 dark:text-gray-400" /></div>
-                        <h1 className='font-bold'>Update Profile</h1>
-                    </div>
-                   </Link>
+                    <Link to="/dashboard/update-profile">
+
+                        <div className="flex items-center gap-4 bg-white dark:bg-gray-700 p-5 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+                            <div className="text-2xl"><CiSettings className="text-gray-500 dark:text-gray-400" /></div>
+                            <h1 className='font-bold'>Update Profile</h1>
+                        </div>
+                    </Link>
                 </div>
 
 

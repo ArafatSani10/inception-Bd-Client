@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { FaCloudUploadAlt } from 'react-icons/fa';
-import axios from 'axios';
-import toast, { Toaster } from 'react-hot-toast';
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { FaCloudUploadAlt } from "react-icons/fa";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const CreateBrand = () => {
   const [thumbnail, setThumbnail] = useState(null);
@@ -17,14 +17,18 @@ const CreateBrand = () => {
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
-      formData.append('name', data.name);
-      formData.append('website', data.website); // backend expects number
-      formData.append('status', data.status);   // active / inactive
-      if (thumbnail) {
-        formData.append('logo', thumbnail);
-      }
 
-      // 🔥 এখানে FULL URL ব্যবহার করো (Postman এর মতো)
+      formData.append(
+        "data",
+        JSON.stringify({
+          name: data.name,
+          website: data.website,
+          status: data.status,
+        })
+      );
+
+      if (thumbnail) formData.append("logo", thumbnail);
+
       const response = await axios.post(
         "http://localhost:5000/api/v1/brands",
         formData,
@@ -44,41 +48,51 @@ const CreateBrand = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-6">
-      <Toaster position="top-right" reverseOrder={false} />
-
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+      <Toaster position="top-right" />
       <div className="max-w-full mx-auto bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-8">
-        <h2 className="text-2xl font-bold mb-6 text-[#00baff]">Create Brand</h2>
+        <h2 className="text-3xl font-bold mb-8 text-blue-600 dark:text-blue-400">
+          Create Brand
+        </h2>
 
-        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          {/* Name */}
-          <div>
-            <label className="block mb-2 font-medium">Brand Name</label>
+        <form
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          {/* Brand Name */}
+          <div className="flex flex-col">
+            <label className="mb-2 font-semibold text-gray-700 dark:text-gray-300">
+              Brand Name
+            </label>
             <input
               {...register("name", { required: true })}
               type="text"
               placeholder="Enter brand name"
-              className="w-full px-4 py-2 rounded-lg border"
+              className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
-          {/* Website (Number) */}
-          <div>
-            <label className="block mb-2 font-medium">Brand Website (Number)</label>
+          {/* Brand Website */}
+          <div className="flex flex-col">
+            <label className="mb-2 font-semibold text-gray-700 dark:text-gray-300">
+              Brand Website
+            </label>
             <input
-              {...register("website", { required: true, valueAsNumber: true })}
-              type="number"
-              placeholder="Enter website number"
-              className="w-full px-4 py-2 rounded-lg border"
+              {...register("website", { required: true })}
+              type="text"
+              placeholder="https://example.com"
+              className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           {/* Logo Upload */}
-          <div>
-            <label className="block mb-2 font-medium">Logo</label>
+          <div className="flex flex-col md:col-span-1">
+            <label className="mb-2 font-semibold text-gray-700 dark:text-gray-300">
+              Logo
+            </label>
             <div
-              className="border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500"
-              onClick={() => document.getElementById("brandImage").click()}
+              className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 transition-colors duration-200 bg-gray-50 dark:bg-gray-700"
+              onClick={() => document.getElementById("brandImage")?.click()}
             >
               {thumbnail ? (
                 <img
@@ -88,8 +102,10 @@ const CreateBrand = () => {
                 />
               ) : (
                 <>
-                  <FaCloudUploadAlt className="text-4xl text-gray-400 mb-2" />
-                  <p className="text-gray-500">Click to upload</p>
+                  <FaCloudUploadAlt className="text-4xl text-gray-400 dark:text-gray-300 mb-2" />
+                  <p className="text-gray-500 dark:text-gray-200">
+                    Click to upload logo
+                  </p>
                 </>
               )}
             </div>
@@ -103,22 +119,24 @@ const CreateBrand = () => {
           </div>
 
           {/* Status */}
-          <div>
-            <label className="block mb-2 font-medium">Status</label>
+          <div className="flex flex-col">
+            <label className="mb-2 font-semibold text-gray-700 dark:text-gray-300">
+              Status
+            </label>
             <select
               {...register("status", { required: true })}
-              className="w-full px-4 py-2 rounded-lg border"
+              className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="active">Active</option>
               <option value="inactive">Inactive</option>
             </select>
           </div>
 
-          {/* Submit */}
-          <div className="pt-4">
+          {/* Submit Button */}
+          <div className="md:col-span-2">
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg"
+              className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white py-3 rounded-lg font-semibold transition-colors duration-200"
             >
               Save Brand
             </button>

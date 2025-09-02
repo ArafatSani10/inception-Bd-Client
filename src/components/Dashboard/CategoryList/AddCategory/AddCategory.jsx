@@ -19,7 +19,9 @@ const AddCategory = () => {
       formData.append("status", data.status);
       formData.append("icon", data.icon[0]);
 
-      await axios.post("http://localhost:5000/api/v1/categories", formData, {
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/categories`,
+        formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

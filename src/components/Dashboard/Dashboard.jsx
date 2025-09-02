@@ -249,7 +249,10 @@ const Dashboard = () => {
                                     <span className="text-base"><TbBrandCoinbase /></span>
                                     {sidebarOpen && <span>Brand</span>}
                                 </NavLink>
+
                             </li>
+
+
 
                             {sidebarOpen && <li className="text-xs text-gray-400 dark:text-gray-500 py-4 px-3 tracking-wide uppercase">Settings</li>}
 

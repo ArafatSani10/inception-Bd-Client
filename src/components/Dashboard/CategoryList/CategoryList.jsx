@@ -20,7 +20,7 @@ const CategoryList = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/v1/categories');
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/categories`);
         setCategories(res.data.data || []);
       } catch (err) {
         console.error('Failed to fetch categories:', err.response?.data || err.message);
@@ -68,52 +68,8 @@ const CategoryList = () => {
 
   const changePage = (page) => setCurrentPage(page);
 
-  // Toggle status (update backend)
-  const toggleStatus = async (cat) => {
-    try {
-      const newStatus = cat.status === 'Active' ? 'Inactive' : 'Active';
-      await axios.patch(`http://localhost:5000/api/v1/categories/${cat._id}`, {
-        status: newStatus,
-      });
-      setCategories((prev) =>
-        prev.map((c) => (c._id === cat._id ? { ...c, status: newStatus } : c))
-      );
-      toast.success(`Status updated to ${newStatus}`);
-    } catch (err) {
-      console.error(err);
-      toast.error('Failed to update status');
-    }
-  };
 
-  // Toggle trending (update backend)
-  const toggleTrending = async (cat) => {
-    try {
-      const newTrending = !cat.isTreading;
-      await axios.patch(`http://localhost:5000/api/v1/categories/${cat._id}`, {
-        isTreading: newTrending,
-      });
-      setCategories((prev) =>
-        prev.map((c) => (c._id === cat._id ? { ...c, isTreading: newTrending } : c))
-      );
-      toast.success(`Show at Trending updated to ${newTrending ? 'Yes' : 'No'}`);
-    } catch (err) {
-      console.error(err);
-      toast.error('Failed to update trending');
-    }
-  };
 
-  // Delete category
-  const deleteCategory = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this category?')) return;
-    try {
-      await axios.delete(`http://localhost:5000/api/v1/categories/${id}`);
-      setCategories((prev) => prev.filter((cat) => cat._id !== id));
-      toast.success('Category deleted successfully');
-    } catch (err) {
-      console.error(err);
-      toast.error('Failed to delete category');
-    }
-  };
 
   if (loading) return <p className="p-4 text-center text-white">Loading categories...</p>;
 
@@ -186,7 +142,7 @@ const CategoryList = () => {
                 <td className="px-4 py-3">{cat.slug}</td>
                 <td className="px-4 py-3">
                   <button
-                    onClick={() => toggleTrending(cat)}
+                    // onClick={() => toggleTrending(cat)}
                     className={`px-3 py-1 rounded-full text-xs sm:text-sm transition duration-200 ${
                       cat.isTreading
                         ? 'bg-green-500 hover:bg-green-600 text-white'
@@ -198,7 +154,7 @@ const CategoryList = () => {
                 </td>
                 <td className="px-4 py-3">
                   <button
-                    onClick={() => toggleStatus(cat)} 
+                    // onClick={() => toggleStatus(cat)} 
                     className={`px-4 py-1 rounded-full shadow text-white text-xs sm:text-sm transition duration-200 ${
                       cat.status === 'Active'
                         ? 'bg-green-500 hover:bg-green-600'
@@ -219,7 +175,7 @@ const CategoryList = () => {
                       <FaList />
                     </button>
                     <button
-                      onClick={() => deleteCategory(cat._id)}
+                      // onClick={() => deleteCategory(cat._id)}
                       className="bg-red-600 hover:bg-red-700 text-white p-2 rounded"
                     >
                       <FaTrash />

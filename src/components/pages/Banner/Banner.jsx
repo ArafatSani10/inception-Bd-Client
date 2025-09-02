@@ -127,7 +127,8 @@ const Banner = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/v1/courses");
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/courses`);
+
         const courses = res.data.data || [];
 
         // createdAt field থাকলে sort করে latest নাও

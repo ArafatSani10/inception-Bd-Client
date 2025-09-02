@@ -16,7 +16,8 @@ const TopCourses = () => {
     const fetchCourses = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:5000/api/v1/courses');
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/courses`);
+
         console.log('API response:', response.data);
 
         // Make sure courses is always an array

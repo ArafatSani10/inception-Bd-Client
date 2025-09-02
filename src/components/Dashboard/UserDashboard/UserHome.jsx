@@ -51,7 +51,7 @@ const UserHome = () => {
                     <img
                         src="https://inceptionbd.com/store/1/dashboard.png"
                         alt="Dashboard Preview"
-                        className="rounded-3xl h-[300px] shadow-2xl hover:scale-105 transition-transform duration-500"
+                        className="rounded-3xl w-full h-[300px]  shadow-2xl hover:scale-105 transition-transform duration-500"
                     />
                 </motion.div>
 

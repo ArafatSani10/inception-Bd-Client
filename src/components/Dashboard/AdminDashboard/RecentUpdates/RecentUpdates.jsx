@@ -8,15 +8,15 @@ export default function RecentUpdates() {
   const [courses, setCourses] = useState([]);
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const base_url = "http://localhost:5000/api/v1";
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [courseRes, blogRes] = await Promise.all([
-          axios.get(`${base_url}/courses`),
-          axios.get(`${base_url}/blogs`),
+          axios.get(`${import.meta.env.VITE_API_URL}/courses`),
+          axios.get(`${import.meta.env.VITE_API_URL}/blogs`),
         ]);
 
         setCourses((courseRes.data?.data || []).reverse());
@@ -40,7 +40,7 @@ export default function RecentUpdates() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-8">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-full mx-auto">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-2">
           Recent Updates
         </h1>

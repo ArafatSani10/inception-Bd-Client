@@ -10,16 +10,19 @@ export default function CreatePost() {
   const [instructors, setInstructors] = useState([]);
   const [categories, setCategories] = useState([]);
 
-  const base_url = "http://localhost:5000/api/v1"; // set your base URL
 
   // Fetch instructors & categories
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const usersRes = await axios.get(`${base_url}/users?role=instructor`);
+        const usersRes = await axios.get(
+          `${import.meta.env.VITE_API_URL}/users?role=instructor`
+        );
         setInstructors(usersRes.data?.data || []);
 
-        const catRes = await axios.get(`${base_url}/categories`);
+        const catRes = await axios.get(
+          `${import.meta.env.VITE_API_URL}/categories`
+        );
         setCategories(catRes.data?.data || []);
       } catch (err) {
         console.error(err);
@@ -28,6 +31,7 @@ export default function CreatePost() {
     };
     fetchData();
   }, []);
+
 
   const onSubmit = async (data) => {
     try {
@@ -56,7 +60,9 @@ export default function CreatePost() {
         formData.append("thumbnail", data.thumbnail[0]);
       }
 
-      const res = await axios.post(`${base_url}/blogs`, formData, {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/blogs`,
+        formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

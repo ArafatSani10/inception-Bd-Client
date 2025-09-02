@@ -32,7 +32,7 @@ export default function RefundPolicy() {
           </h1>
           <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">InceptionBD</p>
           <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
-            Last updated: 29.08.2025
+            {/* Last updated: 29.08.2025 */}
           </p>
         </motion.header>
 
@@ -118,7 +118,9 @@ export default function RefundPolicy() {
               To request a refund:
             </p>
             <ul className="list-disc list-inside mt-2 space-y-2 text-gray-700 dark:text-gray-300">
-              <li>Email us at <strong>learn.inception@gamil.com</strong> with the subject line "Refund Request".</li>
+              <li>Email us at <strong>hello@inceptionbd.com
+
+              </strong> with the subject line "Refund Request".</li>
               <li>Include your name, registered email, course name, purchase receipt, and reason for the refund request.</li>
               <li>Refunds will be processed within 7–14 business days after approval, using the original method of payment.</li>
             </ul>
@@ -150,15 +152,29 @@ export default function RefundPolicy() {
               <FaEnvelope className="text-teal-500" /> 7. Contact Us
             </h2>
             <ul className="mt-2 space-y-2 text-gray-700 dark:text-gray-300">
-              <li><strong>Email:</strong> <a href="mailto:learn.inception@gamil.com" className="text-blue-600 dark:text-blue-400">learn.inception@gamil.com</a></li>
-              <li className="flex items-center gap-2"><FaGlobe/> <strong>Website:</strong> <a href="https://www.inceptionbd.com" target="_blank" rel="noreferrer" className="text-blue-600 dark:text-blue-400">www.inceptionbd.com</a></li>
+              <li><strong>Email:</strong> <a href="mailto:hello@inceptionbd.com
+
+" className="text-blue-600 dark:text-blue-400">hello@inceptionbd.com
+
+              </a></li>
+              <li className="flex items-center gap-2"><FaGlobe /> <strong>Website:</strong> <a href="https://www.inceptionbd.com" target="_blank" rel="noreferrer" className="text-blue-600 dark:text-blue-400">www.inceptionbd.com</a></li>
             </ul>
           </motion.section>
 
-          <footer className="mt-12 border-t border-gray-200 dark:border-gray-700 pt-6 text-sm text-center text-gray-500 dark:text-gray-400">
-            <p>© {new Date().getFullYear()} InceptionBD. All rights reserved.</p>
-          </footer>
+          
         </article>
+
+
+        <div className="mt-10 flex flex-wrap gap-4 justify-start">
+          <button
+            onClick={() => window.print()}
+            className="inline-flex items-center gap-2 px-6 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm transition"
+          >
+            🖨 Print
+          </button>
+
+         
+        </div>
       </div>
     </main>
   );

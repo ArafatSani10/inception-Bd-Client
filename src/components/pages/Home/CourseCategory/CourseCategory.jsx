@@ -25,8 +25,8 @@ const CourseCategory = () => {
     const fetchData = async () => {
       try {
         const [catRes, courseRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/v1/categories"),
-          axios.get("http://localhost:5000/api/v1/courses")
+          axios.get(`${import.meta.env.VITE_API_URL}/categories`),
+          axios.get(`${import.meta.env.VITE_API_URL}/courses`)
         ]);
 
         const allCourses = courseRes.data.data;

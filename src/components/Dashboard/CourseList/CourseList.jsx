@@ -40,7 +40,7 @@ const CourseList = () => {
     const fetchCourses = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:5000/api/v1/courses");
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/courses`);
 
         const data = response.data.data || [];
         const coursesWithDefaults = data.map((course) => ({

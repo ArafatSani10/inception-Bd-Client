@@ -83,7 +83,7 @@ const Courses = () => {
 
         {/* All Courses */}
         <motion.div
-          className="mb-8"
+          className=""
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
@@ -92,7 +92,7 @@ const Courses = () => {
         </motion.div>
 
         {/* Call to Action */}
-        <motion.div
+        {/* <motion.div
           className="mt-8 mb-12 text-center p-8 rounded-3xl
              
              dark:bg-[#00091a] dark:from-transparent dark:to-transparent
@@ -114,7 +114,7 @@ const Courses = () => {
                      hover:scale-[1.05] transition-transform duration-300 font-semibold">
             Explore All Programs
           </button>
-        </motion.div>
+        </motion.div> */}
 
       </div>
     </div>
