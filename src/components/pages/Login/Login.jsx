@@ -1,15 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { FaGoogle, FaEye, FaEyeSlash, FaRedo } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import SocialLogin from '../SocialLogin/SocialLogin';
-import AuthContext from '../../../Content/Authcontext';
+import React, { useContext, useEffect, useState } from "react";
+import { FaGoogle, FaEye, FaEyeSlash, FaRedo } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import SocialLogin from "../SocialLogin/SocialLogin";
+import AuthContext from "../../../Content/Authcontext";
 
-const generateCaptcha = () => Math.floor(100000 + Math.random() * 900000).toString();
+const generateCaptcha = () =>
+  Math.floor(100000 + Math.random() * 900000).toString();
 
 const CaptchaSVG = ({ captcha, width = 150, height = 50 }) => {
-  const chars = captcha.split('');
+  const chars = captcha.split("");
   const charSpacing = width / (chars.length + 1);
   const randomLines = Array.from({ length: 6 }, () => ({
     x1: Math.random() * width,
@@ -20,7 +21,11 @@ const CaptchaSVG = ({ captcha, width = 150, height = 50 }) => {
   }));
 
   return (
-    <svg width={width} height={height} style={{ userSelect: 'none', background: 'white', borderRadius: 10 }}>
+    <svg
+      width={width}
+      height={height}
+      style={{ userSelect: "none", background: "white", borderRadius: 10 }}
+    >
       {chars.map((char, idx) => {
         const x = charSpacing * (idx + 1);
         const y = height / 2 + (Math.random() - 0.5) * 10;
@@ -37,9 +42,9 @@ const CaptchaSVG = ({ captcha, width = 150, height = 50 }) => {
             style={{
               transformOrigin: `${x}px ${y}px`,
               transform: `rotate(${rotate}deg)`,
-              fontFamily: 'monospace',
-              userSelect: 'none',
-              pointerEvents: 'none',
+              fontFamily: "monospace",
+              userSelect: "none",
+              pointerEvents: "none",
             }}
           >
             {char}
@@ -66,33 +71,33 @@ const CaptchaSVG = ({ captcha, width = 150, height = 50 }) => {
 const Login = () => {
   const navigate = useNavigate();
   const [captcha, setCaptcha] = useState(generateCaptcha());
-  const [userCaptchaInput, setUserCaptchaInput] = useState('');
-  const [captchaError, setCaptchaError] = useState('');
+  const [userCaptchaInput, setUserCaptchaInput] = useState("");
+  const [captchaError, setCaptchaError] = useState("");
   const [disable, setDisable] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { singInUser } = useContext(AuthContext);
-
+  const { singInUser, user } = useContext(AuthContext);
+  console.log("user", user);
   useEffect(() => {
     if (userCaptchaInput.length === 6) {
       if (userCaptchaInput === captcha) {
         setDisable(false);
-        setCaptchaError('');
+        setCaptchaError("");
       } else {
         setDisable(true);
-        setCaptchaError('Captcha did not match!');
+        setCaptchaError("Captcha did not match!");
       }
     } else {
       setDisable(true);
-      setCaptchaError('');
+      setCaptchaError("");
     }
   }, [userCaptchaInput, captcha]);
 
   const refreshCaptcha = () => {
     setCaptcha(generateCaptcha());
-    setUserCaptchaInput('');
-    setCaptchaError('');
+    setUserCaptchaInput("");
+    setCaptchaError("");
     setDisable(true);
   };
 
@@ -102,18 +107,17 @@ const Login = () => {
     const email = form.email.value;
     const password = form.password.value;
 
-    if (!email || !password) {  
-      toast.error('⚠️ Please fill in all fields!');
+    if (!email || !password) {
+      toast.error("⚠️ Please fill in all fields!");
       return;
     }
 
     setIsLoading(true);
 
     singInUser(email, password)
-      .then(result => {
-        console.log("Sign in successful:", result.user);
+      .then(() => {
+        // console.log("Sign in successful:", result.user);
 
-      
         toast.success(`✅ Welcome back`, {
           position: "top-right",
           autoClose: 2000,
@@ -124,9 +128,9 @@ const Login = () => {
           progress: undefined,
         });
 
-        setTimeout(() => navigate('/'), 2200);
+        setTimeout(() => navigate("/"), 2200);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err.message);
         toast.error(`❌ ${err.message}`, {
           position: "top-right",
@@ -140,8 +144,6 @@ const Login = () => {
       })
       .finally(() => setIsLoading(false));
   };
-
-
 
   return (
     <div className="dark:bg-[#00091a] min-h-screen flex items-center justify-center py-20">
@@ -157,12 +159,18 @@ const Login = () => {
 
         {/* Form */}
         <div className="p-5  md:p-5">
-          <h1 className="text-4xl font-bold mb-2 bg-clip-text text-transparent bg-[#00baff]">Login</h1>
-          <p className="text-gray-500 dark:text-gray-400 mb-6">#Login to continue your learning journey</p>
+          <h1 className="text-4xl font-bold mb-2 bg-clip-text text-transparent bg-[#00baff]">
+            Login
+          </h1>
+          <p className="text-gray-500 dark:text-gray-400 mb-6">
+            #Login to continue your learning journey
+          </p>
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label className="block text-gray-700 dark:text-gray-300 font-medium mb-1">Email Address</label>
+              <label className="block text-gray-700 dark:text-gray-300 font-medium mb-1">
+                Email Address
+              </label>
               <input
                 type="email"
                 name="email"
@@ -173,10 +181,12 @@ const Login = () => {
             </div>
 
             <div>
-              <label className="block text-gray-700 dark:text-gray-300 font-medium mb-1">Password</label>
+              <label className="block text-gray-700 dark:text-gray-300 font-medium mb-1">
+                Password
+              </label>
               <div className="relative">
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   name="password"
@@ -189,7 +199,11 @@ const Login = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-600"
                 >
-                  {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                  {showPassword ? (
+                    <FaEyeSlash size={18} />
+                  ) : (
+                    <FaEye size={18} />
+                  )}
                 </button>
               </div>
               <div className="text-right mt-2">
@@ -204,7 +218,9 @@ const Login = () => {
 
             {/* Captcha */}
             <div>
-              <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">Security Verification</label>
+              <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                Security Verification
+              </label>
               <div className="flex items-center justify-between bg-gray-100 dark:bg-[#1a243a] p-4 rounded-xl select-none">
                 <CaptchaSVG captcha={captcha} />
                 <button
@@ -226,7 +242,11 @@ const Login = () => {
               />
               {captchaError && (
                 <p className="text-red-500 mt-2 text-sm animate-pulse flex items-center gap-1">
-                  <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                  <svg
+                    className="h-4 w-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
                     <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-10a1 1 0 00-1 1v4a1 1 0 102 0V9a1 1 0 00-1-1zm0 6a1 1 0 100 2 1 1 0 000-2z" />
                   </svg>
                   {captchaError}
@@ -237,36 +257,58 @@ const Login = () => {
             <button
               type="submit"
               disabled={disable || isLoading}
-              className={`w-full py-4 rounded-xl font-bold text-white transition duration-300 flex items-center justify-center ${disable || isLoading
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 shadow-md hover:shadow-xl transform hover:-translate-y-0.5'
-                }`}
+              className={`w-full py-4 rounded-xl font-bold text-white transition duration-300 flex items-center justify-center ${
+                disable || isLoading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 shadow-md hover:shadow-xl transform hover:-translate-y-0.5"
+              }`}
             >
               {isLoading ? (
                 <>
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                    ></path>
                   </svg>
                   Processing...
                 </>
               ) : (
-                'Sign In'
+                "Sign In"
               )}
             </button>
           </form>
 
           <div className="my-8 flex items-center">
             <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
-            <span className="mx-4 text-gray-500 dark:text-gray-400">or continue with</span>
+            <span className="mx-4 text-gray-500 dark:text-gray-400">
+              or continue with
+            </span>
             <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
           </div>
 
           <SocialLogin />
 
           <p className="text-center mt-8 text-gray-600 dark:text-gray-400">
-            Don’t have an account?{' '}
-            <Link to="/register" className="text-blue-600 font-semibold hover:underline">
+            Don’t have an account?{" "}
+            <Link
+              to="/register"
+              className="text-blue-600 font-semibold hover:underline"
+            >
               Create account
             </Link>
           </p>
