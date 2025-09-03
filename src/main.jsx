@@ -1,12 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Mainlayout from "./layout/Mainlayout";
 import Home from "./components/pages/Home/Home";
-import './index.css';
+import "./index.css";
 import Courses from "./components/pages/Courses/Courses";
 import InstructorProfile from "./components/pages/Home/OurInstructor/InstructorProfile";
 import AboutUs from "./components/pages/About/AboutUs/AboutUs";
@@ -62,6 +59,9 @@ import UserHome from "./components/Dashboard/UserDashboard/UserHome";
 import ModulePage from "./components/Dashboard/UserDashboard/ModulePage/ModulePage";
 import Successpage from "./components/Dashboard/CouponCard/Successpage";
 import ErrorPage from "./components/Dashboard/CouponCard/ErrorPage";
+import AdminRouter from "./routes/AdminRouter";
+import ReduxProvider from "./Content/ReduxProvider";
+import ProtectedRouter from "./routes/ProtectedRouter";
 
 const router = createBrowserRouter([
   {
@@ -69,290 +69,282 @@ const router = createBrowserRouter([
     element: <Mainlayout></Mainlayout>,
     children: [
       {
-        path: '/',
-        element: <Home></Home>
+        path: "/",
+        element: <Home></Home>,
       },
 
       {
-        path: '/instructorProfile',
-        element: <InstructorProfile></InstructorProfile>
+        path: "/instructorProfile",
+        element: <InstructorProfile></InstructorProfile>,
       },
       {
-        path: '/courses',
-        element: <Courses></Courses>
-      },
-
-      {
-        path: '/about',
-        element: <AboutUs></AboutUs>
-      },
-
-      {
-        path: '/contact',
-        element: <ContactUs></ContactUs>
+        path: "/courses",
+        element: (
+          <ProtectedRouter>
+            <Courses />
+          </ProtectedRouter>
+        ),
       },
 
       {
-        path: '/instructors',
-        element: <InstructorPage></InstructorPage>
+        path: "/about",
+        element: <AboutUs></AboutUs>,
       },
 
       {
-        path: '/blog',
-        element: <BlogPage></BlogPage>
-      },
-      {
-        path: '/login',
-        element: <Login></Login>
+        path: "/contact",
+        element: <ContactUs></ContactUs>,
       },
 
       {
-        path: '/register',
-        element: <Register></Register>
+        path: "/instructors",
+        element: <InstructorPage></InstructorPage>,
+      },
+
+      {
+        path: "/blog",
+        element: <BlogPage></BlogPage>,
+      },
+      {
+        path: "/login",
+        element: <Login></Login>,
+      },
+
+      {
+        path: "/register",
+        element: <Register></Register>,
       },
 
       {
         path: "/coursedetails/:idOrSlug",
-        element: <CourseDetails></CourseDetails>
+        element: <CourseDetails></CourseDetails>,
       },
 
       {
-        path: '/blogdetails',
-        element: <BlogDetails></BlogDetails>
+        path: "/blogdetails",
+        element: <BlogDetails></BlogDetails>,
       },
       {
         path: "/courses/category/:id",
-        element: <CategoryCourses></CategoryCourses>
+        element: <CategoryCourses></CategoryCourses>,
       },
 
       // footer er infos page
       {
-        path:'/terms-and-conditions',
-        element:<TermsAndCondition></TermsAndCondition>
+        path: "/terms-and-conditions",
+        element: <TermsAndCondition></TermsAndCondition>,
       },
       {
-        path:'/privacy-and-policy',
-        element:<PrivacyPolicy></PrivacyPolicy>
+        path: "/privacy-and-policy",
+        element: <PrivacyPolicy></PrivacyPolicy>,
       },
       {
-        path:"/refund-and-policy",
-        element:<RefundPolicy></RefundPolicy>
+        path: "/refund-and-policy",
+        element: <RefundPolicy></RefundPolicy>,
       },
-
 
       // user checkout list page (Cupon)
       {
-        path:'/checkout',
-        element:<CouponCheckout></CouponCheckout>
+        path: "/checkout",
+        element: <CouponCheckout></CouponCheckout>,
       },
 
       {
-        path:'order/success',
-        element:<Successpage></Successpage>
+        path: "order/success",
+        element: <Successpage></Successpage>,
       },
 
       {
-        path:'/error',
-        element:<ErrorPage></ErrorPage>
+        path: "/error",
+        element: <ErrorPage></ErrorPage>,
       },
-
     ],
-  
   },
 
   // student module access video
   {
-    path:'module-page',
-    element:<ModulePage></ModulePage>
+    path: "module-page",
+    element: <ModulePage></ModulePage>,
   },
 
   {
-    path: 'dashboard',
-    element: <Dashboard></Dashboard>,
+    path: "dashboard",
+    element: (
+      <AdminRouter>
+        <Dashboard></Dashboard>
+      </AdminRouter>
+    ),
     children: [
       // admin routes
       {
-        path: 'admin-home',
-        element: <AdminDashboard></AdminDashboard>
+        path: "admin-home",
+        element: <AdminDashboard></AdminDashboard>,
       },
       // manage courses related routes
       {
-        path: 'courses-list',
-        element: <CourseList></CourseList>
+        path: "courses-list",
+        element: <CourseList></CourseList>,
       },
       {
-        path: 'course-form',
-        element: <CourseForm></CourseForm>
+        path: "course-form",
+        element: <CourseForm></CourseForm>,
       },
       {
-        path: 'update-course',
-        element: <UpdateCourse></UpdateCourse>
+        path: "update-course",
+        element: <UpdateCourse></UpdateCourse>,
       },
 
       // category
       {
-        path: 'categories',
-        element: <CategoryList></CategoryList>
+        path: "categories",
+        element: <CategoryList></CategoryList>,
       },
       {
-        path: 'add-category',
-        element: <AddCategory></AddCategory>
+        path: "add-category",
+        element: <AddCategory></AddCategory>,
       },
 
       {
-        path: 'update-category',
-        element: <Updatecategory></Updatecategory>
+        path: "update-category",
+        element: <Updatecategory></Updatecategory>,
       },
-
-
 
       // Manage Blog related routes
       {
         path: "post-list",
-        element: <PostList></PostList>
+        element: <PostList></PostList>,
       },
       {
-        path: 'create-post',
-        element: <CreatePost></CreatePost>
-      },
-
-      {
-        path: 'post-update',
-        element: <UpdatePost></UpdatePost>
+        path: "create-post",
+        element: <CreatePost></CreatePost>,
       },
 
       {
-        path: 'post-comment',
-        element: <PostComment></PostComment>
+        path: "post-update",
+        element: <UpdatePost></UpdatePost>,
+      },
+
+      {
+        path: "post-comment",
+        element: <PostComment></PostComment>,
       },
       {
-        path: 'certificate',
-        element: <CertificateEditor></CertificateEditor>
+        path: "certificate",
+        element: <CertificateEditor></CertificateEditor>,
       },
       {
-        path: 'orderhistory',
-        element: <OrderHistory></OrderHistory>
+        path: "orderhistory",
+        element: <OrderHistory></OrderHistory>,
       },
       {
-        path: 'invoice',
-        element: <InvoicePage></InvoicePage>
+        path: "invoice",
+        element: <InvoicePage></InvoicePage>,
       },
       {
-        path: 'pending-order',
-        element: <PendingOrder></PendingOrder>
+        path: "pending-order",
+        element: <PendingOrder></PendingOrder>,
       },
       // withdraw related routes
       {
         path: "withdraw-method",
-        element: <WithdrawMethod></WithdrawMethod>
+        element: <WithdrawMethod></WithdrawMethod>,
       },
       {
-        path: 'withdraw-list',
-        element: <WithdrawList></WithdrawList>
+        path: "withdraw-list",
+        element: <WithdrawList></WithdrawList>,
       },
       {
         path: "create-method",
-        element: <CreateMethod></CreateMethod>
+        element: <CreateMethod></CreateMethod>,
       },
       {
-        path: 'update-method',
-        element: <UpdateMethod></UpdateMethod>
+        path: "update-method",
+        element: <UpdateMethod></UpdateMethod>,
       },
       // manage users er all student
       {
-        path: 'all-student',
-        element: <AllUser></AllUser>
+        path: "all-student",
+        element: <AllUser></AllUser>,
       },
       {
-        path: 'all-instructor',
-        element: <AllInstructor></AllInstructor>
+        path: "all-instructor",
+        element: <AllInstructor></AllInstructor>,
       },
       {
-        path: 'instructor-updated',
-        element: <InstructorUpdate></InstructorUpdate>
+        path: "instructor-updated",
+        element: <InstructorUpdate></InstructorUpdate>,
       },
       {
-        path: 'active-user',
-        element: <ActiveUser></ActiveUser>
+        path: "active-user",
+        element: <ActiveUser></ActiveUser>,
       },
       {
-        path: 'active-update',
-        element: <ActiveUpdate></ActiveUpdate>
+        path: "active-update",
+        element: <ActiveUpdate></ActiveUpdate>,
       },
       {
-        path: 'non-verified',
-        element: <NonVarifiedUser></NonVarifiedUser>
+        path: "non-verified",
+        element: <NonVarifiedUser></NonVarifiedUser>,
       },
       {
-        path: 'banned-users',
-        element: <BannedUser></BannedUser>
+        path: "banned-users",
+        element: <BannedUser></BannedUser>,
       },
       {
-        path: 'bulk-mail',
-        element: <SendBulkMail></SendBulkMail>
+        path: "bulk-mail",
+        element: <SendBulkMail></SendBulkMail>,
       },
 
       // Brand
       {
-        path: 'Brand-List',
-        element: <BrandList></BrandList>
+        path: "Brand-List",
+        element: <BrandList></BrandList>,
       },
       {
-        path: 'create-brand',
-        element: <CreateBrand></CreateBrand>
+        path: "create-brand",
+        element: <CreateBrand></CreateBrand>,
       },
       {
-        path: 'update-brand/:id',
-        element: <UpdateBrand></UpdateBrand>
+        path: "update-brand/:id",
+        element: <UpdateBrand></UpdateBrand>,
       },
-
 
       // user/instructor both profile
       {
-        path:'profile',
-        element:<UserProfile></UserProfile>
+        path: "profile",
+        element: <UserProfile></UserProfile>,
       },
 
       {
-        path:'update-profile',
-        element:<UpdateProfile></UpdateProfile>
+        path: "update-profile",
+        element: <UpdateProfile></UpdateProfile>,
       },
 
       {
-        path:'cupon',
-        element:<CouponCard></CouponCard>
+        path: "cupon",
+        element: <CouponCard></CouponCard>,
       },
-
-
-
-
-
-
 
       // user/student related panel route.!!
       {
-        path:'purchase-course',
-        element:<PurchaseCourse></PurchaseCourse>
+        path: "purchase-course",
+        element: <PurchaseCourse></PurchaseCourse>,
       },
 
       {
-        path:'user-home',
-        element:<UserHome></UserHome>
+        path: "user-home",
+        element: <UserHome></UserHome>,
       },
     ],
-
-    
   },
-
-
-
-
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <AuthProviders>
-      <RouterProvider router={router} />
+      <ReduxProvider>
+        <RouterProvider router={router} />
+      </ReduxProvider>
     </AuthProviders>
   </React.StrictMode>
 );

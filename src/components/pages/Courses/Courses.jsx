@@ -4,11 +4,14 @@ import AllCoursesList from "../Home/AllCoursesList/AllCoursesList";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
 import AllCoursesGrid from "./AllCoursesGrid/AllCoursesGrid";
+import { useGetMyDataQuery } from "../../../redux/api/userApi";
 
 const Courses = () => {
+  const { data: myDateRes, isLoading } = useGetMyDataQuery();
+  const myData = myDateRes?.data;
+  console.log("my data", myData);
   return (
     <div className="min-h-screen w-full relative pt-20 text-gray-900 dark:text-gray-100 transition-colors duration-500 overflow-hidden">
-
       {/* Light mode background */}
       <div
         className="absolute inset-0 z-0 dark:hidden"
@@ -29,7 +32,6 @@ const Courses = () => {
           backgroundRepeat: "no-repeat",
         }}
       />
-
       {/* Dark mode background */}
       <div
         className="absolute inset-0 z-0 dark:block hidden"
@@ -38,10 +40,8 @@ const Courses = () => {
 
           backgroundBlendMode: "screen",
           backgroundRepeat: "no-repeat",
-
         }}
       />
-
       {/* Content */}
       <div className="relative z-10 max-w-full mx-auto">
         {/* Hero Banner */}
@@ -61,15 +61,15 @@ const Courses = () => {
               className="max-w-4xl"
             >
               <div className="text-sm font-medium mb-4 flex items-center justify-center text-white">
-                <Link to="/" className="hover:underline font-semibold">Home</Link>
+                <Link to="/" className="hover:underline font-semibold">
+                  Home
+                </Link>
                 <span className="mx-2">&gt;</span>
                 <span className="font-semibold">Courses</span>
               </div>
-
             </motion.div>
           </div>
         </div>
-
 
         {/* Top Courses */}
         <motion.div
@@ -115,7 +115,6 @@ const Courses = () => {
             Explore All Programs
           </button>
         </motion.div> */}
-
       </div>
     </div>
   );
