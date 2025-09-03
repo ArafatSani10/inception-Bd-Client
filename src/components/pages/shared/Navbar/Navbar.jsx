@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { Link, } from "react-router-dom";
+import { Link } from "react-router-dom";
 import AuthContext from "../../../../Content/Authcontext";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaCircleUser } from "react-icons/fa6";
@@ -15,7 +15,6 @@ const Navbar = () => {
   const menuRef = useRef(null);
   const dropdownRef = useRef(null);
 
-
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
@@ -27,9 +26,7 @@ const Navbar = () => {
     if (saved === "enabled") setIsDarkMode(true);
     else if (saved === "disabled") setIsDarkMode(false);
     else
-      setIsDarkMode(
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-      );
+      setIsDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches);
   }, []);
 
   useEffect(() => {
@@ -40,10 +37,7 @@ const Navbar = () => {
   // Close dropdown if clicked outside
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setIsDropdownOpen(false);
       }
       if (
@@ -70,7 +64,7 @@ const Navbar = () => {
   const getAvatarLetters = (user) => {
     if (!user) return "UU";
     if (user.photoURL) return "";
-    if (user.displayName) return user.displayName.slice(0, 2).toUpperCase();
+    if (user?.displayName) return user?.displayName?.slice(0, 2).toUpperCase();
     if (user.email) return user.email.slice(0, 2).toUpperCase();
     return "UU";
   };
@@ -79,7 +73,6 @@ const Navbar = () => {
     signOutUser()
       .then(() => {
         toast.success("Successfully logged out!", { autoClose: 2000 });
-
       })
       .catch((err) => {
         console.error(err.message);
@@ -104,7 +97,6 @@ const Navbar = () => {
             />
           </Link>
         </div>
-
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center space-x-10 text-gray-700 dark:text-gray-300 font-semibold">
@@ -183,7 +175,6 @@ const Navbar = () => {
                 </motion.div>
               )}
             </AnimatePresence>
-
           </div>
 
           {/* Dark Mode Toggle */}
@@ -217,7 +208,6 @@ const Navbar = () => {
           </button>
         </div>
 
-
         {/* Mobile Controls */}
         <div className="flex md:hidden items-center space-x-4 p-3">
           {user && (
@@ -242,9 +232,7 @@ const Navbar = () => {
                 animate={{ rotate: isDropdownOpen ? 180 : 0 }}
                 transition={{ duration: 0.3 }}
                 className="ml-1 text-gray-500 dark:text-gray-300"
-              >
-
-              </motion.span>
+              ></motion.span>
             </div>
           )}
 
@@ -292,7 +280,11 @@ const Navbar = () => {
                 stroke="currentColor"
                 strokeWidth={2}
               >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               </svg>
             ) : (
               <svg
@@ -302,7 +294,11 @@ const Navbar = () => {
                 stroke="currentColor"
                 strokeWidth={2}
               >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             )}
           </button>
@@ -324,7 +320,6 @@ const Navbar = () => {
                   <p className="text-xs max-sm:hidden text-gray-500 dark:text-gray-400">
                     {user?.email || ""}
                   </p>
-
                 </div>
 
                 <Link
@@ -346,14 +341,14 @@ const Navbar = () => {
             )}
           </AnimatePresence>
         </div>
-
       </div>
 
       {/* Mobile Menu Panel */}
       <div
         ref={menuRef}
-        className={`fixed top-0 right-0 h-full w-72 bg-white dark:bg-gray-900 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${isMenuOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+        className={`fixed top-0 right-0 h-full w-72 bg-white dark:bg-gray-900 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
+          isMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
       >
         <div className="flex flex-col p-6 pt-8 space-y-4 text-sm font-medium text-gray-700 dark:text-gray-300 h-full overflow-y-auto">
           {navItems.map(({ name, href }) => (
