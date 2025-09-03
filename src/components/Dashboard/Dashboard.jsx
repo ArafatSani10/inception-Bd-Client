@@ -4,7 +4,7 @@ import {
     FiHome, FiShoppingBag, FiUsers, FiSearch, FiBell,
     FiMessageSquare, FiChevronsLeft, FiChevronDown, FiChevronUp, FiMenu
 } from 'react-icons/fi';
-import { FaBlog, FaBookReader, FaCertificate, FaChalkboardTeacher, FaCog, FaGraduationCap, FaLock, FaRegUser, FaSignOutAlt, FaWallet } from 'react-icons/fa';
+import { FaBlog, FaBookReader, FaCertificate, FaChalkboardTeacher, FaCog, FaGraduationCap, FaLock, FaRegUser, FaSignOutAlt, FaTicketAlt, FaWallet } from 'react-icons/fa';
 import { NavLink, Outlet, Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FaChevronDown, FaChevronUp, FaUsersGear } from 'react-icons/fa6';
@@ -225,6 +225,15 @@ const Dashboard = () => {
                                     { label: "Withdraw List", to: "withdraw-list" },
                                 ]}
                             />
+
+                            <li>
+                                <NavLink to="cupon" className={({ isActive }) => `group relative flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all ${isActive ? ' text-[#00baff] shadow-md font-semibold' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}`}>
+                                    <span className="text-base"><FaTicketAlt /></span>
+                                    {sidebarOpen && <span>Cupon Card</span>}
+                                </NavLink>
+
+                            </li>
+
 
                             {sidebarOpen && <li className="text-xs text-gray-400 dark:text-gray-500 py-4 px-3 tracking-wide uppercase">Manage Users</li>}
 

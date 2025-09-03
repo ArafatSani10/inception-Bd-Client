@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronDown, FaChevronUp, FaBars, FaTimes } from "react-icons/fa";
+import { Link } from "react-router";
 
 const modulesData = [
-    { title: "Live Class", topics: 35, expanded: true },
-    { title: "Recorded Classes", topics: 35, expanded: false },
-    { title: "Resources", topics: 1, expanded: false },
+    { title: "Live Class", topics: 5, expanded: true },
+    { title: "Recorded Classes", topics: 5, expanded: false },
+    { title: "Resources", topics: 2, expanded: false },
 ];
 
 const ModulePage = () => {
     const [modules, setModules] = useState(modulesData);
     const [selectedTopic, setSelectedTopic] = useState({ module: 0, topic: 0 });
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
-    // Resize Handler
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 1024);
         window.addEventListener("resize", handleResize);
@@ -28,37 +28,32 @@ const ModulePage = () => {
     };
 
     return (
-        <div className="min-h-screen font-montserrat flex flex-col bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+        <div className="min-h-screen font-montserrat bg-gray-50 dark:bg-gray-900  flex flex-col transition-colors duration-300">
             {/* Topbar */}
             <div className="flex items-center justify-between px-6 py-4 bg-white dark:bg-gray-800 shadow">
-                <div className="flex items-center   gap-10">
-                    <img
+                <div className="flex items-center gap-4">
+                    <Link to="/"><img
                         src="https://inceptionbd.com/store/1/Untitled%20design%20(3).png"
                         alt="Logo"
                         className="h-10"
-                    />
-                    <div className="">
-                        <h1 className="font-semibold mb-3 text-gray-800 dark:text-gray-200">
-                            Master Generative AI in Bangla
-                        </h1>
-                      
-                    </div>
+                    /></Link>
+                    <h1 className="font-semibold text-gray-800 dark:text-gray-200">
+                        Master Generative AI in Bangla
+                    </h1>
                 </div>
-                <div className="flex gap-4 text-gray-600 dark:text-gray-300">
-                    <div className="flex gap-4">
-                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300">
-                            Course Page
-                        </button>
-                        <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors duration-300">
-                            My Courses
-                        </button>
-                    </div>
 
+                <div className="flex items-center gap-4">
+                    <button className="hidden md:block px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                        Course Page
+                    </button>
+                    <button className="hidden md:block px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition">
+                        My Courses
+                    </button>
                     <button
-                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                        className=""
+                        onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                        className="text-2xl"
                     >
-                        {isSidebarOpen ? <FaTimes /> : <FaBars />}
+                        {isSidebarCollapsed ? <FaBars /> : <FaTimes />}
                     </button>
                 </div>
             </div>
@@ -68,7 +63,6 @@ const ModulePage = () => {
                 <button className="text-green-600 font-semibold border-b-2 border-green-600">
                     Content
                 </button>
-
                 <button className="text-gray-600 dark:text-gray-300 hover:text-green-600">
                     Certificates
                 </button>
@@ -77,44 +71,42 @@ const ModulePage = () => {
             {/* Main */}
             <div className="flex flex-1 relative">
                 {/* Video Area */}
-                <div
-                    className={`flex-1 p-6 transition-all ${isSidebarOpen && !isMobile ? "lg:w-3/4" : "w-full"
-                        }`}
+                <motion.div
+                    className="p-6 transition-all duration-500"
+                    animate={{
+                        width: isMobile
+                            ? "100%"
+                            : isSidebarCollapsed
+                                ? "95%"
+                                : "75%",
+                    }}
                 >
                     <div className="w-full aspect-video rounded-xl overflow-hidden shadow-lg bg-black">
-                        <iframe
-                            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                            title="Course Video"
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            className="w-full h-full"
-                        ></iframe>
+                        <iframe className="w-full h-full" src="https://www.youtube.com/embed/wpO8UbYmNj8?si=G9-2gSCmBEcXm7Xr" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Sidebar */}
-                <AnimatePresence>
-                    {isSidebarOpen && (
-                        <motion.div
-                            key="sidebar"
-                            initial={{ x: 300, opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            exit={{ x: 300, opacity: 0 }}
-                            transition={{ type: "tween", duration: 0.4 }}
-                            className="absolute right-0 top-0 h-full w-3/4 lg:w-1/4 bg-white dark:bg-gray-800 shadow-lg z-20"
-                        >
+                <motion.div
+                    className="absolute right-0 top-0 h-full bg-white dark:bg-gray-800 shadow-lg flex flex-col overflow-hidden transition-all duration-500 z-20"
+                    animate={{
+                        width: isMobile
+                            ? "75%"
+                            : isSidebarCollapsed
+                                ? "60px"
+                                : "25%",
+                    }}
+                >
+                    {!isSidebarCollapsed && (
+                        <>
                             <div className="p-4 border-b dark:border-gray-700">
                                 <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">
                                     Course Modules
                                 </h2>
                             </div>
-                            <div className="p-4 space-y-4 overflow-y-auto h-[calc(100%-60px)]">
+                            <div className="p-4 space-y-4 overflow-y-auto flex-1">
                                 {modules.map((module, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg"
-                                    >
+                                    <div key={idx} className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                                         <div
                                             className="flex justify-between items-center cursor-pointer"
                                             onClick={() => toggleModule(idx)}
@@ -145,9 +137,9 @@ const ModulePage = () => {
                                                                     setSelectedTopic({ module: idx, topic: i })
                                                                 }
                                                                 className={`p-2 rounded-md cursor-pointer text-sm ${selectedTopic.module === idx &&
-                                                                        selectedTopic.topic === i
-                                                                        ? "bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-200"
-                                                                        : "hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                    selectedTopic.topic === i
+                                                                    ? "bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-200"
+                                                                    : "hover:bg-gray-100 dark:hover:bg-gray-600"
                                                                     }`}
                                                             >
                                                                 Topic {i + 1}
@@ -160,9 +152,9 @@ const ModulePage = () => {
                                     </div>
                                 ))}
                             </div>
-                        </motion.div>
+                        </>
                     )}
-                </AnimatePresence>
+                </motion.div>
             </div>
         </div>
     );

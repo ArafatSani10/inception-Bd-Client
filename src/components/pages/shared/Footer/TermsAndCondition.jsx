@@ -204,7 +204,7 @@ export default function TermsAndCondition() {
   ];
 
   return (
-    <main className="min-h-screen mt-5 bg-gradient-to-b from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-950 dark:to-black text-gray-800 dark:text-gray-100 py-12 px-4 sm:px-6 lg:px-4">
+    <main className="min-h-screen mt-10 bg-gradient-to-b from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-950 dark:to-black text-gray-800 dark:text-gray-100 py-12 px-4 sm:px-6 lg:px-4">
       <div className="max-w-full mx-auto">
         {/* Header */}
         <motion.header
@@ -214,7 +214,7 @@ export default function TermsAndCondition() {
           viewport={{ once: true }}
           className="mb-12 text-center"
         >
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#00baff]">
             Terms & Conditions
           </h1>
           <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">

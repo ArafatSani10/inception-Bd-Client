@@ -27,7 +27,7 @@ export default function RefundPolicy() {
           variants={fadeInUp}
           className="mb-12 text-center"
         >
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-green-600 to-teal-500 bg-clip-text text-transparent">
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#00baff]">
             Refund Policy
           </h1>
           <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">InceptionBD</p>

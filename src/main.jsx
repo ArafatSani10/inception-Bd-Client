@@ -60,6 +60,8 @@ import CouponCheckout from "./components/Dashboard/CouponCard/CuponCheckOut";
 import PurchaseCourse from "./components/Dashboard/UserDashboard/Course/PurchaseCourse";
 import UserHome from "./components/Dashboard/UserDashboard/UserHome";
 import ModulePage from "./components/Dashboard/UserDashboard/ModulePage/ModulePage";
+import Successpage from "./components/Dashboard/CouponCard/Successpage";
+import ErrorPage from "./components/Dashboard/CouponCard/ErrorPage";
 
 const router = createBrowserRouter([
   {
@@ -142,6 +144,16 @@ const router = createBrowserRouter([
       {
         path:'/checkout',
         element:<CouponCheckout></CouponCheckout>
+      },
+
+      {
+        path:'order/success',
+        element:<Successpage></Successpage>
+      },
+
+      {
+        path:'/error',
+        element:<ErrorPage></ErrorPage>
       },
 
     ],

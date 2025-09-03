@@ -326,7 +326,11 @@ const CourseDetails = () => {
                                     ) : 'Free'}
                                 </h1>
                             </div>
-                            <Link to="/checkout">
+                          // ...
+                            <Link
+                                to="/checkout"
+                                state={{ course }} // course data পাঠানো হচ্ছে
+                            >
                                 <div className="flex justify-center">
                                     <button className="p-2 text-center bg-[#00baff] hover:bg-gray-800 transition-all duration-300 rounded-xl my-2 text-white w-full">
                                         Enroll on course
