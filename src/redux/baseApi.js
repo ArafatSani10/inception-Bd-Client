@@ -4,7 +4,7 @@ import { tagTypeList } from "./tagTypes";
 const baseQuery = async (args, api, extraOptions) => {
   // works on client side
   const rawBaseQuery = fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_BASE_API,
+    baseUrl: import.meta.env.VITE_API_URL,
     credentials: "include", // ❗️This line is the fix
   });
 

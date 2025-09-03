@@ -1,1 +1,1 @@
-export const getBaseUrl = () => import.meta.env.VITE_BASE_API;
+export const getBaseUrl = () => import.meta.env.VITE_API_URL;

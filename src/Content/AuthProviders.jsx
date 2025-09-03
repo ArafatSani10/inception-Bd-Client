@@ -20,7 +20,7 @@ const AuthProviders = ({ children }) => {
   const exchangeForBackendTokens = async (firebaseUser) => {
     const firebaseIdToken =
       await firebaseUser.getIdToken(/* forceRefresh? false */);
-    const res = await fetch(`${import.meta.env.VITE_BASE_API}/auth/firebase`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/firebase`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include", // IMPORTANT for refresh cookie
