@@ -16,19 +16,26 @@ const UpdateProfile = () => {
         const fetchUser = async () => {
             try {
                 if (user?.email) {
-                    const res = await axios.get(`http://localhost:5000/api/v1/users`);
-                    const singleUser = res.data.data.find(u => u.email === user.email);
-                    setDbUser(singleUser);
+                    const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
+                    const singleUser = res.data?.data?.find((u) => u.email === user.email);
+
+                    if (singleUser) {
+                        setDbUser(singleUser);
+                    } else {
+                        setError("User not found in database");
+                    }
                 }
             } catch (err) {
-                console.error(err);
-                setError('Failed to fetch user data');
+                console.error("Error fetching user:", err);
+                setError("Failed to fetch user data");
             } finally {
                 setLoading(false);
             }
         };
+
         fetchUser();
     }, [user]);
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -46,37 +53,38 @@ const UpdateProfile = () => {
         }
     };
 
-const handleSave = async () => {
-    try {
-        if (!dbUser) return;
+    const handleSave = async () => {
+        try {
+            if (!dbUser) return;
 
-        // Backend expected fields only
-        const updatedData = {
-            name: dbUser.name,
-            phone: dbUser.phone,
-            profilePic: dbUser.profilePic,
-            education: dbUser.education,
-            experience: dbUser.experience,
-            jobTitle: dbUser.jobTitle,
-            bio: dbUser.bio,
-        };
+            // Backend expected fields only
+            const updatedData = {
+                name: dbUser.name,
+                phone: dbUser.phone,
+                profilePic: dbUser.profilePic,
+                education: dbUser.education,
+                experience: dbUser.experience,
+                jobTitle: dbUser.jobTitle,
+                bio: dbUser.bio,
+            };
 
-        const res = await axios.patch(
-            `http://localhost:5000/api/v1/users/${dbUser._id}`,
-            updatedData
-        );
+            const res = await axios.patch(
+                `${import.meta.env.VITE_API_URL}/users/${dbUser._id}`,
+                updatedData
+            );
 
-        const updatedUser = res.data.data || { ...dbUser, ...updatedData };
 
-        // Update context so UserProfile updates
-        updateUser(updatedUser);
+            const updatedUser = res.data.data || { ...dbUser, ...updatedData };
 
-        alert('Profile updated successfully!');
-    } catch (err) {
-        console.error(err.response?.data || err.message);
-        alert('Failed to update profile');
-    }
-};
+            // Update context so UserProfile updates
+            updateUser(updatedUser);
+
+            alert('Profile updated successfully!');
+        } catch (err) {
+            console.error(err.response?.data || err.message);
+            alert('Failed to update profile');
+        }
+    };
 
 
     if (loading) return <p className="text-center text-gray-500 dark:text-gray-400 mt-20">Loading profile...</p>;
@@ -88,7 +96,7 @@ const handleSave = async () => {
     return (
         <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-500">
 
-           
+
 
             {/* Main Content */}
             <div className="flex-1 p-6">

@@ -116,7 +116,7 @@ const Dashboard = () => {
         const fetchUserRole = async () => {
             try {
                 if (user?.email) {
-                    const res = await axios.get(`http://localhost:5000/api/v1/users`);
+                    const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
                     // Filter single user by email
                     const singleUser = res.data.data.find(u => u.email === user.email);
                     setDbUser(singleUser);
