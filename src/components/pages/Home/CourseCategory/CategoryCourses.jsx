@@ -36,7 +36,8 @@ const CategoryCourses = () => {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const res = await axios.get("http://localhost:5000/api/v1/courses");
+                const res = await axios.get(`${import.meta.env.VITE_API_URL}/courses`);
+
 
                 const filtered = res.data.data.filter(course => {
                     if (typeof course.category === "string") {

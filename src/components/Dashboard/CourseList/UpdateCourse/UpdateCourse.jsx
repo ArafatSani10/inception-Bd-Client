@@ -34,17 +34,23 @@ const UpdateCourse = () => {
   useEffect(() => {
     const fetchInstructors = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5000/api/v1/users?role=instructor"
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/users?role=instructor`
         );
-        const { data } = response;
-        if (data) setInstructors(data?.data);
-      } catch (error) {
-        console.error("Error fetching instructors:", error);
+
+        if (res.data?.success) {
+          setInstructors(res.data.data || []);
+        } else {
+          setInstructors([]);
+        }
+      } catch (err) {
+        console.error("Error fetching instructors:", err);
       }
     };
+
     fetchInstructors();
   }, []);
+
 
   // Field arrays
   const {
@@ -101,9 +107,10 @@ const UpdateCourse = () => {
       console.log("🚀 Final Data Sent to Backend:", rest);
 
       const res = await axios.post(
-        "http://localhost:5000/api/v1/courses",
+        `${import.meta.env.VITE_API_URL}/courses`,
         form_data
       );
+
 
       console.log("✅ Server Response:", res.data);
       if (res.data.success) {

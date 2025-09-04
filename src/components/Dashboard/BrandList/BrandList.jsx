@@ -9,7 +9,7 @@ export default function BrandList() {
 
   const fetchBrands = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/v1/brands");
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/brands`);
       if (res.data.success) setBrands(res.data.data);
     } catch (err) {
       console.error(err);
@@ -22,14 +22,15 @@ export default function BrandList() {
 
   const toggleStatus = async (id, currentStatus) => {
     try {
-      await axios.patch(`http://localhost:5000/api/v1/brands/${id}`, {
+      await axios.patch(`${import.meta.env.VITE_API_URL}/brands/${id}`, {
         status: currentStatus === "active" ? "inactive" : "active",
       });
-      fetchBrands(); // refresh after update
+      fetchBrands(); // Update list after status change
     } catch (err) {
-      console.error(err);
+      console.error("Error updating brand status:", err);
     }
   };
+
 
 
   const deleteBrand = async (id) => {
@@ -45,7 +46,7 @@ export default function BrandList() {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:5000/api/v1/brands/${id}`);
+        await axios.delete(`${import.meta.env.VITE_API_URL}/brands/${id}`);
         Swal.fire("Deleted!", "Brand has been deleted.", "success");
         fetchBrands();
       } catch (err) {

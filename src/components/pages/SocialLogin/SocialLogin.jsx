@@ -33,9 +33,10 @@ const SocialLogin = () => {
                 try {
                     setLoading(true);
                     const response = await axios.post(
-                        'http://localhost:5000/api/v1/auth/signup',
+                        `${import.meta.env.VITE_API_URL}/auth/signup`,
                         userData
                     );
+
 
                     if (response.data.success) {
                         toast.success(`🎉 Welcome, ${userData.name}! Registration successful.`, {

@@ -167,6 +167,17 @@ const router = createBrowserRouter([
     element: <ModulePage></ModulePage>,
   },
 
+  // user/student related panel route.!!
+  {
+    path: "purchase-course",
+    element: <PurchaseCourse></PurchaseCourse>,
+  },
+
+  {
+    path: "user-home",
+    element: <UserHome></UserHome>,
+  },
+
   {
     path: "dashboard",
     element: (
@@ -325,18 +336,11 @@ const router = createBrowserRouter([
         element: <CouponCard></CouponCard>,
       },
 
-      // user/student related panel route.!!
-      {
-        path: "purchase-course",
-        element: <PurchaseCourse></PurchaseCourse>,
-      },
 
-      {
-        path: "user-home",
-        element: <UserHome></UserHome>,
-      },
     ],
   },
+
+
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

@@ -15,22 +15,28 @@ const UpdateBrand = () => {
   useEffect(() => {
     const fetchBrand = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/v1/brands/${id}`);
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/brands/${id}`
+        );
+
         console.log("Fetched brand:", res.data);
-        if (res.data.success) {
+
+        if (res.data?.success) {
           const brand = res.data.data;
-          setValue("name", brand.name);
-          setValue("website", brand.website);
-          setValue("status", brand.status.toLowerCase());
-          setThumbnail(brand.logo);
+          setValue("name", brand?.name || "");
+          setValue("website", brand?.website || "");
+          setValue("status", brand?.status?.toLowerCase() || "inactive");
+          setThumbnail(brand?.logo || "");
         }
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching brand:", err);
         toast.error("Failed to fetch brand");
       }
     };
-    fetchBrand();
+
+    if (id) fetchBrand();
   }, [id, setValue]);
+
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -55,7 +61,7 @@ const UpdateBrand = () => {
       for (let [key, value] of formData.entries()) console.log(key, value);
 
       const response = await axios.patch(
-        `http://localhost:5000/api/v1/brands/${id}`,
+        `${import.meta.env.VITE_API_URL}/brands/${id}`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -81,26 +87,26 @@ const UpdateBrand = () => {
           <div className="flex flex-col">
             <label className="mb-2 font-semibold text-gray-700 dark:text-gray-300">Brand Name</label>
             <input {...register("name", { required: true })} type="text" placeholder="Brand name"
-              className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+              className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
 
           <div className="flex flex-col">
             <label className="mb-2 font-semibold text-gray-700 dark:text-gray-300">Brand Website</label>
             <input {...register("website", { required: true })} type="text" placeholder="https://example.com"
-              className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+              className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
 
           <div className="flex flex-col md:col-span-1">
             <label className="mb-2 font-semibold text-gray-700 dark:text-gray-300">Logo</label>
             <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 transition-colors duration-200 bg-gray-50 dark:bg-gray-700"
               onClick={() => document.getElementById("brandImage")?.click()}>
-              {thumbnail ? <img src={thumbnail} alt="Logo" className="w-32 h-32 object-cover rounded-lg"/>
+              {thumbnail ? <img src={thumbnail} alt="Logo" className="w-32 h-32 object-cover rounded-lg" />
                 : <>
-                  <FaCloudUploadAlt className="text-4xl text-gray-400 dark:text-gray-300 mb-2"/>
+                  <FaCloudUploadAlt className="text-4xl text-gray-400 dark:text-gray-300 mb-2" />
                   <p className="text-gray-500 dark:text-gray-200">Click to upload logo</p>
                 </>}
             </div>
-            <input id="brandImage" type="file" accept="image/*" className="hidden" onChange={handleImageChange}/>
+            <input id="brandImage" type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
           </div>
 
           <div className="flex flex-col">

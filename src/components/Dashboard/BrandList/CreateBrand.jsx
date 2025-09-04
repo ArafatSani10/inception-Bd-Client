@@ -30,10 +30,16 @@ const CreateBrand = () => {
       if (thumbnail) formData.append("logo", thumbnail);
 
       const response = await axios.post(
-        "http://localhost:5000/api/v1/brands",
+        `${import.meta.env.VITE_API_URL}/brands`,
         formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        {
+          headers: {
+            // axios automatically sets correct Content-Type for FormData
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
+
 
       toast.success("Brand created successfully!");
       reset();
