@@ -9,7 +9,9 @@ const PartnershipLogo = () => {
   const fetchBrands = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:5000/api/v1/brands");
+    
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/brands`);
+
       if (res.data.success) {
         setBrands(res.data.data);
       } else {

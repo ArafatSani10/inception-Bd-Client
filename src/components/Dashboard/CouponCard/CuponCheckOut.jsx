@@ -147,7 +147,7 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../../../Content/Authcontext";
 
-const base_url = "http://localhost:5000/api/v1";
+
 
 export default function CheckoutForm() {
   const { register, handleSubmit, reset } = useForm();
@@ -161,7 +161,7 @@ export default function CheckoutForm() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`${base_url}/users/${user?.email}`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/users/${user?.email}`);
         if (res.data) {
           setUserInfo(res.data?.data); // পুরো user object set
         }
@@ -189,7 +189,7 @@ export default function CheckoutForm() {
 
       console.log("payload", payload)
 
-      const res = await axios.post(`${base_url}/orders`, payload);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/orders`, payload);
       console.log("Order created:", res.data);
       window.location.href = res?.data?.data?.url
       // alert("✅ Order placed successfully!");
