@@ -83,10 +83,23 @@ const AuthProviders = ({ children }) => {
       });
   };
 
-  const signInWithGoogle = () => {
+  const signInWithGoogle = async () => {
     setLoading(true);
-    return signInWithPopup(auth, googleProvider);
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      // যদি backend token চাই
+      await exchangeForBackendTokens(user);
+      setUser(user);
+      return user;
+    } catch (err) {
+      console.error("Google sign-in error:", err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {

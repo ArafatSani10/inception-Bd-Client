@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { FaGoogle, FaEye, FaEyeSlash, FaRedo } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaRedo } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import AuthContext from "../../../Content/Authcontext";
+import Lottie from "lottie-react";
+import LoginLottieData from '../../../../public/lottie/login/login blue.json';
 
 const generateCaptcha = () =>
   Math.floor(100000 + Math.random() * 900000).toString();
@@ -78,7 +80,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { singInUser, user } = useContext(AuthContext);
-  console.log("user", user);
+
   useEffect(() => {
     if (userCaptchaInput.length === 6) {
       if (userCaptchaInput === captcha) {
@@ -116,31 +118,11 @@ const Login = () => {
 
     singInUser(email, password)
       .then(() => {
-        // console.log("Sign in successful:", result.user);
-
-        toast.success(`✅ Welcome back`, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-
+        toast.success(`✅ Welcome back`, { autoClose: 2000 });
         setTimeout(() => navigate("/"), 2200);
       })
       .catch((err) => {
-        console.log(err.message);
-        toast.error(`❌ ${err.message}`, {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(`❌ ${err.message}`, { autoClose: 3000 });
       })
       .finally(() => setIsLoading(false));
   };
@@ -148,17 +130,17 @@ const Login = () => {
   return (
     <div className="dark:bg-[#00091a] min-h-screen flex items-center justify-center py-20">
       <div className="max-w-7xl mx-auto max-sm:w-full bg-white dark:bg-[#0f172a] rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-2">
-        {/* Image */}
-        <div className="flex items-center justify-center bg-gradient-to-br from-[#e3f2fd] to-[#ede7f6] dark:from-[#0f172a] dark:to-[#1e2a3a] h-[250px] max-sm:h-[500px] lg:h-auto">
-          <img
-            src="https://inceptionbd.com/store/1/default_images/front_login.jpg"
-            alt="Login Illustration"
-            className="w-full h-full lg:object-cover"
+        {/* Lottie Animation */}
+        <div className="flex items-center justify-center p-5 md:p-10 bg-gray-100 dark:bg-[#0a1a33]">
+          <Lottie
+            animationData={LoginLottieData}
+            loop={true}
+            className="w-full max-w-full"
           />
         </div>
 
         {/* Form */}
-        <div className="p-5  md:p-5">
+        <div className="p-5 md:p-4">
           <h1 className="text-4xl font-bold mb-2 bg-clip-text text-transparent bg-[#00baff]">
             Login
           </h1>
@@ -167,6 +149,7 @@ const Login = () => {
           </p>
 
           <form onSubmit={handleLogin} className="space-y-6">
+            {/* Email */}
             <div>
               <label className="block text-gray-700 dark:text-gray-300 font-medium mb-1">
                 Email Address
@@ -180,6 +163,7 @@ const Login = () => {
               />
             </div>
 
+            {/* Password */}
             <div>
               <label className="block text-gray-700 dark:text-gray-300 font-medium mb-1">
                 Password
@@ -199,11 +183,7 @@ const Login = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-600"
                 >
-                  {showPassword ? (
-                    <FaEyeSlash size={18} />
-                  ) : (
-                    <FaEye size={18} />
-                  )}
+                  {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                 </button>
               </div>
               <div className="text-right mt-2">
@@ -242,18 +222,12 @@ const Login = () => {
               />
               {captchaError && (
                 <p className="text-red-500 mt-2 text-sm animate-pulse flex items-center gap-1">
-                  <svg
-                    className="h-4 w-4"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-10a1 1 0 00-1 1v4a1 1 0 102 0V9a1 1 0 00-1-1zm0 6a1 1 0 100 2 1 1 0 000-2z" />
-                  </svg>
                   {captchaError}
                 </p>
               )}
             </div>
 
+            {/* Submit */}
             <button
               type="submit"
               disabled={disable || isLoading}
@@ -293,6 +267,7 @@ const Login = () => {
             </button>
           </form>
 
+          {/* Social Login */}
           <div className="my-8 flex items-center">
             <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
             <span className="mx-4 text-gray-500 dark:text-gray-400">

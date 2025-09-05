@@ -8,6 +8,9 @@ import AuthContext from "../../../Content/Authcontext";
 import axios from "axios";
 import { getBaseUrl } from "../../../utls/getBaseUrl";
 
+import RegistarData from "../../../../public/lottie/Register/Appointment booking with smartphone.json"
+import Lottie from "lottie-react";
+
 // Generate random 6-digit captcha
 const generateCaptcha = () =>
   Math.floor(100000 + Math.random() * 900000).toString();
@@ -162,7 +165,7 @@ const Register = () => {
         autoClose: 3000,
       });
 
-      navigate("/login");
+      navigate("/verify-OTP");
     } catch (err) {
       console.log("error from register form", err);
       console.error(err.response?.data || err.message);
@@ -181,12 +184,15 @@ const Register = () => {
   return (
     <div className="dark:bg-[#00091a] min-h-screen flex items-center justify-center py-20">
       <div className="max-w-7xl mx-auto bg-white dark:bg-[#0f172a] rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-2">
-        <div className="lg:flex items-center justify-center bg-gradient-to-br from-[#e3f2fd] to-[#ede7f6] dark:from-[#0f172a] dark:to-[#1e2a3a]">
-          <img
-            src="https://inceptionbd.com/store/1/default_images/front_register.jpg"
-            alt="Register Illustration"
-            className="w-full h-full object-cover"
-          />
+        {/* Lottie Animation */}
+        <div className="flex items-center justify-center p-5 md:p-10 bg-gray-100 dark:bg-[#0a1a33]">
+          <div className="flex justify-center lg:justify-end">
+            <Lottie
+              animationData={RegistarData}
+              loop={true}
+              className="w-full h-full" // responsive height
+            />
+          </div>
         </div>
         <div className="p-6 md:p-5">
           <h1 className="text-4xl font-bold mb-2 bg-clip-text text-transparent bg-[#00baff]">
@@ -268,9 +274,8 @@ const Register = () => {
                     return (
                       <li
                         key={idx}
-                        className={`flex items-center gap-2 ${
-                          valid ? "text-green-600" : "text-red-500"
-                        }`}
+                        className={`flex items-center gap-2 ${valid ? "text-green-600" : "text-red-500"
+                          }`}
                       >
                         {valid ? "✅" : "❌"} {cond.label}
                       </li>
@@ -323,11 +328,10 @@ const Register = () => {
             <button
               type="submit"
               disabled={disable || isLoading}
-              className={`w-full py-4 rounded-xl font-bold text-white transition duration-300 flex items-center justify-center ${
-                disable || isLoading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 shadow-md hover:shadow-xl transform hover:-translate-y-0.5"
-              }`}
+              className={`w-full py-4 rounded-xl font-bold text-white transition duration-300 flex items-center justify-center ${disable || isLoading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 shadow-md hover:shadow-xl transform hover:-translate-y-0.5"
+                }`}
             >
               {isLoading ? "Processing..." : "Register"}
             </button>

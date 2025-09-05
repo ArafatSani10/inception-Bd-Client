@@ -4,10 +4,9 @@ import { FaUser, FaEnvelope, FaPhone, FaUserTag, FaCheckCircle, FaTimesCircle, F
 // import AuthContext from '../../../Content/Authcontext';
 import { CiSettings } from 'react-icons/ci';
 import { Link } from 'react-router';
-import AuthContext from '../../../Content/Authcontext';
+import AuthContext from '../../../../Content/Authcontext';
 
-
-const UserProfile = () => {
+const StudentProfile = () => {
     const { user } = useContext(AuthContext);
     const [dbUser, setDbUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -112,7 +111,7 @@ const UserProfile = () => {
                     </div>
 
 
-                    <Link to="/dashboard/update-profile">
+                    <Link to="/student-dashboard/student-update-profile">
 
                         <div className="flex items-center gap-4 bg-white dark:bg-gray-800 p-10 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
                             <div className="text-2xl"><CiSettings className="text-gray-500 dark:text-gray-400" /></div>
@@ -127,7 +126,7 @@ const UserProfile = () => {
     );
 };
 
-export default UserProfile;
+export default StudentProfile;
 
 
 
