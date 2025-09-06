@@ -7,6 +7,7 @@ import SocialLogin from "../SocialLogin/SocialLogin";
 import AuthContext from "../../../Content/Authcontext";
 import Lottie from "lottie-react";
 import LoginLottieData from '../../../../public/lottie/login/login blue.json';
+import Swal from "sweetalert2";
 
 const generateCaptcha = () =>
   Math.floor(100000 + Math.random() * 900000).toString();
@@ -118,14 +119,31 @@ const Login = () => {
 
     singInUser(email, password)
       .then(() => {
-        toast.success(`✅ Welcome back`, { autoClose: 2000 });
-        setTimeout(() => navigate("/"), 2200);
+        Swal.fire({
+          title: '✅ Login Successful!',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1500,
+          background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)', // stylish gradient bg
+          color: '#fff', // text color
+          padding: '1.5rem',
+          iconColor: '#00baff', // icon color
+          toast: true,
+          position: 'top-end'
+
+
+        }).then(() => {
+          // Swal close hole navigate hobe
+          navigate("/"); // home page e redirect
+        });
       })
       .catch((err) => {
         toast.error(`❌ ${err.message}`, { autoClose: 3000 });
       })
       .finally(() => setIsLoading(false));
   };
+
+
 
   return (
     <div className="dark:bg-[#00091a] min-h-screen flex items-center justify-center py-20">
@@ -231,11 +249,10 @@ const Login = () => {
             <button
               type="submit"
               disabled={disable || isLoading}
-              className={`w-full py-4 rounded-xl font-bold text-white transition duration-300 flex items-center justify-center ${
-                disable || isLoading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 shadow-md hover:shadow-xl transform hover:-translate-y-0.5"
-              }`}
+              className={`w-full py-4 rounded-xl font-bold text-white transition duration-300 flex items-center justify-center ${disable || isLoading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 shadow-md hover:shadow-xl transform hover:-translate-y-0.5"
+                }`}
             >
               {isLoading ? (
                 <>

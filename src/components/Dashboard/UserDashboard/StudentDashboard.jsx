@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { NavLink, Link, Outlet } from "react-router-dom";
+import { NavLink, Link, Outlet, useNavigate } from "react-router-dom";
 import { FiHome, FiMenu, FiChevronDown, FiChevronUp, FiSearch } from "react-icons/fi";
 import { FaBookReader, FaUserCircle, FaCog, FaSignOutAlt } from "react-icons/fa";
 import { HiSun, HiMoon } from "react-icons/hi";
 import { AnimatePresence, motion } from "framer-motion";
 import AuthContext from "../../../Content/Authcontext";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 const DropdownItem = ({ icon, label, sidebarOpen, subLinks = [] }) => {
     const [open, setOpen] = useState(false);
@@ -61,6 +63,7 @@ const StudentDashboard = () => {
     const [dbUser, setDbUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
@@ -113,6 +116,33 @@ const StudentDashboard = () => {
     if (!dbUser) return <p className="text-center mt-10 text-gray-500 dark:text-gray-400">No user found.</p>;
 
     const profileImage = dbUser.photo || dbUser.image || `https://ui-avatars.com/api/?name=${dbUser.name}`;
+
+
+    const handleLogout = async () => {
+        try {
+            await signOutUser(); // AuthContext theke logout
+            setDbUser(null); // UI clear
+
+            // Stylish compact SweetAlert
+            Swal.fire({
+                title: '👋 Logged out!',
+                icon: 'info',
+                showConfirmButton: false,
+                timer: 1500,
+                background: 'linear-gradient(135deg, #42275a, #734b6d)', // unique gradient
+                color: '#fff',
+                padding: '1.5rem',
+                iconColor: '#ff6b6b',
+                toast: true,
+                position: 'top-end'
+            }).then(() => {
+                navigate("/login"); // redirect to login page after Swal closes
+            });
+        } catch (err) {
+            toast.error("Logout failed");
+            console.error(err);
+        }
+    };
 
 
     return (
@@ -271,7 +301,7 @@ const StudentDashboard = () => {
                                             </Link>
                                             <hr className="border-t dark:border-gray-700" />
                                             <button
-                                                onClick={signOutUser}
+                                                onClick={handleLogout}
                                                 className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 transition"
                                             >
                                                 <FaSignOutAlt className="text-lg" /> Logout
