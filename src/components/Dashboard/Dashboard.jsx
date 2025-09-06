@@ -141,6 +141,18 @@ const Dashboard = () => {
     };
 
 
+      const handleLogout = () => {
+        signOutUser()
+          .then(() => {
+            toast.success("Successfully logged out!", { autoClose: 2000 });
+          })
+          .catch((err) => {
+            console.error(err.message);
+            toast.error(`Logout failed: ${err.message}`, { autoClose: 3000 });
+          });
+      };
+
+
 
     return (
         <div className={`${darkMode ? 'dark' : ''} font-montserrat`}>
@@ -444,7 +456,7 @@ const Dashboard = () => {
                                                 <FaCog className="text-lg text-indigo-500" /> Settings
                                             </a>
                                             <hr className="border-t dark:border-gray-700" />
-                                            <button onClick={signOutUser} className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 transition">
+                                            <button onClick={() => signOutUser()} className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 transition">
                                                 <FaSignOutAlt className="text-lg" /> Logout
                                             </button>
                                         </motion.div>

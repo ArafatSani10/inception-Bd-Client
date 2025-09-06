@@ -6,6 +6,7 @@ import { MdDashboard, MdLogout } from "react-icons/md";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { useGetMyDataQuery } from "../../../../redux/api/userApi";
 
 const Navbar = () => {
   const { user, signOutUser } = useContext(AuthContext);
@@ -36,7 +37,8 @@ const Navbar = () => {
     const saved = localStorage.getItem("darkMode");
     if (saved === "enabled") setIsDarkMode(true);
     else if (saved === "disabled") setIsDarkMode(false);
-    else setIsDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches);
+    else
+      setIsDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches);
   }, []);
 
   useEffect(() => {
@@ -47,8 +49,14 @@ const Navbar = () => {
   // Close dropdown/menu on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) setIsDropdownOpen(false);
-      if (menuRef.current && !menuRef.current.contains(e.target) && !e.target.closest("#mobile-menu-btn")) setIsMenuOpen(false);
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target))
+        setIsDropdownOpen(false);
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(e.target) &&
+        !e.target.closest("#mobile-menu-btn")
+      )
+        setIsMenuOpen(false);
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -77,16 +85,6 @@ const Navbar = () => {
     if (user.email) return user.email.slice(0, 2).toUpperCase();
     return "UU";
   };
-
-  const handleLogout = async () => {
-    try {
-      await signOutUser();
-      toast.success("Successfully logged out!", { autoClose: 2000 });
-    } catch (err) {
-      toast.error(`Logout failed: ${err.message}`, { autoClose: 3000 });
-    }
-  };
-
   return (
     <>
       <ToastContainer position="top-right" />
@@ -97,9 +95,10 @@ const Navbar = () => {
             <Link to="/">
               <img
                 className="max-sm:w-[130px] w-[150px]"
-                src={isDarkMode
-                  ? "https://i.ibb.co/cKzQyBNk/534732164-2212940409145293-5451801233054972764-n.jpg"
-                  : "https://i.ibb.co/v6c6bv8w/2e8737d8-8837-4936-aaae-723c2fa0c1e0.jpg"
+                src={
+                  isDarkMode
+                    ? "https://i.ibb.co/cKzQyBNk/534732164-2212940409145293-5451801233054972764-n.jpg"
+                    : "https://i.ibb.co/v6c6bv8w/2e8737d8-8837-4936-aaae-723c2fa0c1e0.jpg"
                 }
                 alt="Logo"
               />
@@ -122,7 +121,10 @@ const Navbar = () => {
             {/* User Dropdown */}
             <div className="relative ml-6" ref={dropdownRef}>
               {dbUser ? (
-                <div className="flex items-center cursor-pointer" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+                <div
+                  className="flex items-center cursor-pointer"
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                >
                   {dbUser.photo || dbUser.image ? (
                     <img
                       src={dbUser.photo || dbUser.image}
@@ -152,18 +154,26 @@ const Navbar = () => {
                     className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden"
                   >
                     <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                      <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">{dbUser.name || "User"}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{dbUser.email || ""}</p>
+                      <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                        {dbUser.name || "User"}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {dbUser.email || ""}
+                      </p>
                     </div>
-                    <Link
-                      to="/dashboard"
+                    <button
+                      onClick={() => {
+                        user?.role === "admin"
+                          ? (window.location.href = "/dashboard")
+                          : (window.location.href = "/student-dashboard");
+                      }}
                       className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                     >
                       <MdDashboard className="text-gray-500 dark:text-gray-400" />
                       Dashboard
-                    </Link>
+                    </button>
                     <button
-                      onClick={handleLogout}
+                      onClick={() => signOutUser()}
                       className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                     >
                       <MdLogout className="text-gray-500 dark:text-gray-400" />
@@ -180,12 +190,26 @@ const Navbar = () => {
               className="ml-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300"
             >
               {isDarkMode ? (
-                <svg className="h-6 w-6 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="h-6 w-6 text-yellow-400"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
                 </svg>
               ) : (
-                <svg className="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m8.485-9H21m-16 0H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 7a5 5 0 100 10 5 5 0 000-10z" />
+                <svg
+                  className="h-6 w-6 text-gray-700 dark:text-gray-300"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 3v1m0 16v1m8.485-9H21m-16 0H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 7a5 5 0 100 10 5 5 0 000-10z"
+                  />
                 </svg>
               )}
             </button>
@@ -194,9 +218,16 @@ const Navbar = () => {
           {/* Mobile Controls */}
           <div className="flex md:hidden items-center space-x-4 p-3">
             {dbUser && (
-              <div className="flex items-center cursor-pointer select-none" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+              <div
+                className="flex items-center cursor-pointer select-none"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              >
                 {dbUser.photo || dbUser.image ? (
-                  <img src={dbUser.photo || dbUser.image} alt={dbUser.name || "User"} className="w-10 h-10 rounded-full object-cover border-2 border-gradient-to-r from-purple-600 to-blue-500" />
+                  <img
+                    src={dbUser.photo || dbUser.image}
+                    alt={dbUser.name || "User"}
+                    className="w-10 h-10 rounded-full object-cover border-2 border-gradient-to-r from-purple-600 to-blue-500"
+                  />
                 ) : (
                   <div className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-xs font-semibold text-gray-700 dark:text-gray-300">
                     {getAvatarLetters(dbUser)}
@@ -210,21 +241,63 @@ const Navbar = () => {
               className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300"
             >
               {isDarkMode ? (
-                <svg className="h-6 w-6 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="h-6 w-6 text-yellow-400"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
                 </svg>
               ) : (
-                <svg className="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m8.485-9H21m-16 0H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 7a5 5 0 100 10 5 5 0 000-10z" />
+                <svg
+                  className="h-6 w-6 text-gray-700 dark:text-gray-300"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 3v1m0 16v1m8.485-9H21m-16 0H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 7a5 5 0 100 10 5 5 0 000-10z"
+                  />
                 </svg>
               )}
             </button>
 
-            <button id="mobile-menu-btn" onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700">
+            <button
+              id="mobile-menu-btn"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+            >
               {!isMenuOpen ? (
-                <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                <svg
+                  className="h-7 w-7"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
               ) : (
-                <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                <svg
+                  className="h-7 w-7"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
               )}
             </button>
           </div>
@@ -241,8 +314,12 @@ const Navbar = () => {
               className="absolute top-14 right-3 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden md:hidden"
             >
               <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">{dbUser.name || "User"}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{dbUser.email || ""}</p>
+                <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                  {dbUser.name || "User"}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {dbUser.email || ""}
+                </p>
               </div>
               <Link
                 to="/dashboard"
@@ -252,7 +329,7 @@ const Navbar = () => {
                 Dashboard
               </Link>
               <button
-                onClick={handleLogout}
+                onClick={() => signOutUser()}
                 className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
               >
                 <MdLogout className="text-gray-500 dark:text-gray-400" />
@@ -291,7 +368,12 @@ const Navbar = () => {
         </div>
 
         {/* Overlay */}
-        {isMenuOpen && <div className="fixed inset-0 bg-black bg-opacity-30 z-40 md:hidden" onClick={() => setIsMenuOpen(false)}></div>}
+        {isMenuOpen && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-30 z-40 md:hidden"
+            onClick={() => setIsMenuOpen(false)}
+          ></div>
+        )}
       </nav>
     </>
   );

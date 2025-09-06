@@ -5,17 +5,18 @@ import AuthContext from "../Content/Authcontext";
 
 const AdminRouter = ({ children }) => {
   const navigate = useNavigate();
-  const { user, loading: authLoading } = useContext(AuthContext);
+  const { user, loading: authLoading, signOutUser } = useContext(AuthContext);
 
   // Fetch role from backend
   const { data, isLoading: roleLoading, isError } = useGetRoleQuery();
+
 
   // Redirect logic
   useEffect(() => {
     if (!authLoading && !roleLoading) {
       // If user not logged in OR role not admin, redirect
       if (!user || isError || data?.data?.role !== "admin") {
-        navigate("/login");
+        return navigate("/login");
       }
     }
   }, [user, authLoading, data, roleLoading, isError, navigate]);

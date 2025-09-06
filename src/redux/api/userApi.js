@@ -8,7 +8,6 @@ export const userApi = baseApi.injectEndpoints({
     getMyData: build.query({
       query: () => {
         const accessToken = localStorage.getItem("access_token"); // load token from localStorage
-
         return {
           url: `${AUTH_URL}/my-data`,
           method: "GET", // usually GET for fetching role
@@ -22,4 +21,4 @@ export const userApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetMyDataQuery } = userApi;
+export const { useGetMyDataQuery,useLazyGetMyDataQuery } = userApi;
