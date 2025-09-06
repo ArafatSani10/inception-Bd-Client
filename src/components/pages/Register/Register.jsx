@@ -10,6 +10,7 @@ import { getBaseUrl } from "../../../utls/getBaseUrl";
 
 import RegistarData from "../../../../public/lottie/Register/Appointment booking with smartphone.json"
 import Lottie from "lottie-react";
+import Swal from "sweetalert2";
 
 // Generate random 6-digit captcha
 const generateCaptcha = () =>
@@ -125,6 +126,7 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
     if (!isPasswordValid) {
       toast.error("Password does not meet requirements!");
       return;
@@ -154,32 +156,36 @@ const Register = () => {
         password: passwordValue,
       });
 
-      console.log("backend data", data);
-
       // 🔹 Firebase Auth
       await createUser(email, passwordValue, name);
 
-      // ✅ Show toast instead of console.log
-      toast.success(`🎉 Registration Successful! Welcome ${name}`, {
-        position: "top-right",
-        autoClose: 3000,
+      // ✅ Stylish Swal for success
+      Swal.fire({
+        title: `🎉 Welcome ${name}!`,
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 1800,
+        background: 'linear-gradient(135deg, #1f4037, #99f2c8)', // stylish gradient
+        color: '#fff',
+        padding: '1.5rem',
+        iconColor: '#00baff',
+        toast: true,
+        position: 'top-end'
+      }).then(() => {
+        navigate("/verify-OTP"); // redirect to OTP verification page
       });
 
-      navigate("/verify-OTP");
     } catch (err) {
-      console.log("error from register form", err);
-      console.error(err.response?.data || err.message);
+      console.error("error from register form", err.response?.data || err.message);
       toast.error(
         `❌ Registration failed: ${err.response?.data?.message || err.message}`,
-        {
-          position: "top-right",
-          autoClose: 4000,
-        }
+        { position: "top-right", autoClose: 4000 }
       );
     } finally {
       setIsLoading(false);
     }
   };
+
 
   return (
     <div className="dark:bg-[#00091a] min-h-screen flex items-center justify-center py-20">

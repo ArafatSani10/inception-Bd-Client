@@ -1,7 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router";
 
-const PurchaseCourse = () => {
+const PurchaseCourse = ({orders}) => {
     const purchases = [
         {
             _id: "2025",
@@ -38,7 +39,7 @@ const PurchaseCourse = () => {
     return (
         <div className="max-w-full mx-auto mt-12 p-2">
             <h2 className="text-2xl font-bold mb-8 text-[#00baff]">
-                You have 3 new course
+                You have {orders?.length} new course
             </h2>
 
             {purchases.length === 0 ? (
@@ -47,9 +48,9 @@ const PurchaseCourse = () => {
                 </p>
             ) : (
                 <div className="grid gap-6 md:grid-cols-2">
-                    {purchases.map((course, index) => (
+                    {orders?.map((order, index) => (
                         <motion.div
-                            key={course._id}
+                            key={order._id}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.2, duration: 0.6 }}
@@ -58,8 +59,8 @@ const PurchaseCourse = () => {
                         >
                             {/* Thumbnail */}
                             <img
-                                src={course.thumbnail}
-                                alt={course.title}
+                                src={order?.course?.thumbnail}
+                                alt={order?.course?.title}
                                 className="w-full h-48 object-cover md:h-56"
                             />
 
@@ -67,30 +68,30 @@ const PurchaseCourse = () => {
                             <div className="p-4 flex flex-col justify-between">
                                 <div>
                                     <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-lg md:text-xl">
-                                        {course.title}
+                                        {order?.course?.title}
                                     </h3>
                                     <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                                        Category: {course.category}
+                                        Category: {order?.course?.category?.name}
                                     </p>
                                     <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                                        Instructor: {course.instructor}
+                                        Instructor: {order?.course?.instructor?.name || "Not Found"}
                                     </p>
                                     <div className="flex items-center gap-2 mt-2">
                                         <span className="text-yellow-400 font-bold">
-                                            {course.rating} ★
+                                            {/* {course.rating} ★ */}
                                         </span>
                                         <span className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs px-2 py-0.5 rounded">
-                                            {course.price}
+                                            {order?.course?.price}
                                         </span>
                                     </div>
                                     <p className="text-xs text-gray-400 mt-2">
-                                        Item ID: {course._id} | Purchase Date: {course.date}
+                                        {/* Item ID: {course._id} | Purchase Date: {course.date} */}
                                     </p>
                                 </div>
 
-                                <button className="mt-4 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-lg font-medium shadow-lg hover:opacity-90 transition-all duration-300">
+                               <Link to="/student-dashboard/module-page"> <button className="mt-4 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-lg font-medium shadow-lg hover:opacity-90 transition-all duration-300">
                                     View Course
-                                </button>
+                                </button></Link>
                             </div>
                         </motion.div>
                     ))}
