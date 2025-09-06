@@ -76,7 +76,7 @@ const AdminDashboard = () => {
                 ].map((card, idx) => (
                     <div
                         key={idx}
-                        className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md flex items-center space-x-4 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition"
+                        className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-md flex items-center space-x-4 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition"
                     >
                         <div className="bg-indigo-500 p-4 rounded-lg text-white text-2xl flex justify-center items-center">
                             <svg
@@ -101,10 +101,10 @@ const AdminDashboard = () => {
                     </div>
                 ))}
             </div>
-            <div className="bg-gray-50 dark:bg-gray-900 min-h-screen  space-y-8">
+            <div className="bg-gray-50 dark:bg-gray-900   space-y-8">
 
                 {/* Sales Chart with Filters */}
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 max-w-full mx-auto">
+                <div className="bg-white dark:bg-gray-900 rounded-xl shadow-md p-6 max-w-full mx-auto">
                     {/* Filter Section */}
                     <div className="flex flex-col md:flex-row justify-between md:items-center mb-5 gap-4">
                         <div className="flex flex-wrap gap-4 items-center">
@@ -113,7 +113,9 @@ const AdminDashboard = () => {
                             <select
                                 value={selectedYear}
                                 onChange={(e) => setSelectedYear(e.target.value)}
-                                className="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 text-sm text-gray-700 dark:text-gray-200"
+                                className="px-2
+                                
+py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 text-sm text-gray-700 dark:text-gray-200"
                             >
                                 {years.map((year) => (
                                     <option key={year} value={year}>{year}</option>
@@ -141,7 +143,7 @@ const AdminDashboard = () => {
                     </div>
 
                     {/* Chart Section */}
-                    <div className="h-72">
+                    <div className="h-72 w-full">
                         <ResponsiveContainer width="100%" height={300}>
                             <LineChart
                                 data={filteredData}

@@ -144,14 +144,14 @@ const Dashboard = () => {
 
     return (
         <div className={`${darkMode ? 'dark' : ''} font-montserrat`}>
-            <div className="flex h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 relative">
+            <div className="flex h-screen bg-gray-50 dark:bg-[#00091a] text-gray-900 dark:text-gray-100 relative">
                 {/* Sidebar */}
                 <aside className={`transition-all duration-700 bg-white dark:bg-gray-900 shadow-xl h-screen ${sidebarOpen ? 'w-60' : 'w-20'} fixed md:static top-0 left-0 z-50 overflow-y-auto scrollbar-hide ${sidebarOpen ? 'block' : 'hidden md:block'}`}>
                     <div className="flex items-center justify-between p-4">
                         {sidebarOpen && (
                             <Link to="/">
                                 <div className="w-36 h-[50px] bg-no-repeat bg-contain bg-left
-                    bg-[url('https://inceptionbd.com/store/1/Untitled%20design%20(3).png')]
+                    bg-[url('https://i.ibb.co/v6c6bv8w/2e8737d8-8837-4936-aaae-723c2fa0c1e0.jpg')]
                     dark:bg-[url('https://i.ibb.co/cKzQyBNk/534732164-2212940409145293-5451801233054972764-n.jpg')]"></div>
                             </Link>
                         )}
@@ -404,7 +404,7 @@ const Dashboard = () => {
                 )}
 
                 <div className="flex-1 flex flex-col overflow-hidden ml-0 md:ml-0">
-                    <header className="flex items-center justify-between px-6 py-4 bg-white dark:bg-gray-800 shadow">
+                    <header className="flex items-center justify-between px-6 py-4 bg-white dark:bg-gray-900 shadow">
                         <div className="relative w-64">
                             <FiSearch className="absolute top-2.5 left-3 text-gray-400" />
                             <input type="text" placeholder="Search..." className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-black dark:text-white focus:outline-none text-sm" />

@@ -32,7 +32,7 @@ export default function RecentUpdates() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className=" flex items-center justify-center">
         <div className="animate-pulse w-32 h-32 bg-blue-400 rounded-full"></div>
       </div>
     );
@@ -52,9 +52,8 @@ export default function RecentUpdates() {
           {/* Courses */}
           <InfoCard
             title="Recent Courses"
-            subtitle={`Total: ${courses.length} • Pending: ${
-              courses.filter((c) => (c.status || "pending") === "pending").length
-            }`}
+            subtitle={`Total: ${courses.length} • Pending: ${courses.filter((c) => (c.status || "pending") === "pending").length
+              }`}
             data={courses.slice(0, 3).map((c) => ({
               title: c.title,
               author: c.instructorTitle || "Unknown",
@@ -70,11 +69,10 @@ export default function RecentUpdates() {
           {/* Blogs */}
           <InfoCard
             title="Recent Blogs"
-            subtitle={`Total: ${blogs.length} • Pending: ${
-              blogs.filter(
-                (b) => (b.status || "pending").toLowerCase() === "pending"
-              ).length
-            }`}
+            subtitle={`Total: ${blogs.length} • Pending: ${blogs.filter(
+              (b) => (b.status || "pending").toLowerCase() === "pending"
+            ).length
+              }`}
             data={blogs.slice(0, 3).map((b) => ({
               title: b.title,
               author: b.author?.name || "Unknown",
@@ -134,11 +132,10 @@ function InfoCard({ title, subtitle, data, accentColor, onViewAll }) {
                 )}
                 <span className="mx-2">•</span>
                 <span
-                  className={`capitalize px-2 py-0.5 rounded-full text-xs font-medium ${
-                    item.status === "pending"
+                  className={`capitalize px-2 py-0.5 rounded-full text-xs font-medium ${item.status === "pending"
                       ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
                       : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                  }`}
+                    }`}
                 >
                   {item.status}
                 </span>

@@ -1,0 +1,325 @@
+import React, { useContext, useEffect, useState } from "react";
+import { NavLink, Link, Outlet } from "react-router-dom";
+import {
+    FiHome,
+    FiMenu,
+    FiChevronDown,
+    FiChevronUp,
+    FiSearch,
+} from "react-icons/fi";
+import {
+    FaBookReader,
+    FaUserCircle,
+    FaCog,
+    FaSignOutAlt,
+} from "react-icons/fa";
+import { HiSun, HiMoon } from "react-icons/hi";
+import { AnimatePresence, motion } from "framer-motion";
+import AuthContext from "../../../Content/Authcontext";
+import { FaRegUser } from "react-icons/fa6";
+
+const DropdownItem = ({ icon, label, sidebarOpen, subLinks = [] }) => {
+    const [open, setOpen] = useState(false);
+    const toggleDropdown = () => {
+        if (sidebarOpen) setOpen(!open);
+    };
+
+    return (
+        <div className="relative group w-full">
+            <div
+                onClick={toggleDropdown}
+                className="flex items-center justify-between cursor-pointer hover:bg-gray-100 dark:hover:bg-[#00132f] p-3 rounded-lg transition-all duration-300"
+            >
+                <div className="flex items-center gap-3">
+                    <span className="text-xl">{icon}</span>
+                    {sidebarOpen && (
+                        <span className="font-medium text-gray-700 dark:text-gray-200">
+                            {label}
+                        </span>
+                    )}
+                </div>
+                {sidebarOpen && (
+                    <span className="text-sm text-gray-600 dark:text-gray-300">
+                        {open ? <FiChevronUp /> : <FiChevronDown />}
+                    </span>
+                )}
+            </div>
+
+            <AnimatePresence>
+                {sidebarOpen && open && (
+                    <motion.div
+                        className="pl-10 flex flex-col gap-2 mt-2"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        {subLinks.map((link, index) => (
+                            <NavLink
+                                key={index}
+                                to={link.to}
+                                className="text-xs text-gray-600 dark:text-gray-300 hover:text-[#00baff] transition-colors duration-200"
+                            >
+                                {link.label}
+                            </NavLink>
+                        ))}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+};
+
+const StudentDashboard = () => {
+    const { user, signOutUser } = useContext(AuthContext);
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+    const [darkMode, setDarkMode] = useState(true);
+
+    useEffect(() => {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "dark") {
+            setDarkMode(true);
+            document.documentElement.classList.add("dark");
+        } else {
+            setDarkMode(false);
+            document.documentElement.classList.remove("dark");
+        }
+    }, []);
+
+    const toggleTheme = () => {
+        const newMode = !darkMode;
+        setDarkMode(newMode);
+        if (newMode) {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("theme", "light");
+        }
+    };
+
+    return (
+        <div className={`${darkMode ? "dark" : ""} font-montserrat`}>
+            <div className="flex h-screen bg-gray-50 dark:bg-[#00091a] text-gray-900 dark:text-gray-100 relative">
+                {/* Sidebar */}
+                <aside
+                    className={`transition-all duration-700 bg-white dark:bg-[#00091a] shadow-xl h-screen ${sidebarOpen ? "w-56" : "w-20 max-sm:w-0"
+                        } fixed md:static top-0 left-0 z-50 overflow-y-auto`}
+                >
+                    {/* Logo */}
+                    <div className="flex items-center justify-between p-4">
+                        {sidebarOpen && (
+                            <Link to="/">
+                                <div className="w-36 h-[50px] flex items-center">
+                                    {/* Light mode logo */}
+                                    <img
+                                        src="https://i.ibb.co.com/v6c6bv8w/2e8737d8-8837-4936-aaae-723c2fa0c1e0.jpg"
+                                        alt="Logo Light"
+                                        className="block dark:hidden w-full h-full object-contain"
+                                    />
+
+                                    {/* Dark mode logo */}
+                                    <img
+                                        src="https://i.ibb.co/cKzQyBNk/534732164-2212940409145293-5451801233054972764-n.jpg"
+                                        alt="Logo Dark"
+                                        className="hidden dark:block w-full h-full object-contain"
+                                    />
+                                </div>
+                            </Link>
+                        )}
+                        <button
+                            onClick={() => setSidebarOpen(!sidebarOpen)}
+                            className="text-gray-600 dark:text-gray-300 text-2xl"
+                        >
+                            {sidebarOpen ? <FiChevronDown /> : <FiMenu />}
+                        </button>
+                    </div>
+
+                    {/* aikhane user er profile image and niche name and tyar nichle role */}
+
+
+                    {/* 🆕 Profile Section */}
+                    {sidebarOpen && (
+                        <div className="flex flex-col items-center text-center px-4 py-6 border-b border-gray-200 dark:border-gray-700">
+                            {user?.photoURL ? (
+                                <div className="relative">
+                                    <img
+                                        src={user.photoURL}
+                                        alt="User"
+                                        className="w-24 sm:w-28 md:w-32 lg:w-40 xl:w-52 rounded-full border-2 border-[#00baff] shadow-md mb-3 ring-2 ring-[#00baff]/60 animate-pulse"
+                                    />
+                                </div>
+                            ) : (
+                                <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold text-xl shadow-lg ring-2 ring-[#00baff]/60 animate-pulse">
+                                    {(() => {
+                                        if (user?.email) {
+                                            const parts = user.email.split("@")[0].split(".");
+                                            const first = parts[0]?.[0]?.toUpperCase() || "";
+                                            const last = parts[parts.length - 1]?.[0]?.toUpperCase() || "";
+                                            return first + last;
+                                        }
+                                        return "GU";
+                                    })()}
+                                </div>
+                            )}
+                            <h2 className="text-sm md:text-base font-semibold text-gray-800 dark:text-gray-200 truncate w-full mt-3">
+                                {user?.displayName || "Guest User"}
+                            </h2>
+                            <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400">
+                                {user?.role || "Student"}
+                            </p>
+                        </div>
+                    )}
+
+
+
+                    {/* Nav Items */}
+                    <nav className="mt-4">
+                        <ul className="space-y-1 text-sm">
+                            <li>
+                                <NavLink
+                                    to="user-home"
+                                    className={({ isActive }) =>
+                                        `flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all ${isActive
+                                            ? "text-[#00baff] shadow-md font-semibold"
+                                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#00132f]"
+                                        }`
+                                    }
+                                >
+                                    <span className="text-base">
+                                        <FiHome />
+                                    </span>
+                                    {sidebarOpen && <span>Dashboard</span>}
+                                </NavLink>
+                            </li>
+
+                            <DropdownItem
+                                icon={<FaBookReader />}
+                                label="Courses"
+                                sidebarOpen={sidebarOpen}
+                                subLinks={[
+                                    { label: "My Courses", to: "purchase-course" },
+                                    
+                                ]}
+                            />
+
+
+                            <li>
+                                <NavLink
+                                    to="student-profile"
+                                    className={({ isActive }) =>
+                                        `flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all ${isActive
+                                            ? "text-[#00baff] shadow-md font-semibold"
+                                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#00132f]"
+                                        }`
+                                    }
+                                >
+                                    <span className="text-base">
+                                        <FaCog />
+                                    </span>
+                                    {sidebarOpen && <span>Settings</span>}
+                                </NavLink>
+                            </li>
+                        </ul>
+                    </nav>
+                </aside>
+
+                {/* Sidebar toggle button (mobile) */}
+                {!sidebarOpen && (
+                    <button
+                        onClick={() => setSidebarOpen(true)}
+                        className="md:hidden absolute top-4 left-4 text-2xl z-50 text-gray-700 dark:text-gray-200 bg-white dark:bg-[#00091a] p-2 rounded-full shadow"
+                    >
+                        <FiMenu />
+                    </button>
+                )}
+
+                {/* Main Content */}
+                <div className="flex-1 flex flex-col overflow-hidden ml-0 md:ml-0">
+                    {/* Header */}
+                    <header className="flex items-center justify-between px-6 py-4 bg-white dark:bg-[#00091a] shadow-lg">
+                        {/* Search */}
+                        <div className="relative w-56">
+                            <FiSearch className="absolute top-2.5 left-3 text-gray-400" />
+                            <input
+                                type="text"
+                                placeholder="Search..."
+                                className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-black dark:text-white focus:outline-none text-sm border border-transparent focus:border-[#00baff] transition"
+                            />
+                        </div>
+
+                        {/* Right Actions */}
+                        <div className="flex items-center gap-4 md:gap-6">
+                            {/* Theme toggle */}
+                            <button
+                                onClick={toggleTheme}
+                                className="text-xl text-gray-600 dark:text-gray-300 hover:text-[#00baff] dark:hover:text-[#00baff] transition"
+                            >
+                                {darkMode ? <HiSun /> : <HiMoon />}
+                            </button>
+
+                            {/* Profile */}
+                            <div className="relative">
+                                <button
+                                    onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                                    className="flex items-center gap-3 group"
+                                >
+                                    {user?.photoURL ? (
+                                        <img
+                                            src={user.photoURL}
+                                            alt="User Avatar"
+                                            className="w-9 h-9 rounded-full border-2 border-[#00baff] group-hover:scale-105 transition"
+                                        />
+                                    ) : (
+                                        <FaUserCircle className="text-[#00baff] text-3xl group-hover:scale-110 transition" />
+                                    )}
+                                </button>
+
+                                <AnimatePresence>
+                                    {profileDropdownOpen && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                                            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                                            transition={{ duration: 0.2 }}
+                                            className="absolute right-0 mt-3 w-52 bg-white/95 dark:bg-[#00132f]/95 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl z-50 backdrop-blur-md overflow-hidden"
+                                        >
+                                            <Link
+                                                to="student-profile"
+                                                className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-[#00baff]/10 transition"
+                                            >
+                                                <FaUserCircle className="text-lg text-[#00baff]" />{" "}
+                                                Profile
+                                            </Link>
+                                            <Link
+                                                to="settings"
+                                                className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-[#00baff]/10 transition"
+                                            >
+                                                <FaCog className="text-lg text-[#00baff]" /> Settings
+                                            </Link>
+                                            <hr className="border-t dark:border-gray-700" />
+                                            <button
+                                                onClick={signOutUser}
+                                                className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 transition"
+                                            >
+                                                <FaSignOutAlt className="text-lg" /> Logout
+                                            </button>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Page Content */}
+                    <main className="flex-1 overflow-y-auto bg-gray-100 dark:bg-[#00091a] p-4 md:p-3 transition-colors duration-300">
+                        <Outlet />
+                    </main>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default StudentDashboard;

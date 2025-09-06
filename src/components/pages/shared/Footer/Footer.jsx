@@ -21,7 +21,7 @@ const Footer = () => {
                 <div className="flex items-center">
                     <div
                         className="w-[150px] max-sm:w-[130px] h-[50px] bg-no-repeat bg-contain bg-center
-            bg-[url('https://inceptionbd.com/store/1/Untitled%20design%20(3).png')]
+            bg-[url('https://i.ibb.co.com/v6c6bv8w/2e8737d8-8837-4936-aaae-723c2fa0c1e0.jpg')]
             dark:bg-[url('https://i.ibb.co/cKzQyBNk/534732164-2212940409145293-5451801233054972764-n.jpg')]"
                     />
                 </div>
@@ -38,13 +38,13 @@ const Footer = () => {
                                 {item.name}
                             </a>
 
-                            
+
                         ))}
 
-                           <h1>Trade licence no - <span className='text-[#00baff]'>07127</span></h1>
+                        <h1>Trade licence no - <span className='text-[#00baff]'>07127</span></h1>
                     </nav>
 
-                 
+
 
                     <div className="flex gap-4 text-xl text-gray-600 dark:text-gray-300">
                         <a

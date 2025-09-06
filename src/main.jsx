@@ -62,6 +62,10 @@ import ErrorPage from "./components/Dashboard/CouponCard/ErrorPage";
 import AdminRouter from "./routes/AdminRouter";
 import ReduxProvider from "./Content/ReduxProvider";
 import ProtectedRouter from "./routes/ProtectedRouter";
+import StudentDashboard from "./components/Dashboard/UserDashboard/StudentDashboard";
+import OTPVerification from "./components/pages/OTPVerification/OTPVerification";
+import StudentProfile from "./components/Dashboard/UserDashboard/StudentProfile/StudentProfile";
+import StudentUpdateProfile from "./components/Dashboard/UserDashboard/StudentProfile/StudentUpdateProfile";
 
 const router = createBrowserRouter([
   {
@@ -116,6 +120,11 @@ const router = createBrowserRouter([
       },
 
       {
+        path:'/verify-OTP',
+        element:<OTPVerification></OTPVerification>
+      },
+
+      {
         path: "/coursedetails/:idOrSlug",
         element: <CourseDetails></CourseDetails>,
       },
@@ -167,16 +176,7 @@ const router = createBrowserRouter([
     element: <ModulePage></ModulePage>,
   },
 
-  // user/student related panel route.!!
-  {
-    path: "purchase-course",
-    element: <PurchaseCourse></PurchaseCourse>,
-  },
 
-  {
-    path: "user-home",
-    element: <UserHome></UserHome>,
-  },
 
   {
     path: "dashboard",
@@ -340,6 +340,33 @@ const router = createBrowserRouter([
     ],
   },
 
+
+  {
+    path: "student-dashboard",
+    element: <StudentDashboard></StudentDashboard>,
+    children: [
+      // user/student related panel route.!!
+      {
+        path: "purchase-course",
+        element: <PurchaseCourse></PurchaseCourse>,
+      },
+
+      {
+        path: "user-home",
+        element: <UserHome></UserHome>,
+      },
+
+      {
+        path:"student-profile",
+        element:<StudentProfile></StudentProfile>
+      },
+
+      {
+        path:"student-update-profile",
+        element:<StudentUpdateProfile></StudentUpdateProfile>
+      },
+    ],
+  },
 
 ]);
 
