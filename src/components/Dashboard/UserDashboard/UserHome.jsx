@@ -85,39 +85,7 @@ const UserHome = () => {
                 </motion.div>
             </div>
 
-            {/* User Stats Section */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-                className="max-w-full mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-16"
-            >
-                <Link to="/dashboard/purchase-course">
-                    <div className="flex items-center gap-4 bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-lg hover:shadow-xl cursor-pointer transition-all">
-                        <FaGraduationCap className="text-5xl text-purple-500" />
-                        <div>
-                            <p className="text-gray-600 dark:text-gray-300 text-sm">Courses Enrolled</p>
-                            <p className="text-xl font-bold text-gray-900 dark:text-gray-100">{coursesEnrolled}</p>
-                        </div>
-                    </div>
-                </Link>
-
-                <div className="flex items-center gap-4 bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all">
-                    <FaBell className="text-5xl text-yellow-500" />
-                    <div>
-                        <p className="text-gray-600 dark:text-gray-300 text-sm">Notifications</p>
-                        <p className="text-xl font-bold text-gray-900 dark:text-gray-100">{notifications}</p>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-4 bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all">
-                    <FaCommentDots className="text-5xl text-green-500" />
-                    <div>
-                        <p className="text-gray-600 dark:text-gray-300 text-sm">Comments</p>
-                        <p className="text-xl font-bold text-gray-900 dark:text-gray-100">{messages}</p>
-                    </div>
-                </div>
-            </motion.div>
+         
 
             {/* Purchased Courses Section */}
             <div className="max-w-full mx-auto">
