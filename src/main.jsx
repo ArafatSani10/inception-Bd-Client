@@ -66,6 +66,7 @@ import StudentDashboard from "./components/Dashboard/UserDashboard/StudentDashbo
 import OTPVerification from "./components/pages/OTPVerification/OTPVerification";
 import StudentProfile from "./components/Dashboard/UserDashboard/StudentProfile/StudentProfile";
 import StudentUpdateProfile from "./components/Dashboard/UserDashboard/StudentProfile/StudentUpdateProfile";
+import InstrucorDetails from "./components/pages/InstructorPage/InstrucorDetails";
 
 const router = createBrowserRouter([
   {
@@ -103,6 +104,11 @@ const router = createBrowserRouter([
       {
         path: "/instructors",
         element: <InstructorPage></InstructorPage>,
+      },
+
+      {
+        path:"/instructor/:email",
+        element:<InstrucorDetails></InstrucorDetails>
       },
 
       {
@@ -164,7 +170,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "/error",
+        path: "order/fail",
         element: <ErrorPage></ErrorPage>,
       },
     ],

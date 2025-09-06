@@ -122,12 +122,13 @@ const ContactUs = () => {
                         <div className="rounded-3xl overflow-hidden shadow-2xl border border-gray-300 dark:border-gray-700">
                             <iframe
                                 className="w-full h-72 lg:h-[600px] grayscale-[40%] hover:grayscale-0 transition duration-500"
-                                src="https://maps.google.com/maps?q=lahini%20kushtia&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                                allowFullScreen=""
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3648.684373997991!2d89.14408811543796!3d23.88727338492971!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39fe97255b9e461b%3A0xb81541865a28a5d2!2sInception%20Office%2C%20Lahini%20Bottola%2C%20Domdom%20Sharok%2C%20Kushtia%207001%2C%20Bangladesh!5e0!3m2!1sen!2sbd!4v1693999999999!5m2!1sen!2sbd"
+                                allowFullScreen
                                 loading="lazy"
-                                title="Google Map"
+                                title="Inception Office Map"
                             ></iframe>
                         </div>
+
 
                         {/* Info Card */}
                         <div className="bg-white/60 dark:bg-gray-800/50 backdrop-blur-xl rounded-3xl shadow-xl p-8 border border-gray-200 dark:border-gray-700 space-y-6">
