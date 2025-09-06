@@ -276,7 +276,7 @@ const Login = () => {
             <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
           </div>
 
-          <SocialLogin />
+          {/* <SocialLogin /> */}
 
           <p className="text-center mt-8 text-gray-600 dark:text-gray-400">
             Don’t have an account?{" "}
