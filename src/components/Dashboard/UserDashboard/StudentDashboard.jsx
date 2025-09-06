@@ -1,22 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { NavLink, Link, Outlet } from "react-router-dom";
-import {
-    FiHome,
-    FiMenu,
-    FiChevronDown,
-    FiChevronUp,
-    FiSearch,
-} from "react-icons/fi";
-import {
-    FaBookReader,
-    FaUserCircle,
-    FaCog,
-    FaSignOutAlt,
-} from "react-icons/fa";
+import { FiHome, FiMenu, FiChevronDown, FiChevronUp, FiSearch } from "react-icons/fi";
+import { FaBookReader, FaUserCircle, FaCog, FaSignOutAlt } from "react-icons/fa";
 import { HiSun, HiMoon } from "react-icons/hi";
 import { AnimatePresence, motion } from "framer-motion";
 import AuthContext from "../../../Content/Authcontext";
-import { FaRegUser } from "react-icons/fa6";
 
 const DropdownItem = ({ icon, label, sidebarOpen, subLinks = [] }) => {
     const [open, setOpen] = useState(false);
@@ -33,9 +21,7 @@ const DropdownItem = ({ icon, label, sidebarOpen, subLinks = [] }) => {
                 <div className="flex items-center gap-3">
                     <span className="text-xl">{icon}</span>
                     {sidebarOpen && (
-                        <span className="font-medium text-gray-700 dark:text-gray-200">
-                            {label}
-                        </span>
+                        <span className="font-medium text-gray-700 dark:text-gray-200">{label}</span>
                     )}
                 </div>
                 {sidebarOpen && (
@@ -72,11 +58,34 @@ const DropdownItem = ({ icon, label, sidebarOpen, subLinks = [] }) => {
 
 const StudentDashboard = () => {
     const { user, signOutUser } = useContext(AuthContext);
+    const [dbUser, setDbUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
     const [darkMode, setDarkMode] = useState(true);
 
     useEffect(() => {
+        // Fetch user from API
+        const fetchUser = async () => {
+            try {
+                if (user?.email) {
+                    const res = await fetch(`${import.meta.env.VITE_API_URL}/users`);
+                    const data = await res.json();
+                    const singleUser = data.data.find(u => u.email === user.email);
+                    setDbUser(singleUser);
+                }
+            } catch (err) {
+                console.error(err);
+                setError("Failed to fetch user data");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchUser();
+
+        // Load theme
         const savedTheme = localStorage.getItem("theme");
         if (savedTheme === "dark") {
             setDarkMode(true);
@@ -85,7 +94,7 @@ const StudentDashboard = () => {
             setDarkMode(false);
             document.documentElement.classList.remove("dark");
         }
-    }, []);
+    }, [user]);
 
     const toggleTheme = () => {
         const newMode = !darkMode;
@@ -98,6 +107,10 @@ const StudentDashboard = () => {
             localStorage.setItem("theme", "light");
         }
     };
+
+    if (loading) return <p className="text-center mt-10 text-gray-500 dark:text-gray-400">Loading...</p>;
+    if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
+    if (!dbUser) return <p className="text-center mt-10 text-gray-500 dark:text-gray-400">No user found.</p>;
 
     return (
         <div className={`${darkMode ? "dark" : ""} font-montserrat`}>
@@ -112,14 +125,11 @@ const StudentDashboard = () => {
                         {sidebarOpen && (
                             <Link to="/">
                                 <div className="w-36 h-[50px] flex items-center">
-                                    {/* Light mode logo */}
                                     <img
                                         src="https://i.ibb.co.com/v6c6bv8w/2e8737d8-8837-4936-aaae-723c2fa0c1e0.jpg"
                                         alt="Logo Light"
                                         className="block dark:hidden w-full h-full object-contain"
                                     />
-
-                                    {/* Dark mode logo */}
                                     <img
                                         src="https://i.ibb.co/cKzQyBNk/534732164-2212940409145293-5451801233054972764-n.jpg"
                                         alt="Logo Dark"
@@ -136,43 +146,28 @@ const StudentDashboard = () => {
                         </button>
                     </div>
 
-                    {/* aikhane user er profile image and niche name and tyar nichle role */}
-
-
                     {/* 🆕 Profile Section */}
                     {sidebarOpen && (
                         <div className="flex flex-col items-center text-center px-4 py-6 border-b border-gray-200 dark:border-gray-700">
-                            {user?.photoURL ? (
-                                <div className="relative">
-                                    <img
-                                        src={user.photoURL}
-                                        alt="User"
-                                        className="w-24 sm:w-28 md:w-32 lg:w-40 xl:w-52 rounded-full border-2 border-[#00baff] shadow-md mb-3 ring-2 ring-[#00baff]/60 animate-pulse"
-                                    />
-                                </div>
-                            ) : (
-                                <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold text-xl shadow-lg ring-2 ring-[#00baff]/60 animate-pulse">
-                                    {(() => {
-                                        if (user?.email) {
-                                            const parts = user.email.split("@")[0].split(".");
-                                            const first = parts[0]?.[0]?.toUpperCase() || "";
-                                            const last = parts[parts.length - 1]?.[0]?.toUpperCase() || "";
-                                            return first + last;
-                                        }
-                                        return "GU";
-                                    })()}
-                                </div>
-                            )}
+                            <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-[#00baff] shadow-lg">
+                                <img
+                                    src={dbUser.PhotoUrl || `https://ui-avatars.com/api/?name=${dbUser.name}`}
+                                    alt={dbUser.name}
+                                    className="w-full h-full object-cover"
+                                />
+                                <span
+                                    className={`absolute bottom-2 right-2 w-5 h-5 rounded-full border-2 border-gray-900 ${dbUser.status === 'active' ? 'bg-green-400 animate-ping' : 'bg-red-500'
+                                        }`}
+                                ></span>
+                            </div>
                             <h2 className="text-sm md:text-base font-semibold text-gray-800 dark:text-gray-200 truncate w-full mt-3">
-                                {user?.displayName || "Guest User"}
+                                {dbUser.name}
                             </h2>
                             <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400">
-                                {user?.role || "Student"}
+                                {dbUser.role || "Student"}
                             </p>
                         </div>
                     )}
-
-
 
                     {/* Nav Items */}
                     <nav className="mt-4">
@@ -187,9 +182,7 @@ const StudentDashboard = () => {
                                         }`
                                     }
                                 >
-                                    <span className="text-base">
-                                        <FiHome />
-                                    </span>
+                                    <span className="text-base"><FiHome /></span>
                                     {sidebarOpen && <span>Dashboard</span>}
                                 </NavLink>
                             </li>
@@ -198,12 +191,8 @@ const StudentDashboard = () => {
                                 icon={<FaBookReader />}
                                 label="Courses"
                                 sidebarOpen={sidebarOpen}
-                                subLinks={[
-                                    { label: "My Courses", to: "purchase-course" },
-                                    
-                                ]}
+                                subLinks={[{ label: "My Courses", to: "purchase-course" }]}
                             />
-
 
                             <li>
                                 <NavLink
@@ -215,9 +204,7 @@ const StudentDashboard = () => {
                                         }`
                                     }
                                 >
-                                    <span className="text-base">
-                                        <FaCog />
-                                    </span>
+                                    <span className="text-base"><FaCog /></span>
                                     {sidebarOpen && <span>Settings</span>}
                                 </NavLink>
                             </li>
@@ -239,7 +226,6 @@ const StudentDashboard = () => {
                 <div className="flex-1 flex flex-col overflow-hidden ml-0 md:ml-0">
                     {/* Header */}
                     <header className="flex items-center justify-between px-6 py-4 bg-white dark:bg-[#00091a] shadow-lg">
-                        {/* Search */}
                         <div className="relative w-56">
                             <FiSearch className="absolute top-2.5 left-3 text-gray-400" />
                             <input
@@ -251,29 +237,17 @@ const StudentDashboard = () => {
 
                         {/* Right Actions */}
                         <div className="flex items-center gap-4 md:gap-6">
-                            {/* Theme toggle */}
-                            <button
-                                onClick={toggleTheme}
-                                className="text-xl text-gray-600 dark:text-gray-300 hover:text-[#00baff] dark:hover:text-[#00baff] transition"
-                            >
+                            <button onClick={toggleTheme} className="text-xl text-gray-600 dark:text-gray-300 hover:text-[#00baff] dark:hover:text-[#00baff] transition">
                                 {darkMode ? <HiSun /> : <HiMoon />}
                             </button>
 
-                            {/* Profile */}
                             <div className="relative">
-                                <button
-                                    onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                                    className="flex items-center gap-3 group"
-                                >
-                                    {user?.photoURL ? (
-                                        <img
-                                            src={user.photoURL}
-                                            alt="User Avatar"
-                                            className="w-9 h-9 rounded-full border-2 border-[#00baff] group-hover:scale-105 transition"
-                                        />
-                                    ) : (
-                                        <FaUserCircle className="text-[#00baff] text-3xl group-hover:scale-110 transition" />
-                                    )}
+                                <button onClick={() => setProfileDropdownOpen(!profileDropdownOpen)} className="flex items-center gap-3 group">
+                                    <img
+                                        src={dbUser.PhotoUrl || `https://ui-avatars.com/api/?name=${dbUser.name}`}
+                                        alt={dbUser.name}
+                                        className="w-9 h-9 rounded-full border-2 border-[#00baff] group-hover:scale-105 transition"
+                                    />
                                 </button>
 
                                 <AnimatePresence>
@@ -289,8 +263,7 @@ const StudentDashboard = () => {
                                                 to="student-profile"
                                                 className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-[#00baff]/10 transition"
                                             >
-                                                <FaUserCircle className="text-lg text-[#00baff]" />{" "}
-                                                Profile
+                                                <FaUserCircle className="text-lg text-[#00baff]" /> Profile
                                             </Link>
                                             <Link
                                                 to="settings"
