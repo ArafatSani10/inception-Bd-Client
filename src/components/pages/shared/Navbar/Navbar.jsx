@@ -2,20 +2,31 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../../../../Content/Authcontext";
 import { AnimatePresence, motion } from "framer-motion";
-import { FaCircleUser, FaUser } from "react-icons/fa6";
-import { SiLogmein } from "react-icons/si";
+import { MdDashboard, MdLogout } from "react-icons/md";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { MdDashboard, MdLogout } from "react-icons/md";
+import axios from "axios";
+import { useGetMyDataQuery } from "../../../../redux/api/userApi";
 
 const Navbar = () => {
+  const { user, signOutUser } = useContext(AuthContext);
+  const [dbUser, setDbUser] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const { user, signOutUser } = useContext(AuthContext);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const menuRef = useRef(null);
   const dropdownRef = useRef(null);
 
+  const navItems = [
+    { name: "Home", href: "/" },
+    { name: "Courses", href: "/courses" },
+    { name: "Instructors", href: "/instructors" },
+    { name: "About us", href: "/about" },
+    { name: "Contact us", href: "/contact" },
+    { name: "Blog", href: "/blog" },
+  ];
+
+  // Toggle Dark Mode
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
@@ -35,54 +46,45 @@ const Navbar = () => {
     else document.documentElement.classList.remove("dark");
   }, [isDarkMode]);
 
-  // Close dropdown/menu if clicked outside
+  // Close dropdown/menu on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target))
         setIsDropdownOpen(false);
-      }
       if (
         menuRef.current &&
         !menuRef.current.contains(e.target) &&
         !e.target.closest("#mobile-menu-btn")
-      ) {
+      )
         setIsMenuOpen(false);
-      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const navItems = [
-    { name: "Home", href: "/" },
-    { name: "Courses", href: "/courses" },
-    { name: "Instructors", href: "/instructors" },
-    { name: "About us", href: "/about" },
-    { name: "Contact us", href: "/contact" },
-    { name: "Blog", href: "/blog" },
-  ];
+  // Fetch full user data from backend
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        if (user?.email) {
+          const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
+          const singleUser = res.data.data.find((u) => u.email === user.email);
+          setDbUser(singleUser);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchUser();
+  }, [user]);
 
   const getAvatarLetters = (user) => {
     if (!user) return "UU";
-    if (user.photoURL) return "";
-    if (user.displayName) return user.displayName.slice(0, 2).toUpperCase();
+    if (user.photo || user.image) return "";
+    if (user.name) return user.name.slice(0, 2).toUpperCase();
     if (user.email) return user.email.slice(0, 2).toUpperCase();
     return "UU";
   };
-
-  const handleLogout = async () => {
-    try {
-      await signOutUser();
-      toast.success("Successfully logged out!", { autoClose: 2000 });
-    } catch (err) {
-      console.error(err.message);
-      toast.error(`Logout failed: ${err.message}`, { autoClose: 3000 });
-    }
-  };
-
-
-  
-
   return (
     <>
       <ToastContainer position="top-right" />
@@ -118,19 +120,19 @@ const Navbar = () => {
 
             {/* User Dropdown */}
             <div className="relative ml-6" ref={dropdownRef}>
-              {user ? (
+              {dbUser ? (
                 <div
                   className="flex items-center cursor-pointer"
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 >
-                  {user.photoURL ? (
+                  {dbUser.photo || dbUser.image ? (
                     <img
-                      src={user.photoURL}
+                      src={dbUser.photo || dbUser.image}
                       className="w-10 h-10 rounded-full object-cover border-2 border-gradient-to-r from-purple-600 to-blue-500 transition-transform transform hover:scale-105"
                     />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-sm font-semibold text-gray-700 dark:text-gray-300 transition-transform transform hover:scale-105">
-                      {getAvatarLetters(user)}
+                      {getAvatarLetters(dbUser)}
                     </div>
                   )}
                 </div>
@@ -143,7 +145,7 @@ const Navbar = () => {
               )}
 
               <AnimatePresence>
-                {isDropdownOpen && user && (
+                {isDropdownOpen && dbUser && (
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -153,23 +155,25 @@ const Navbar = () => {
                   >
                     <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
                       <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">
-                        {user.displayName || "User"}
+                        {dbUser.name || "User"}
                       </p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {user.email || ""}
+                        {dbUser.email || ""}
                       </p>
                     </div>
-                    {/* link to dashboard */}
-                    <Link
-                      to="/dashboard"
+                    <button
+                      onClick={() => {
+                        user?.role === "admin"
+                          ? (window.location.href = "/dashboard")
+                          : (window.location.href = "/student-dashboard");
+                      }}
                       className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                     >
                       <MdDashboard className="text-gray-500 dark:text-gray-400" />
                       Dashboard
-                    </Link>
-
+                    </button>
                     <button
-                      onClick={handleLogout}
+                      onClick={() => signOutUser()}
                       className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                     >
                       <MdLogout className="text-gray-500 dark:text-gray-400" />
@@ -213,20 +217,20 @@ const Navbar = () => {
 
           {/* Mobile Controls */}
           <div className="flex md:hidden items-center space-x-4 p-3">
-            {user && (
+            {dbUser && (
               <div
                 className="flex items-center cursor-pointer select-none"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               >
-                {user.photoURL ? (
+                {dbUser.photo || dbUser.image ? (
                   <img
-                    src={user.photoURL}
-                    alt={user.displayName || "User"}
+                    src={dbUser.photo || dbUser.image}
+                    alt={dbUser.name || "User"}
                     className="w-10 h-10 rounded-full object-cover border-2 border-gradient-to-r from-purple-600 to-blue-500"
                   />
                 ) : (
-                  <div className="w-10 h-10 -mb-1 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-xs font-semibold text-gray-700 dark:text-gray-300">
-                    {getAvatarLetters(user)}
+                  <div className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-xs font-semibold text-gray-700 dark:text-gray-300">
+                    {getAvatarLetters(dbUser)}
                   </div>
                 )}
               </div>
@@ -301,7 +305,7 @@ const Navbar = () => {
 
         {/* Mobile Dropdown */}
         <AnimatePresence>
-          {isDropdownOpen && user && (
+          {isDropdownOpen && dbUser && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -311,13 +315,12 @@ const Navbar = () => {
             >
               <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
                 <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">
-                  {user.displayName || "User"}
+                  {dbUser.name || "User"}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {user.email || ""}
+                  {dbUser.email || ""}
                 </p>
               </div>
-
               <Link
                 to="/dashboard"
                 className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
@@ -325,9 +328,8 @@ const Navbar = () => {
                 <MdDashboard className="text-gray-500 dark:text-gray-400" />
                 Dashboard
               </Link>
-
               <button
-                onClick={handleLogout}
+                onClick={() => signOutUser()}
                 className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
               >
                 <MdLogout className="text-gray-500 dark:text-gray-400" />
@@ -355,10 +357,9 @@ const Navbar = () => {
                 {name}
               </Link>
             ))}
-
-            {!user && (
+            {!dbUser && (
               <Link to="/login">
-                <button className="px-5 py-2 text-sm bg-gradient-to-r from-purple-600 to-blue-500 text-white rounded-md font-semibold hover:from-purple-700 hover:to-blue-600 transition transform hover:-translate-y-0.5 shadow-lg">
+                <button className="px-5 py-2 text-sm bg-gradient-to-r from-purple-600 to-blue-500 text-white rounded-md font-semibold hover:from-purple-700 hover:to-blue-600 transition transform hover:-translate-y-0.5 shadow-lg w-full mt-4">
                   Login
                 </button>
               </Link>
@@ -369,9 +370,9 @@ const Navbar = () => {
         {/* Overlay */}
         {isMenuOpen && (
           <div
+            className="fixed inset-0 bg-black bg-opacity-30 z-40 md:hidden"
             onClick={() => setIsMenuOpen(false)}
-            className="fixed inset-0 bg-black bg-opacity-40 z-40 transition-opacity"
-          />
+          ></div>
         )}
       </nav>
     </>

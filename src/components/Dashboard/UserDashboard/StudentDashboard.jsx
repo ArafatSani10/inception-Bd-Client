@@ -112,6 +112,9 @@ const StudentDashboard = () => {
     if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
     if (!dbUser) return <p className="text-center mt-10 text-gray-500 dark:text-gray-400">No user found.</p>;
 
+    const profileImage = dbUser.photo || dbUser.image || `https://ui-avatars.com/api/?name=${dbUser.name}`;
+
+
     return (
         <div className={`${darkMode ? "dark" : ""} font-montserrat`}>
             <div className="flex h-screen bg-gray-50 dark:bg-[#00091a] text-gray-900 dark:text-gray-100 relative">
@@ -149,14 +152,10 @@ const StudentDashboard = () => {
                     {/* 🆕 Profile Section */}
                     {sidebarOpen && (
                         <div className="flex flex-col items-center text-center px-4 py-6 border-b border-gray-200 dark:border-gray-700">
-                            <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-[#00baff] shadow-lg">
-                                <img
-                                    src={dbUser.PhotoUrl || `https://ui-avatars.com/api/?name=${dbUser.name}`}
-                                    alt={dbUser.name}
-                                    className="w-full h-full object-cover"
-                                />
+                            <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-purple-500 shadow-lg">
+                                <img src={profileImage} alt={dbUser.name} className="w-full h-full object-cover" />
                                 <span
-                                    className={`absolute bottom-2 right-2 w-5 h-5 rounded-full border-2 border-gray-900 ${dbUser.status === 'active' ? 'bg-green-400 animate-ping' : 'bg-red-500'
+                                    className={`absolute bottom-3 right-3 w-6 h-6 rounded-full border-2 border-gray-900 ${dbUser.status === 'active' ? 'bg-green-400 animate-ping' : 'bg-red-500'
                                         }`}
                                 ></span>
                             </div>
@@ -243,11 +242,10 @@ const StudentDashboard = () => {
 
                             <div className="relative">
                                 <button onClick={() => setProfileDropdownOpen(!profileDropdownOpen)} className="flex items-center gap-3 group">
-                                    <img
-                                        src={dbUser.PhotoUrl || `https://ui-avatars.com/api/?name=${dbUser.name}`}
-                                        alt={dbUser.name}
-                                        className="w-9 h-9 rounded-full border-2 border-[#00baff] group-hover:scale-105 transition"
-                                    />
+                                    <div className="relative w-10 h-10 rounded-full overflow-hidden border-4 border-purple-500 shadow-lg">
+                                        <img src={profileImage} alt={dbUser.name} className="w-full h-full object-cover" />
+
+                                    </div>
                                 </button>
 
                                 <AnimatePresence>

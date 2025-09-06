@@ -1,9 +1,12 @@
+
+
+
+
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-import { FaUser, FaEnvelope, FaPhone, FaUserTag, FaCheckCircle, FaTimesCircle, FaCalendarAlt, FaKey } from 'react-icons/fa';
-// import AuthContext from '../../../Content/Authcontext';
+import { FaUser, FaEnvelope, FaPhone, FaUserTag, FaCheckCircle, FaTimesCircle, FaCalendarAlt, FaKey, FaBriefcase, FaGraduationCap, FaFileAlt } from 'react-icons/fa';
 import { CiSettings } from 'react-icons/ci';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import AuthContext from '../../../../Content/Authcontext';
 
 const StudentProfile = () => {
@@ -34,7 +37,7 @@ const StudentProfile = () => {
     if (error) return <p className="text-center text-red-500 mt-20">{error}</p>;
     if (!dbUser) return <p className="text-center text-gray-500 dark:text-gray-400 mt-20">No user found.</p>;
 
-    const profileImage = user?.photoURL || dbUser?.PhotoUrl || `https://ui-avatars.com/api/?name=${dbUser.name}`;
+    const profileImage = dbUser.photo || dbUser.image || `https://ui-avatars.com/api/?name=${dbUser.name}`;
 
     return (
         <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-500">
@@ -97,8 +100,8 @@ const StudentProfile = () => {
                     <div className="flex items-center gap-4 bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
                         <div className="text-2xl"><FaUserTag className="text-purple-500 dark:text-purple-400" /></div>
                         <div>
-                            <p className="text-gray-500 dark:text-gray-400 text-sm"><span>{dbUser.role}</span> ID</p>
-                            <p className="font-semibold text-lg">{dbUser.id}</p>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm">Role</p>
+                            <p className="font-semibold text-lg">{dbUser.role}</p>
                         </div>
                     </div>
 
@@ -110,23 +113,64 @@ const StudentProfile = () => {
                         </div>
                     </div>
 
+                    <div className="flex items-center gap-4 bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+                        <div className="text-2xl"><FaBriefcase className="text-purple-500 dark:text-purple-400" /></div>
+                        <div>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm">Job Title</p>
+                            <p className="font-semibold text-lg">{dbUser.jobTitle}</p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-4 bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+                        <div className="text-2xl"><FaGraduationCap className="text-purple-500 dark:text-purple-400" /></div>
+                        <div>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm">Education</p>
+                            <p className="font-semibold text-lg whitespace-pre-wrap">{dbUser.education}</p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-4 bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+                        <div className="text-2xl"><FaFileAlt className="text-purple-500 dark:text-purple-400" /></div>
+                        <div>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm">Experience</p>
+                            <p className="font-semibold text-lg">{dbUser.experience}</p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-4 bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+                        <div className="text-2xl"><FaFileAlt className="text-purple-500 dark:text-purple-400" /></div>
+                        <div>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm">Bio</p>
+                            <p className="font-semibold text-lg">{dbUser.bio}</p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-4 bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+                        <div className="text-2xl"><FaKey className="text-yellow-500" /></div>
+                        <div>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm">OTP Code</p>
+                            <p className="font-semibold text-lg">{dbUser.otpCode}</p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-4 bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+                        <div className="text-2xl"><FaCalendarAlt className="text-gray-500 dark:text-gray-400" /></div>
+                        <div>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm">OTP Expiry</p>
+                            <p className="font-semibold text-lg">{new Date(dbUser.otpExpiresAt).toLocaleString()}</p>
+                        </div>
+                    </div>
 
                     <Link to="/student-dashboard/student-update-profile">
-
                         <div className="flex items-center gap-4 bg-white dark:bg-gray-800 p-10 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
                             <div className="text-2xl"><CiSettings className="text-gray-500 dark:text-gray-400" /></div>
                             <h1 className='font-bold'>Update Profile</h1>
                         </div>
                     </Link>
                 </div>
-
-
             </div>
         </div>
     );
 };
 
 export default StudentProfile;
-
-
-
