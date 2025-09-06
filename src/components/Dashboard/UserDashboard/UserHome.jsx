@@ -8,17 +8,20 @@ import axios from 'axios';
 import AuthContext from '../../../Content/Authcontext';
 
 import lottiedata from '../../../../public/lottie/Artificial intelligence robot development technology.json';
+import { useMyOrdersQuery } from '../../../redux/api/orderApi';
 
 const UserHome = () => {
     const { user } = useContext(AuthContext); // to get email
     const [dbUser, setDbUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const {data:orderRes,isLoading} = useMyOrdersQuery(dbUser?.email,{
+        skip:!dbUser?.email
+    })
+    const myOrderData = orderRes?.data;
 
-    const coursesEnrolled = 3;
-    const notifications = 5;
-    const messages = 2;
-
+    console.log("myorder data",myOrderData)
+    
     useEffect(() => {
         const fetchUser = async () => {
             try {
@@ -89,7 +92,7 @@ const UserHome = () => {
 
             {/* Purchased Courses Section */}
             <div className="max-w-full mx-auto">
-                <PurchaseCourse />
+                <PurchaseCourse orders={myOrderData} />
             </div>
         </div>
     );
