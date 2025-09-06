@@ -67,6 +67,7 @@ import OTPVerification from "./components/pages/OTPVerification/OTPVerification"
 import StudentProfile from "./components/Dashboard/UserDashboard/StudentProfile/StudentProfile";
 import StudentUpdateProfile from "./components/Dashboard/UserDashboard/StudentProfile/StudentUpdateProfile";
 import InstrucorDetails from "./components/pages/InstructorPage/InstrucorDetails";
+import ModuleUpload from "./components/Dashboard/ModuleUpload/ModuleUpload";
 
 const router = createBrowserRouter([
   {
@@ -107,8 +108,8 @@ const router = createBrowserRouter([
       },
 
       {
-        path:"/instructor/:email",
-        element:<InstrucorDetails></InstrucorDetails>
+        path: "/instructor/:email",
+        element: <InstrucorDetails></InstrucorDetails>
       },
 
       {
@@ -126,8 +127,8 @@ const router = createBrowserRouter([
       },
 
       {
-        path:'/verify-OTP',
-        element:<OTPVerification></OTPVerification>
+        path: '/verify-OTP',
+        element: <OTPVerification></OTPVerification>
       },
 
       {
@@ -176,11 +177,7 @@ const router = createBrowserRouter([
     ],
   },
 
-  // student module access video
-  {
-    path: "module-page",
-    element: <ModulePage></ModulePage>,
-  },
+
 
 
 
@@ -225,6 +222,9 @@ const router = createBrowserRouter([
         path: "update-category",
         element: <Updatecategory></Updatecategory>,
       },
+
+      // moduleupload
+
 
       // Manage Blog related routes
       {
@@ -363,13 +363,25 @@ const router = createBrowserRouter([
       },
 
       {
-        path:"student-profile",
-        element:<StudentProfile></StudentProfile>
+        path: "student-profile",
+        element: <StudentProfile></StudentProfile>
       },
 
       {
-        path:"student-update-profile",
-        element:<StudentUpdateProfile></StudentUpdateProfile>
+        path: "student-update-profile",
+        element: <StudentUpdateProfile></StudentUpdateProfile>
+      },
+
+
+
+      // student module access video
+      {
+        path: "module-page",
+        element: <ModulePage></ModulePage>,
+      },
+      {
+        path: "module-upload",
+        element: <ModuleUpload></ModuleUpload>
       },
     ],
   },

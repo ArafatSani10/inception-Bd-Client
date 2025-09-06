@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router";
 
 const PurchaseCourse = () => {
     const purchases = [
@@ -88,9 +89,9 @@ const PurchaseCourse = () => {
                                     </p>
                                 </div>
 
-                                <button className="mt-4 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-lg font-medium shadow-lg hover:opacity-90 transition-all duration-300">
+                               <Link to="/student-dashboard/module-page"> <button className="mt-4 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-lg font-medium shadow-lg hover:opacity-90 transition-all duration-300">
                                     View Course
-                                </button>
+                                </button></Link>
                             </div>
                         </motion.div>
                     ))}
