@@ -375,7 +375,7 @@ const router = createBrowserRouter([
 
       // student module access video
       {
-        path: "module-page",
+        path: "module-page/:id",
         element: <ModulePage></ModulePage>,
       },
     ],

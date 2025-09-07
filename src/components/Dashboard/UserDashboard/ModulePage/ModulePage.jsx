@@ -1,46 +1,80 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronDown, FaChevronUp, FaBars, FaTimes } from "react-icons/fa";
-import { Link } from "react-router";
-
-const modulesData = [
-  { title: "Live Class", topics: 5, expanded: true },
-  { title: "Recorded Classes", topics: 5, expanded: false },
-  { title: "Resources", topics: 2, expanded: false },
-];
+import { Link, useParams } from "react-router";
+import { useGetSingleCourseQuery } from "../../../../redux/api/courseApi";
 
 const ModulePage = () => {
-  const [modules, setModules] = useState(modulesData);
-  const [selectedTopic, setSelectedTopic] = useState({ module: 0, topic: 0 });
+  const { id } = useParams();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [toggle, setToggle] = useState(false);
+  const { data: courseRes, isLoading } = useGetSingleCourseQuery(id, {
+    skip: !id,
+  });
+  const [videoUrl, setVideoUrl] = useState(null);
+  const [classUrl, setClassUrl] = useState(null);
+  const [resoursceUrl, setResourceUrl] = useState(null);
 
-  const toggleModule = (index) => {
-    setModules((prev) =>
-      prev.map((mod, i) =>
-        i === index ? { ...mod, expanded: !mod.expanded } : mod
-      )
-    );
-  };
+  useEffect(() => {
+    if (classUrl) {
+      return (window.location.href = classUrl);
+    }
+  }, [classUrl]);
+
+  useEffect(() => {
+    if (resoursceUrl) {
+      return (window.location.href = resoursceUrl);
+    }
+  }, [resoursceUrl]);
+
+  if (isLoading) {
+    return <p>loading....</p>;
+  }
+
+  const course = courseRes?.data;
+  const modulesData = course?.modules;
+  const liveModule = modulesData?.filter((module) => module.mode === "live");
+  const recordedModule = modulesData?.filter(
+    (module) => module.mode === "recorded"
+  );
+  const resoursce = modulesData?.filter(
+    (module) => module.mode === "resoursce"
+  );
+
+  const formatModulesArray = [
+    {
+      title: "Live Class",
+      length: liveModule?.length,
+      data: liveModule,
+    },
+    {
+      title: "Recorded Class",
+      length: recordedModule?.length,
+      data: recordedModule,
+    },
+    {
+      title: "Class Materials",
+      length: recordedModule?.length,
+      data: recordedModule,
+    },
+  ];
 
   return (
     <div className=" font-montserrat bg-gray-50 dark:bg-[#00091a] flex flex-col transition-colors duration-300">
       {/* Topbar */}
       <div className="flex items-center justify-between px-6 py-4 bg-white dark:bg-[#00091a] shadow">
         <div className="flex items-center gap-4">
-          
           <h1 className="font-semibold text-gray-800 dark:text-gray-200">
             Master Generative AI in Bangla
           </h1>
         </div>
 
         <div className="flex items-center gap-4">
-         
-        <Link to="/student-dashboard/purchase-course">
- 
-          <button  className="hidden md:block px-4 py-2 bg-gray-200 dark:bg-[#00baff] dark:text-white text-gray-800 rounded-lg hover:bg-gray-300 transition">
-            My Courses
-          </button>
-        </Link>
+          <Link to="/student-dashboard/purchase-course">
+            <button className="hidden md:block px-4 py-2 bg-gray-200 dark:bg-[#00baff] dark:text-white text-gray-800 rounded-lg hover:bg-gray-300 transition">
+              My Courses
+            </button>
+          </Link>
 
           {/* Toggle button */}
           <button
@@ -74,7 +108,7 @@ const ModulePage = () => {
           <div className="w-full aspect-video rounded-xl overflow-hidden shadow-lg bg-black">
             <iframe
               className="w-full h-full"
-              src="https://www.youtube.com/embed/wpO8UbYmNj8?si=G9-2gSCmBEcXm7Xr"
+              src={videoUrl}
               title="YouTube video player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -100,7 +134,7 @@ const ModulePage = () => {
                   Course Modules
                 </h2>
               </div>
-              <div className="p-4 space-y-4 overflow-y-auto flex-1">
+              {/* <div className="p-4 space-y-4 overflow-y-auto flex-1">
                 {modules.map((module, idx) => (
                   <div
                     key={idx}
@@ -145,6 +179,71 @@ const ModulePage = () => {
                                 Topic {i + 1}
                               </li>
                             ))}
+                          </ul>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ))}
+              </div> */}
+              <div className="p-4 space-y-4 overflow-y-auto flex-1">
+                {formatModulesArray?.map((module, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg"
+                  >
+                    <div
+                      className="flex justify-between items-center cursor-pointer"
+                      onClick={() => setToggle(!toggle)}
+                    >
+                      <h3 className="font-semibold text-gray-800 dark:text-gray-200">
+                        {module.title} ({module.length} Topics)
+                      </h3>
+                      {module.expanded ? (
+                        <FaChevronUp className="text-gray-500" />
+                      ) : (
+                        <FaChevronDown className="text-gray-500" />
+                      )}
+                    </div>
+
+                    <AnimatePresence>
+                      {toggle && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="mt-3 pl-3 border-l-2 border-green-500"
+                        >
+                          <ul className="space-y-2">
+                            {module?.data?.map((contents, i) => {
+                              {
+                                return contents?.contents?.map(
+                                  (content, index) => {
+                                    return (
+                                      <li
+                                        className="cursor-pointer"
+                                        onClick={() => {
+                                          if (
+                                            module?.title === "Recorded Class"
+                                          ) {
+                                            setClassUrl(content?.content);
+                                          } else if (
+                                            module.title === "Class Materials"
+                                          ) {
+                                            setResourceUrl(content?.content);
+                                          } else {
+                                            setVideoUrl(content?.content);
+                                          }
+                                        }}
+                                        key={index}
+                                      >
+                                        {content?.title}
+                                      </li>
+                                    );
+                                  }
+                                );
+                              }
+                            })}
                           </ul>
                         </motion.div>
                       )}
