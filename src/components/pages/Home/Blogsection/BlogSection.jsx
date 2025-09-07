@@ -11,7 +11,6 @@ import "swiper/css/pagination";
 
 const BlogSection = () => {
   const [blogPosts, setBlogPosts] = useState([]);
-  
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -49,40 +48,46 @@ const BlogSection = () => {
           modules={[Pagination, Autoplay]}
         >
           {blogPosts.map((post) => (
-            <SwiperSlide key={post._id}>
-              <div className="bg-white dark:bg-gray-900 shadow-lg rounded-2xl overflow-hidden transition hover:scale-100 hover:shadow-2xl">
-                <div className="relative">
-                  <img
-                    src={post.thumbnail || post.image || "https://via.placeholder.com/400x250"}
-                    alt={post.title}
-                    className="w-full h-56 sm:h-60 md:h-64 object-cover"
-                  />
-                  <div className="absolute bottom-[-12px] left-4 bg-green-500 text-white text-xs sm:text-sm px-3 py-1 rounded-full flex items-center gap-2 shadow">
-                    <FaCalendarAlt className="text-xs" />
-                    {new Date(post.createdAt).toLocaleDateString()}
+            <SwiperSlide key={post.id}>
+              {/* 🔹 Use custom id for routing */}
+              <Link to={`/blog/${post.id}`}>
+                <div className="bg-white dark:bg-gray-900 shadow-lg rounded-2xl overflow-hidden transition hover:scale-100 hover:shadow-2xl">
+                  <div className="relative">
+                    <img
+                      src={
+                        post.thumbnail ||
+                        post.image ||
+                        "https://via.placeholder.com/400x250"
+                      }
+                      alt={post.title}
+                      className="w-full h-56 sm:h-60 md:h-64 object-cover"
+                    />
+                    <div className="absolute bottom-[-12px] left-4 bg-green-500 text-white text-xs sm:text-sm px-3 py-1 rounded-full flex items-center gap-2 shadow">
+                      <FaCalendarAlt className="text-xs" />
+                      {new Date(post.createdAt).toLocaleDateString()}
+                    </div>
                   </div>
-                </div>
-                <div className="p-4 pt-6">
-                 
+                  <div className="p-4 pt-6">
                     <h3 className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 dark:text-white mb-2 line-clamp-2">
                       {post.title}
                     </h3>
-          
-                  <p className="text-sm sm:text-[15px] text-gray-600 dark:text-gray-400 line-clamp-3 leading-relaxed">
-                    {post.description || post.des || "No description available."}
-                  </p>
-                  <div className="flex items-center justify-between mt-4 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                    <span className="flex items-center gap-1 sm:gap-2">
-                      <FaUser />
-                      {post.author?.name || post.author || "Unknown"}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <FaComment />
-                      {post.comments?.length || 0}
-                    </span>
+
+                    <p className="text-sm sm:text-[15px] text-gray-600 dark:text-gray-400 line-clamp-3 leading-relaxed">
+                      {post.description || "No description available."}
+                    </p>
+                    <div className="flex items-center justify-between mt-4 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                      <span className="flex items-center gap-1 sm:gap-2">
+                        <FaUser />
+                        {post.author?.name || "Unknown"}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <FaComment />
+                        {post.commentCount || 0}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>
