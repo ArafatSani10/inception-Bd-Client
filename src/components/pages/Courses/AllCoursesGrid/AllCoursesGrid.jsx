@@ -1,36 +1,29 @@
-
-
-
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
 const AllCoursesGrid = () => {
     const [courses, setCourses] = useState([]);
+    const [enrollCounts, setEnrollCounts] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Fetch all courses
     useEffect(() => {
         const fetchCourses = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}/courses`); // backend API
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/courses`);
                 const data = response.data.data || [];
 
-                // Ensure instructor info & category exists
                 const coursesWithDefaults = data.map((course) => ({
                     ...course,
                     instructorName: course.instructor?.name || "Unknown",
                     instructorImage:
                         course.instructorImage || course.instructor?.image || "https://randomuser.me/api/portraits/lego/1.jpg",
-
-                    category: course.category || "General",
-                    thumbnail:
-                        course.thumbnail ||
-                        "https://via.placeholder.com/400x200?text=Course+Image",
+                    category: course.category || { name: "General" },
+                    thumbnail: course.thumbnail || "https://via.placeholder.com/400x200?text=Course+Image",
                     rating: course.rating || 4.5,
-                    students: course.students || 0,
                     duration: course.duration || "N/A",
                     price: course.price || 0,
                 }));
@@ -47,10 +40,45 @@ const AllCoursesGrid = () => {
         fetchCourses();
     }, []);
 
-    if (loading)
-        return <div className="text-center py-20 text-lg">Loading courses...</div>;
-    if (error)
-        return <div className="text-center py-20 text-red-500">{error}</div>;
+    // Fetch all orders to count enrolled students per course
+    useEffect(() => {
+        const fetchEnrollments = async () => {
+            try {
+                const res = await axios.get(`${import.meta.env.VITE_API_URL}/orders`);
+                const allOrders = Array.isArray(res.data)
+                    ? res.data
+                    : Array.isArray(res.data.data)
+                        ? res.data.data
+                        : Array.isArray(res.data.orders)
+                            ? res.data.orders
+                            : [];
+
+                const counts = {};
+                allOrders.forEach((order) => {
+                    if (!order.course) return;
+
+                    let courseId = order.course;
+                    if (typeof courseId === "object" && courseId._id) courseId = courseId._id;
+                    courseId = String(courseId);
+
+                    // Only count completed orders (optional)
+                    if (order.status === "complete") {
+                        counts[courseId] = (counts[courseId] || 0) + 1;
+                    }
+                });
+
+                console.log("Enroll Counts:", counts);
+                setEnrollCounts(counts);
+            } catch (err) {
+                console.error("Failed to fetch enrollments", err);
+            }
+        };
+
+        fetchEnrollments();
+    }, []);
+
+    if (loading) return <div className="text-center py-20 text-lg">Loading courses...</div>;
+    if (error) return <div className="text-center py-20 text-red-500">{error}</div>;
 
     return (
         <div className="py-24 px-2 max-w-full mx-auto">
@@ -88,33 +116,39 @@ const AllCoursesGrid = () => {
                             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                                 <img
                                     src={course.instructorImage}
-                                    //   alt={course.instructorName}
+                                    alt={course.instructorName}
                                     className="w-6 h-6 rounded-full object-cover"
                                 />
                                 <span>
-                                    Instructor:{" "}
-                                    <span className="font-medium">{course.instructorName}</span>
+                                    Instructor: <span className="font-medium">{course.instructorName}</span>
                                 </span>
                             </div>
 
-                            <div className="flex justify-between items-center text-sm text-gray-700 dark:text-gray-300">
-                                <span>
-                                    ⭐ {course.rating} ({Math.floor(course.students / 1000)}k+
-                                    students)
+                            <div className="flex justify-between items-center text-sm text-gray-700 dark:text-gray-300   py-2 rounded-lg shadow-sm">
+                                <span className="flex items-center gap-1">
+                                    {/* Colored stars */}
+                                    <span className="text-yellow-400">⭐</span>
+                                    <span className="text-yellow-400">⭐</span>
+                                    <span className="text-yellow-400">⭐</span>
+                                    <span className="text-yellow-400">⭐</span>
+                                    <span className="text-yellow-400">⭐</span>
                                 </span>
-                                <span>{course.duration} hours</span>
+
+                                <span className="font-medium text-gray-900 dark:text-gray-100">
+                                    {enrollCounts[String(course._id)] || 0}+ students enrolled
+                                </span>
+
+                                <span className="font-medium text-gray-900 dark:text-gray-100">
+                                    {course.duration} Hours
+                                </span>
                             </div>
+
 
                             <div className="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
                                 <div>
                                     <span className="text-xl font-bold text-gray-900 dark:text-white">
                                         ৳{course.price}
                                     </span>
-                                    {course.price > 80 && (
-                                        <span className="ml-2 text-sm text-gray-400 line-through">
-                                            ৳{course.price + 30}
-                                        </span>
-                                    )}
                                 </div>
                                 <Link to={`/coursedetails/${course.slug}`}>
                                     <button className="bg-[#00baff] hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">

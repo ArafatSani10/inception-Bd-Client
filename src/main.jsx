@@ -68,6 +68,7 @@ import StudentProfile from "./components/Dashboard/UserDashboard/StudentProfile/
 import StudentUpdateProfile from "./components/Dashboard/UserDashboard/StudentProfile/StudentUpdateProfile";
 import InstrucorDetails from "./components/pages/InstructorPage/InstrucorDetails";
 import ModuleUpload from "./components/Dashboard/ModuleUpload/ModuleUpload";
+import CourseStudents from "./components/Dashboard/CourseList/CourseStudents/CourseStudents";
 
 const router = createBrowserRouter([
   {
@@ -194,6 +195,10 @@ const router = createBrowserRouter([
       {
         path: "courses-list",
         element: <CourseList></CourseList>,
+      },
+      {
+        path:"course-students/:courseId",
+        element:<CourseStudents></CourseStudents>
       },
       {
         path: "course-form",
