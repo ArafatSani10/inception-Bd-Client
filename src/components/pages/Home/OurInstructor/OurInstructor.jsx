@@ -65,7 +65,7 @@ const OurInstructor = () => {
                     {instructor?.name}
                   </h3>
                   <p className="text-[#00baff] dark:text-[#00baff] text-xs font-medium mt-2">
-                    {instructor?.role}
+                    {instructor?.jobTitle}
                   </p>
 
                   <div className="mt-3 text-yellow-400 text-lg">
