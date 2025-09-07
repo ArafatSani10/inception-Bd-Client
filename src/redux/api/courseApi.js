@@ -14,7 +14,16 @@ export const courseApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.COURSE],
     }),
+    getSingleCourse: build.query({
+      query: (id) => {
+        return {
+          url: `${AUTH_URL}/${id}`,
+          method: "GET", // usually GET for fetching role
+        };
+      },
+      invalidatesTags: [tagTypes.COURSE],
+    }),
   }),
 });
 
-export const { useGetAllCourseQuery } = courseApi;
+export const { useGetAllCourseQuery,useGetSingleCourseQuery } = courseApi;

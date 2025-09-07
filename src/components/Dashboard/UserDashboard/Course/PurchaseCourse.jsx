@@ -89,7 +89,7 @@ const PurchaseCourse = ({orders}) => {
                                     </p>
                                 </div>
 
-                               <Link to="/student-dashboard/module-page"> <button className="mt-4 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-lg font-medium shadow-lg hover:opacity-90 transition-all duration-300">
+                               <Link to={`/student-dashboard/module-page/${order?.course?.id}`}> <button className="mt-4 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-lg font-medium shadow-lg hover:opacity-90 transition-all duration-300">
                                     View Course
                                 </button></Link>
                             </div>
