@@ -150,7 +150,7 @@ const StudentDashboard = () => {
             <div className="flex h-screen bg-gray-50 dark:bg-[#00091a] text-gray-900 dark:text-gray-100 relative">
                 {/* Sidebar */}
                 <aside
-                    className={`transition-all duration-700 bg-white dark:bg-[#00091a] shadow-xl h-screen ${sidebarOpen ? "w-56" : "w-20 max-sm:w-0"
+                    className={`transition-all duration-700 bg-white dark:bg-[#00091a] shadow-xl h-screen ${sidebarOpen ? "w-56" : "md:w-20  w-0"
                         } fixed md:static top-0 left-0 z-50 overflow-y-auto`}
                 >
                     {/* Logo */}
@@ -271,13 +271,23 @@ const StudentDashboard = () => {
                             </button>
 
                             <div className="relative">
-                                <button onClick={() => setProfileDropdownOpen(!profileDropdownOpen)} className="flex items-center gap-3 group">
+                                <button
+                                    onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                                    className="flex items-center gap-3 group"
+                                >
+                                    {/* Profile Image */}
                                     <div className="relative w-10 h-10 rounded-full overflow-hidden border-4 border-purple-500 shadow-lg">
-                                        <img src={profileImage} alt={dbUser.name} className="w-full h-full object-cover" />
+                                        <img src={profileImage} alt={dbUser?.name} className="w-full h-full object-cover" />
+                                    </div>
 
+                                    {/* Name & Role next to image */}
+                                    <div className="hidden sm:flex flex-col text-sm font-medium text-gray-700 dark:text-gray-200">
+                                        <span>{dbUser?.name || "User"}</span>
+                                        <span className="text-xs text-gray-500 dark:text-gray-400">{dbUser?.role || "Student"}</span>
                                     </div>
                                 </button>
 
+                                {/* Dropdown */}
                                 <AnimatePresence>
                                     {profileDropdownOpen && (
                                         <motion.div
@@ -310,6 +320,7 @@ const StudentDashboard = () => {
                                     )}
                                 </AnimatePresence>
                             </div>
+
                         </div>
                     </header>
 

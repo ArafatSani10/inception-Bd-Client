@@ -29,6 +29,7 @@ const iconMap = {
 const CategoryCourses = () => {
     const { id } = useParams();
     const [courses, setCourses] = useState([]);
+    const [enrollCounts, setEnrollCounts] = useState({});
     const [loading, setLoading] = useState(true);
 
     const IconComponent = iconMap[id.toLowerCase()] || FaBook;
@@ -37,8 +38,6 @@ const CategoryCourses = () => {
         const fetchCourses = async () => {
             try {
                 const res = await axios.get(`${import.meta.env.VITE_API_URL}/courses`);
-
-
                 const filtered = res.data.data.filter(course => {
                     if (typeof course.category === "string") {
                         return course.category.toLowerCase().trim() === id.toLowerCase().trim();
@@ -57,12 +56,41 @@ const CategoryCourses = () => {
                 setCourses(filtered);
             } catch (err) {
                 console.error(err);
-            } finally {
-                setLoading(false);
             }
         };
 
-        fetchCourses();
+        const fetchEnrollments = async () => {
+            try {
+                const res = await axios.get(`${import.meta.env.VITE_API_URL}/orders`);
+                const allOrders = Array.isArray(res.data)
+                    ? res.data
+                    : Array.isArray(res.data.data)
+                        ? res.data.data
+                        : Array.isArray(res.data.orders)
+                            ? res.data.orders
+                            : [];
+
+                const counts = {};
+                allOrders.forEach(order => {
+                    if (!order.course) return;
+                    let courseId = order.course;
+                    if (typeof courseId === "object" && courseId._id) courseId = courseId._id;
+                    courseId = String(courseId);
+
+                    if (order.status === "complete") {
+                        counts[courseId] = (counts[courseId] || 0) + 1;
+                    }
+                });
+
+                setEnrollCounts(counts);
+                console.log("Enroll Counts:", counts);
+            } catch (err) {
+                console.error("Failed to fetch enrollments", err);
+            }
+        };
+
+        setLoading(true);
+        Promise.all([fetchCourses(), fetchEnrollments()]).finally(() => setLoading(false));
     }, [id]);
 
     if (loading)
@@ -80,7 +108,6 @@ const CategoryCourses = () => {
 
     return (
         <div className="min-h-screen bg-white dark:bg-[#00091a] px-6 py-12 relative overflow-hidden">
-            {/* Animated Background */}
             {[...Array(5)].map((_, i) => (
                 <div
                     key={i}
@@ -96,7 +123,6 @@ const CategoryCourses = () => {
             ))}
 
             <div className="max-w-full mx-auto relative z-10">
-                {/* Header */}
                 <div className="text-center mb-16">
                     <div className="inline-flex items-center justify-center p-4 rounded-full bg-gradient-to-r from-[#00baff] to-[#3EC6F0] mb-6 shadow-lg">
                         <IconComponent className="text-white text-4xl" />
@@ -109,7 +135,6 @@ const CategoryCourses = () => {
                     </p>
                 </div>
 
-                {/* Courses Grid */}
                 {courses.length === 0 ? (
                     <div className="text-center py-20">
                         <div className="inline-flex items-center justify-center p-4 rounded-full bg-gray-200 dark:bg-gray-800 mb-6">
@@ -144,7 +169,6 @@ const CategoryCourses = () => {
                                 <div className="p-6">
                                     <div className="flex justify-between items-start mb-4">
                                         <span className="text-[#00baff] text-sm font-medium bg-[#00baff]/10 px-3 py-1 rounded-full">
-                                            {/* {course.type} */}
                                             {course.category?.name}
                                         </span>
                                         <span className="font-bold text-gray-900 dark:text-gray-200 text-xl">৳{course.price}</span>
@@ -152,9 +176,21 @@ const CategoryCourses = () => {
                                     <h3 className="text-xl font-bold text-[#00baff] dark:text-[#00baff] mb-3 line-clamp-2">{course.title}</h3>
                                     <p className="text-gray-700 dark:text-gray-400 text-sm mb-5 line-clamp-2">{course.description?.slice(0, 100)}...</p>
                                     <div className="flex items-center justify-between text-sm text-gray-700 dark:text-gray-400">
-                                        <div className="flex items-center"><FaClock className="mr-1" /> <span>{course.duration || '10h'}</span></div>
-                                        <div className="flex items-center"><FaUsers className="mr-1" /> <span>{course.enrollments || '0'}</span></div>
-                                        <div className="flex items-center"><FaStar className="text-yellow-400 mr-1" /> <span>{course.rating || '4.5'}</span></div>
+                                        <div className="flex items-center"><FaClock className="mr-1" /> <span>{course.duration || '10h'} Hours</span> </div>
+                                        <div className="flex items-center"><FaUsers className="mr-1" /> <span>{enrollCounts[String(course._id)] || 0}</span></div>
+                                        <div className="flex justify-between items-center text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-lg shadow-sm">
+                                            {/* Stars */}
+                                            <div className="flex items-center">
+                                                <FaStar className="text-yellow-400 mr-1" />
+                                                <FaStar className="text-yellow-400 mr-1" />
+                                                <FaStar className="text-yellow-400 mr-1" />
+                                                <FaStar className="text-yellow-400 mr-1" />
+                                                <FaStar className="text-yellow-400" />
+                                            </div>
+
+
+                                        </div>
+
                                     </div>
                                 </div>
                                 <div className="px-6 pb-6">

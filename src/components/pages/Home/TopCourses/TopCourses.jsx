@@ -9,19 +9,30 @@ import axios from 'axios';
 
 const TopCourses = () => {
   const [courses, setCourses] = useState([]);
+  const [enrollCounts, setEnrollCounts] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Fetch courses
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         setLoading(true);
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/courses`);
+        const data = response.data.data || [];
 
-        console.log('API response:', response.data);
+        // Add default instructor & category info
+        const coursesWithDefaults = data.map(course => ({
+          ...course,
+          instructorName: course.instructor?.name || 'Unknown',
+          instructorImage: course.instructorImage || course.instructor?.image || 'https://randomuser.me/api/portraits/lego/1.jpg',
+          category: course.category || { name: 'General' },
+          rating: course.rating || 0,
+          duration: course.duration || 'N/A',
+          price: course.price || 0,
+        }));
 
-        // Make sure courses is always an array
-        setCourses(response.data.data || []);
+        setCourses(coursesWithDefaults);
       } catch (err) {
         console.error(err);
         setError('Failed to fetch courses.');
@@ -33,11 +44,46 @@ const TopCourses = () => {
     fetchCourses();
   }, []);
 
+  // Fetch enrollments
+  useEffect(() => {
+    const fetchEnrollments = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/orders`);
+        const allOrders = Array.isArray(res.data)
+          ? res.data
+          : Array.isArray(res.data.data)
+            ? res.data.data
+            : Array.isArray(res.data.orders)
+              ? res.data.orders
+              : [];
+
+        const counts = {};
+        allOrders.forEach(order => {
+          if (!order.course) return;
+
+          let courseId = order.course;
+          if (typeof courseId === 'object' && courseId._id) courseId = courseId._id;
+          courseId = String(courseId);
+
+          // Only count completed orders
+          if (order.status === 'complete') {
+            counts[courseId] = (counts[courseId] || 0) + 1;
+          }
+        });
+
+        setEnrollCounts(counts);
+        console.log('Enroll Counts:', counts);
+      } catch (err) {
+        console.error('Failed to fetch enrollments', err);
+      }
+    };
+
+    fetchEnrollments();
+  }, []);
+
   if (loading) return <div className="p-6 text-center">⏳ Loading courses...</div>;
   if (error) return <div className="p-6 text-center text-red-500">{error}</div>;
-
-  if (!courses.length)
-    return <div className="p-6 text-center text-gray-500">No courses available.</div>;
+  if (!courses.length) return <div className="p-6 text-center text-gray-500">No courses available.</div>;
 
   return (
     <div className="py-24 w-full">
@@ -89,39 +135,44 @@ const TopCourses = () => {
                   </h3>
 
                   {/* Instructor */}
-                  {course.instructor && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                      <img
-                        src={ course.instructorImage}
-                        alt={course.instructor.name}
-                        className="w-6 h-6 rounded-full object-cover"
-                      />
-                      <span>
-                        Instructor:{' '}
-                        <span className="font-medium">{course.instructor.name}</span>
-                      </span>
-                    </div>
-                  )}
-
-                  <div className="flex justify-between items-center text-sm text-gray-700 dark:text-gray-300">
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                    <img
+                      src={course.instructorImage}
+                      alt={course.instructorName}
+                      className="w-6 h-6 rounded-full object-cover"
+                    />
                     <span>
-                      ⭐ {course.rating || 0} (
-                      {course.students ? Math.floor(course.students / 1000) + 'k+' : '0'} students)
+                      Instructor: <span className="font-medium">{course.instructorName}</span>
                     </span>
-                    <span>{course.duration || 'N/A'}</span>
                   </div>
+
+                  {/* Rating & Students */}
+                  <div className="flex justify-between items-center text-sm text-gray-700 dark:text-gray-300  py-2 rounded-lg shadow-sm">
+                    <span className="flex items-center gap-1">
+                      {/* Colored stars */}
+                      <span className="text-yellow-400">⭐</span>
+                      <span className="text-yellow-400">⭐</span>
+                      <span className="text-yellow-400">⭐</span>
+                      <span className="text-yellow-400">⭐</span>
+                      <span className="text-yellow-400">⭐</span>
+                    </span>
+
+                    <span className="font-medium text-gray-900 dark:text-gray-100">
+                      {enrollCounts[String(course._id)] || 0}+ students enrolled
+                    </span>
+
+                    <span className="font-medium text-gray-900 dark:text-gray-100">
+                      {course.duration} Hours
+                    </span>
+                  </div>
+
 
                   {/* Price & Enroll */}
                   <div className="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
                     <div>
                       <span className="text-xl font-bold text-gray-900 dark:text-white">
-                        ${course.price || 0}
+                        ৳{course.price}
                       </span>
-                      {course.price > 80 && (
-                        <span className="ml-2 text-sm text-gray-400 line-through">
-                          ${course.price + 30}
-                        </span>
-                      )}
                     </div>
                     <Link to={`/coursedetails/${course.slug}`}>
                       <button className="bg-[#00baff] hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">
