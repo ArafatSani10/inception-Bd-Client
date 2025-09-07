@@ -37,8 +37,8 @@ const ModulePage = () => {
   const recordedModule = modulesData?.filter(
     (module) => module.mode === "recorded"
   );
-  const resoursce = modulesData?.filter(
-    (module) => module.mode === "resoursce"
+  const resoursceModule = modulesData?.filter(
+    (module) => module.mode === "resource"
   );
 
   const formatModulesArray = [
@@ -54,8 +54,8 @@ const ModulePage = () => {
     },
     {
       title: "Class Materials",
-      length: recordedModule?.length,
-      data: recordedModule,
+      length: resoursceModule?.length,
+      data: resoursceModule,
     },
   ];
 
@@ -186,6 +186,7 @@ const ModulePage = () => {
                   </div>
                 ))}
               </div> */}
+             
               <div className="p-4 space-y-4 overflow-y-auto flex-1">
                 {formatModulesArray?.map((module, idx) => (
                   <div
@@ -199,7 +200,7 @@ const ModulePage = () => {
                       <h3 className="font-semibold text-gray-800 dark:text-gray-200">
                         {module.title} ({module.length} Topics)
                       </h3>
-                      {module.expanded ? (
+                      {toggle ? (
                         <FaChevronUp className="text-gray-500" />
                       ) : (
                         <FaChevronDown className="text-gray-500" />
@@ -226,13 +227,13 @@ const ModulePage = () => {
                                           if (
                                             module?.title === "Recorded Class"
                                           ) {
-                                            setClassUrl(content?.content);
+                                            setVideoUrl(content?.content);
                                           } else if (
                                             module.title === "Class Materials"
                                           ) {
                                             setResourceUrl(content?.content);
                                           } else {
-                                            setVideoUrl(content?.content);
+                                            setClassUrl(content?.content);
                                           }
                                         }}
                                         key={index}
