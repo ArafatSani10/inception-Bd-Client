@@ -69,6 +69,7 @@ import StudentUpdateProfile from "./components/Dashboard/UserDashboard/StudentPr
 import InstrucorDetails from "./components/pages/InstructorPage/InstrucorDetails";
 import ModuleUpload from "./components/Dashboard/ModuleUpload/ModuleUpload";
 import CourseStudents from "./components/Dashboard/CourseList/CourseStudents/CourseStudents";
+import FounderStory from "./components/pages/FounderStory/FounderStory";
 
 const router = createBrowserRouter([
   {
@@ -106,6 +107,12 @@ const router = createBrowserRouter([
       {
         path: "/instructors",
         element: <InstructorPage></InstructorPage>,
+      },
+
+
+      {
+        path:"/founder-story",
+        element:<FounderStory></FounderStory>
       },
 
       {
