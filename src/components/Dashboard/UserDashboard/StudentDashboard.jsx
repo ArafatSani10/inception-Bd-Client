@@ -303,12 +303,7 @@ const StudentDashboard = () => {
                                             >
                                                 <FaUserCircle className="text-lg text-[#00baff]" /> Profile
                                             </Link>
-                                            <Link
-                                                to="settings"
-                                                className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-[#00baff]/10 transition"
-                                            >
-                                                <FaCog className="text-lg text-[#00baff]" /> Settings
-                                            </Link>
+                                         
                                             <hr className="border-t dark:border-gray-700" />
                                             <button
                                                 onClick={handleLogout}

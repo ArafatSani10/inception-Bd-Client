@@ -331,6 +331,26 @@ const Register = () => {
                 </p>
               )}
             </div>
+            {/* xs */}
+            <div className="flex items-center gap-2 mt-4">
+              <input
+                type="checkbox"
+                id="terms"
+                className="w-4 h-4 accent-blue-600 cursor-pointer"
+              />
+              <label
+                htmlFor="terms"
+                className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer"
+              >
+                I agree to the{" "}
+                <span
+                  onClick={() => (window.location.href = "/terms-and-conditions")}
+                  className="text-blue-600 hover:underline cursor-pointer"
+                >
+                  Terms & Conditions
+                </span>
+              </label>
+            </div>
             <button
               type="submit"
               disabled={disable || isLoading}
@@ -345,9 +365,9 @@ const Register = () => {
 
           <div className="my-8 flex items-center">
             <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
-            <span className="mx-4 text-gray-500 dark:text-gray-400">
+            {/* <span className="mx-4 text-gray-500 dark:text-gray-400">
               or continue with
-            </span>
+            </span> */}
             <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
           </div>
 
