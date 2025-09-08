@@ -40,42 +40,7 @@ const AllCoursesGrid = () => {
         fetchCourses();
     }, []);
 
-    // Fetch all orders to count enrolled students per course
-    useEffect(() => {
-        const fetchEnrollments = async () => {
-            try {
-                const res = await axios.get(`${import.meta.env.VITE_API_URL}/orders`);
-                const allOrders = Array.isArray(res.data)
-                    ? res.data
-                    : Array.isArray(res.data.data)
-                        ? res.data.data
-                        : Array.isArray(res.data.orders)
-                            ? res.data.orders
-                            : [];
 
-                const counts = {};
-                allOrders.forEach((order) => {
-                    if (!order.course) return;
-
-                    let courseId = order.course;
-                    if (typeof courseId === "object" && courseId._id) courseId = courseId._id;
-                    courseId = String(courseId);
-
-                    // Only count completed orders (optional)
-                    if (order.status === "complete") {
-                        counts[courseId] = (counts[courseId] || 0) + 1;
-                    }
-                });
-
-                console.log("Enroll Counts:", counts);
-                setEnrollCounts(counts);
-            } catch (err) {
-                console.error("Failed to fetch enrollments", err);
-            }
-        };
-
-        fetchEnrollments();
-    }, []);
 
     if (loading) return <div className="text-center py-20 text-lg">Loading courses...</div>;
     if (error) return <div className="text-center py-20 text-red-500">{error}</div>;
@@ -92,7 +57,9 @@ const AllCoursesGrid = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+                {/*  */}
                 {courses.map((course) => (
+                   <Link to={`/coursedetails/${course.slug}`}>
                     <div
                         key={course._id || course.id}
                         className="bg-white/70 dark:bg-white/5 backdrop-blur-lg rounded-3xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
@@ -112,6 +79,8 @@ const AllCoursesGrid = () => {
                             <h3 className="text-xl font-bold text-gray-900 dark:text-white line-clamp-2">
                                 {course.title}
                             </h3>
+                      <p className="text-gray-700 dark:text-gray-400 text-sm mb-5 line-clamp-2">{course.description?.slice(0, 100)}...</p>
+
 
                             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                                 <img
@@ -135,10 +104,6 @@ const AllCoursesGrid = () => {
                                 </span>
 
                                 <span className="font-medium text-gray-900 dark:text-gray-100">
-                                    {enrollCounts[String(course._id)] || 0}+ students enrolled
-                                </span>
-
-                                <span className="font-medium text-gray-900 dark:text-gray-100">
                                     {course.duration} Hours
                                 </span>
                             </div>
@@ -150,14 +115,15 @@ const AllCoursesGrid = () => {
                                         ৳{course.price}
                                     </span>
                                 </div>
-                                <Link to={`/coursedetails/${course.slug}`}>
+                             
                                     <button className="bg-[#00baff] hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">
                                         Enroll Now
                                     </button>
-                                </Link>
+                       
                             </div>
                         </div>
                     </div>
+                   </Link>
                 ))}
             </div>
         </div>

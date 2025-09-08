@@ -38,7 +38,7 @@ const SuccessPage = () => {
 
         {/* Button */}
         <button
-          onClick={() => navigate("/courses")}
+          onClick={() => navigate("/student-dashboard/user-home")}
           className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold shadow-xl hover:scale-105 transform transition-all duration-300"
         >
           Go to Courses

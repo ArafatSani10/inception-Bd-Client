@@ -1,9 +1,10 @@
 
 
-
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import AuthContext from "../../../../Content/Authcontext";
+
+
 
 const StudentUpdateProfile = () => {
   const { user, updateUser } = useContext(AuthContext);
@@ -11,13 +12,17 @@ const StudentUpdateProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("basic");
+  const [photoFile, setPhotoFile] = useState("");
+  console.log("photo file", photoFile);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         if (user?.email) {
           const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
-          const singleUser = res.data?.data?.find((u) => u.email === user.email);
+          const singleUser = res.data?.data?.find(
+            (u) => u.email === user.email
+          );
 
           if (singleUser) {
             setDbUser(singleUser);
@@ -41,23 +46,10 @@ const StudentUpdateProfile = () => {
     setDbUser((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setDbUser((prev) => ({ ...prev, photo: reader.result }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  
-
   const handleSave = async () => {
     try {
       if (!dbUser) return;
-      console.log("db user", dbUser)
+      const formData = new FormData();
 
       // Backend schema fields
       const updatedData = {
@@ -73,20 +65,24 @@ const StudentUpdateProfile = () => {
         status: dbUser.status,
         isVerified: dbUser.isVerified,
       };
-  
+      formData.append("photo", photoFile);
+      formData.append("data", JSON.stringify(updatedData));
+
       const res = await axios.patch(
         `${import.meta.env.VITE_API_URL}/users/${dbUser.id}`,
-        updatedData,
-        { withCredentials: true }
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+        }
       );
+      toast.success("profile updated successfully");
 
       const updatedUser = res.data.data || { ...dbUser, ...updatedData };
       updateUser(updatedUser);
-
-      alert("Profile updated successfully!");
     } catch (err) {
       console.error(err.response?.data || err.message);
-    //   alert("Failed to update profile");
+      //   alert("Failed to update profile");
     }
   };
 
@@ -96,10 +92,7 @@ const StudentUpdateProfile = () => {
         Loading profile...
       </p>
     );
-  if (error)
-    return (
-      <p className="text-center text-red-500 mt-20">{error}</p>
-    );
+  if (error) return <p className="text-center text-red-500 mt-20">{error}</p>;
   if (!dbUser)
     return (
       <p className="text-center text-gray-500 dark:text-gray-400 mt-20">
@@ -144,11 +137,15 @@ const StudentUpdateProfile = () => {
             <div className="space-y-4">
               <div className="flex items-center gap-4">
                 <img
-                  src={profileImage}
+                  src={dbUser?.photo || profileImage}
                   alt="Profile"
                   className="w-24 h-24 rounded-full border-2 border-gray-300 dark:border-gray-700 object-cover"
                 />
-                <input type="file" accept="image/*" onChange={handleImageChange} />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setPhotoFile(e.target.files[0])}
+                />
               </div>
               <div>
                 <label className="block mb-1">Name</label>
@@ -239,4 +236,3 @@ const StudentUpdateProfile = () => {
 };
 
 export default StudentUpdateProfile;
-

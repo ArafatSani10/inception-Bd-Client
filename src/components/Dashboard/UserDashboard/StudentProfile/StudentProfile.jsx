@@ -70,7 +70,7 @@ const StudentProfile = () => {
 
             {/* Main Content */}
             <div className="flex-1 p-3 space-y-6">
-                <h1 className="text-3xl max-sm:text-2xl font-bold text-purple-500 dark:text-purple-400 mb-4"> Student Profile Details</h1>
+                <h1 className="text-3xl max-sm:text-2xl font-bold text-purple-500 dark:text-purple-400 mb-4"> {dbUser?.role} Profile Details</h1>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex items-center gap-4 bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
