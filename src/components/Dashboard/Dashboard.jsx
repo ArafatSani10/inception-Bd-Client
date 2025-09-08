@@ -497,12 +497,7 @@ const Dashboard = () => {
                                                 <FaUserCircle className="text-lg text-indigo-500" />{" "}
                                                 Profile
                                             </Link>
-                                            <a
-                                                href="/settings"
-                                                className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-indigo-700/50 transition"
-                                            >
-                                                <FaCog className="text-lg text-indigo-500" /> Settings
-                                            </a>
+                                          
                                             <hr className="border-t dark:border-gray-700" />
                                             <button
                                                 onClick={handleLogout}
