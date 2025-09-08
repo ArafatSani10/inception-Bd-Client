@@ -8,7 +8,7 @@ export default function UpdatePost() {
 
   const onSubmit = (data) => {
     console.log("Form Data:", data);
-    alert("✅ Post Saved!");
+    // alert("✅ Post Saved!");
     reset();
     setThumbnailPreview(null);
   };

@@ -64,21 +64,22 @@ const OurInstructor = () => {
                   <h3 className="mt-5 text-xl font-semibold text-[#00baff] dark:text-[#00baff]">
                     {instructor?.name}
                   </h3>
-                  <p className="text-[#00baff] dark:text-[#00baff] text-xs font-medium mt-2">
+                  <p className="text-[#00baff] dark:text-[#00baff] text-sm font-medium mt-2">
                     {instructor?.jobTitle}
                   </p>
 
                   <div className="mt-3 text-yellow-400 text-lg">
-                    {/* {"⭐".repeat(Math.floor(instructor?.rating || 5))} */}
+                    {/* {"⭐".repeat(Math.floor(instructor?.rating || 5))} */}⭐⭐⭐⭐⭐
                   </div>
 
                   {/* Dynamic Profile Link using email */}
-                  <Link
-                    to={`/instructor/${instructor?.email}`}
+                  <button
+                    onClick={() => window.location.href = `/instructor/${instructor?.email}`}
                     className="inline-block mt-6 px-5 py-2 rounded-full bg-[#00baff] hover:bg-indigo-600 text-white font-semibold shadow-md transition-all"
                   >
                     View Profile
-                  </Link>
+                  </button>
+
                 </div>
               </SwiperSlide>
             ))

@@ -1,266 +1,176 @@
-// import React, { useEffect, useState } from "react";
-// import { Swiper, SwiperSlide } from "swiper/react";
-// import { Pagination, Autoplay } from "swiper/modules";
-// import 'swiper/css';
-// import 'swiper/css/pagination';
-// import { Link } from 'react-router-dom';
-// import axios from 'axios';
-
-// const AllCoursesList = () => {
-//     const [courses, setCourses] = useState([]);
-
-//     useEffect(() => {
-//         const fetchCourses = async () => {
-//             try {
-//                 const res = await axios.get(`${import.meta.env.VITE_API_URL}/courses`);
-//                 const data = res.data.data || [];
-
-//                 // Map for instructorImage fallback
-//                 const mappedCourses = data.map(course => ({
-//                     ...course,
-//                     instructorImage: course.instructorImage || course.instructor?.image || "https://randomuser.me/api/portraits/lego/1.jpg",
-//                     instructorName: course.instructor?.name || "Unknown",
-                
-//                 }));
-
-//                 setCourses(mappedCourses);
-//             } catch (err) {
-//                 console.error("Failed to fetch courses", err);
-//             }
-//         };
-
-//         fetchCourses();
-//     }, []);
-
-//     return (
-//         <div className="py-24 max-w-full mx-auto">
-//             <div className="text-center mb-16">
-//                 <h2 className="text-xl md:text-5xl font-extrabold text-[#00baff] dark:text-[#00baff]">
-//                     🎓Explore All Our Courses
-//                 </h2>
-//                 <p className="mt-4 text-sm md:text-xl text-gray-600 dark:text-gray-300">
-//                     Find the perfect course to power your career.
-//                 </p>
-//             </div>
-
-//             <Swiper
-//                 modules={[Pagination, Autoplay]}
-//                 pagination={{ clickable: true }}
-//                 autoplay={{ delay: 3000, disableOnInteraction: false }}
-//                 spaceBetween={30}
-//                 breakpoints={{
-//                     640: { slidesPerView: 1 },
-//                     768: { slidesPerView: 2 },
-//                     1024: { slidesPerView: 3 },
-//                 }}
-//                 className="pb-10"
-//             >
-//                 {courses.map(course => (
-//                     <SwiperSlide key={course._id}>
-//                         <div className="bg-white/70 dark:bg-white/5 backdrop-blur-lg rounded-3xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
-//                             <div className="relative aspect-video w-full overflow-hidden rounded-t-3xl">
-//                                 <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover object-center rounded-t-3xl" />
-//                                 <div className="absolute top-4 left-4 bg-[#00baff] text-white text-xs font-bold px-3 py-1 rounded-full shadow">
-//                                     {course.category?.name}
-//                                 </div>
-//                             </div>
-
-//                             <div className="p-6 space-y-3">
-//                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white line-clamp-2">{course.title}</h3>
-
-//                                 <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-//                                     <img src={course.instructorImage} alt={course.instructorName} className="w-6 h-6 rounded-full object-cover" />
-//                                     <span>Instructor: <span className="font-medium">{course.instructorName}</span></span>
-//                                 </div>
-
-//                                 <div className="flex justify-between items-center text-sm text-gray-700 dark:text-gray-300">
-//                                     <span>⭐ {course.rating} ({Math.floor(course.students / 1000)}k+ students)</span>
-//                                     <span>{course.duration} hours</span>
-//                                 </div>
-
-//                                 <div className="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
-//                                     <div>
-//                                         <span className="text-xl font-bold text-gray-900 dark:text-white">৳{course.price}</span>
-//                                         {/* {course.price > 80 && (
-//                                             <span className="ml-2 text-sm text-gray-400 line-through">৳{course.price + 30}</span>
-//                                         )} */}
-//                                     </div>
-//                                     <Link to={`/coursedetails/${course.slug}`}>
-//                                         <button className="bg-[#00baff] hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">
-//                                             Enroll Now
-//                                         </button>
-//                                     </Link>
-//                                 </div>
-//                             </div>
-//                         </div>
-//                     </SwiperSlide>
-//                 ))}
-//             </Swiper>
-//         </div>
-//     );
-// };
-
-// export default AllCoursesList;
-
-
-
-import React, { useEffect, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import React, { useState, useEffect, useRef } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 const AllCoursesList = () => {
   const [courses, setCourses] = useState([]);
-  const [enrollCounts, setEnrollCounts] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Fetch all courses
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
+  const [swiperInstance, setSwiperInstance] = useState(null);
+
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/courses`);
-        const data = res.data.data || [];
+        setLoading(true);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/courses`);
+        const data = response.data.data || [];
 
-        const mappedCourses = data.map((course) => ({
+        const coursesWithDefaults = data.map(course => ({
           ...course,
-          instructorImage:
-            course.instructorImage ||
-            course.instructor?.image ||
-            "https://randomuser.me/api/portraits/lego/1.jpg",
-          instructorName: course.instructor?.name || "Unknown",
+          instructorName: course.instructor?.name || 'Unknown',
+          instructorImage: course.instructorImage || course.instructor?.image || 'https://randomuser.me/api/portraits/lego/1.jpg',
+          category: course.category || { name: 'General' },
+          duration: course.duration || 'N/A',
+          price: course.price || 0,
         }));
 
-        setCourses(mappedCourses);
+        setCourses(coursesWithDefaults);
       } catch (err) {
-        console.error("Failed to fetch courses", err);
+        console.error(err);
+        setError('Failed to fetch courses.');
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchCourses();
   }, []);
 
-  // Fetch all orders and count enrolled students per course
-useEffect(() => {
-  const fetchEnrollments = async () => {
-    try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/orders`);
-      
-      // Check if API returns data in res.data.data or res.data.orders
-      const allOrders = Array.isArray(res.data)
-        ? res.data
-        : Array.isArray(res.data.data)
-        ? res.data.data
-        : Array.isArray(res.data.orders)
-        ? res.data.orders
-        : [];
-
-      const counts = {};
-      allOrders.forEach((order) => {
-        if (!order.course) return;
-
-        let courseId = order.course;
-        if (typeof courseId === "object" && courseId._id) {
-          courseId = courseId._id;
-        }
-        courseId = String(courseId);
-        counts[courseId] = (counts[courseId] || 0) + 1;
-      });
-
-      console.log("Enroll Counts:", JSON.stringify(counts, null, 2));
-      setEnrollCounts(counts);
-    } catch (err) {
-      console.error("Failed to fetch enrollments", err);
+  // Assign navigation buttons after Swiper mounts
+  useEffect(() => {
+    if (swiperInstance) {
+      swiperInstance.params.navigation.prevEl = prevRef.current;
+      swiperInstance.params.navigation.nextEl = nextRef.current;
+      swiperInstance.navigation.init();
+      swiperInstance.navigation.update();
     }
-  };
+  }, [swiperInstance]);
 
-  fetchEnrollments();
-}, []);
-
+  if (loading) return <div className="p-6 text-center">⏳ Loading courses...</div>;
+  if (error) return <div className="p-6 text-center text-red-500">{error}</div>;
+  if (!courses.length) return <div className="p-6 text-center text-gray-500">No courses available.</div>;
 
   return (
-    <div className="py-24 max-w-full mx-auto">
-      <div className="text-center mb-16">
-        <h2 className="text-xl md:text-5xl font-extrabold text-[#00baff] dark:text-[#00baff]">
-          🎓Explore All Our Courses
-        </h2>
-        <p className="mt-4 text-sm md:text-xl text-gray-600 dark:text-gray-300">
-          Find the perfect course to power your career.
-        </p>
-      </div>
+    <div className="py-24 w-full relative">
+      <div className="max-w-full mx-auto md:px-2 px-3">
+        <div className="text-center mb-16">
+          <h2 className="text-xl md:text-5xl font-extrabold text-[#00baff] dark:text-[#00baff]">
+            🎓 Explore All Our Courses
+          </h2>
+          <p className="mt-4 text-sm md:text-xl text-gray-600 dark:text-gray-300">
+            Find the perfect course to power your career.
+          </p>
+        </div>
 
-      <Swiper
-        modules={[Pagination, Autoplay]}
-        pagination={{ clickable: true }}
-        autoplay={{ delay: 3000, disableOnInteraction: false }}
-        spaceBetween={30}
-        breakpoints={{
-          640: { slidesPerView: 1 },
-          768: { slidesPerView: 2 },
-          1024: { slidesPerView: 3 },
-        }}
-        className="pb-10"
-      >
-        {courses.map((course) => (
-          <SwiperSlide key={course._id}>
-            <div className="bg-white/70 dark:bg-white/5 backdrop-blur-lg rounded-3xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
-              <div className="relative aspect-video w-full overflow-hidden rounded-t-3xl">
-                <img
-                  src={course.thumbnail}
-                  alt={course.title}
-                  className="w-full h-full object-cover object-center rounded-t-3xl"
-                />
-                <div className="absolute top-4 left-4 bg-[#00baff] text-white text-xs font-bold px-3 py-1 rounded-full shadow">
-                  {course.category?.name}
-                </div>
-              </div>
+        <div className="relative">
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            spaceBetween={30}
+            slidesPerView={1}
+            loop
+            autoplay={{ delay: 4000 }}
+            pagination={{ clickable: true }}
+            navigation={{ prevEl: prevRef.current, nextEl: nextRef.current }}
+            onBeforeInit={(swiper) => {
+              swiper.params.navigation.prevEl = prevRef.current;
+              swiper.params.navigation.nextEl = nextRef.current;
+            }}
+            onSwiper={setSwiperInstance}
+            breakpoints={{
+              640: { slidesPerView: 1 },
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+            }}
+            className="pb-12"
+          >
+            {courses.map((course) => (
+              <SwiperSlide key={course._id || course.id}>
+                <Link to={`/coursedetails/${course.slug}`}>
+                  <div className="bg-white/70 dark:bg-white/5 backdrop-blur-lg rounded-3xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                    {/* Thumbnail */}
+                    <div className="relative aspect-video w-full overflow-hidden rounded-t-3xl">
+                      <img
+                        src={course.thumbnail}
+                        alt={course.title}
+                        className="w-full h-full object-cover object-center rounded-t-3xl"
+                      />
+                      {course.category && (
+                        <div className="absolute top-4 left-4 bg-[#00baff] text-white text-xs font-semibold px-4 py-1 rounded-full shadow">
+                          {course.category?.name}
+                        </div>
+                      )}
+                    </div>
 
-              <div className="p-6 space-y-3">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white line-clamp-2">
-                  {course.title}
-                </h3>
+                    {/* Content */}
+                    <div className="p-6 space-y-3">
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white line-clamp-2">
+                        {course.title}
+                      </h3>
 
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                  <img
-                    src={course.instructorImage}
-                    alt={course.instructorName}
-                    className="w-6 h-6 rounded-full object-cover"
-                  />
-                  <span>
-                    Instructor: <span className="font-medium">{course.instructorName}</span>
-                  </span>
-                </div>
+                      <p className="text-gray-700 dark:text-gray-400 text-sm mb-5 line-clamp-2">{course.description?.slice(0, 100)}...</p>
 
-                
+                      {/* Instructor */}
+                      <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                        <img
+                          src={course.instructorImage}
+                          alt={course.instructorName}
+                          className="w-6 h-6 rounded-full object-cover"
+                        />
+                        <span>
+                          Instructor: <span className="font-medium">{course.instructorName}</span>
+                        </span>
+                      </div>
 
-                <div className="flex justify-between items-center text-sm text-gray-700 dark:text-gray-300">
-                  <span>⭐⭐⭐⭐⭐ </span>
-                  {/* <span>{course.duration} hours</span> */}
-                  <p className="text-sm text-gray-800 dark:text-white font-medium">
-                 {enrollCounts[String(course._id)] ?? 0}+ Student enrolled
-                </p>
-                  <span>{course.duration} hours</span>
+                      {/* Duration */}
+                      <div className="flex justify-between items-center text-sm text-gray-700 dark:text-gray-300 py-2 rounded-lg shadow-sm">
+                        <span className="font-medium text-gray-900 dark:text-gray-100">
+                          {course.duration} Hours
+                        </span>
+                      </div>
 
-                </div>
+                      {/* Price & Enroll */}
+                      <div className="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <div>
+                          <span className="text-xl font-bold text-gray-900 dark:text-white">
+                            ৳{course.price}
+                          </span>
+                        </div>
 
-                <div className="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <div>
-                    <span className="text-xl font-bold text-gray-900 dark:text-white">
-                      ৳{course.price}
-                    </span>
+                        <button className="bg-[#00baff] hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">
+                          Enroll Now
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <Link to={`/coursedetails/${course.slug}`}>
-                    <button className="bg-[#00baff] hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">
-                      Enroll Now
-                    </button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+                </Link>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+          {/* Overlay Navigation Buttons */}
+          <div
+            ref={prevRef}
+            className="absolute top-1/3 -translate-y-1/2 left-2 md:left-4 z-10 bg-blue-600 text-white dark:bg-gray-400 dark:text-white p-3 rounded-full shadow-lg cursor-pointer dark:hover:bg-gray-700 transition"
+          >
+            <FiChevronLeft size={24} />
+          </div>
+          <div
+            ref={nextRef}
+            className="absolute top-1/3 -translate-y-1/2 right-2 md:right-4 z-10 bg-blue-600 text-white dark:bg-gray-400 dark:text-white p-3 rounded-full shadow-lg cursor-pointer dark:hover:bg-gray-700 transition"
+          >
+            <FiChevronRight size={24} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

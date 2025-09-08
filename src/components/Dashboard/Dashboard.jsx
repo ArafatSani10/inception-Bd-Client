@@ -35,6 +35,8 @@ import AuthContext from "../../Content/Authcontext";
 import axios from "axios";
 import { AiFillSafetyCertificate } from "react-icons/ai";
 import Swal from "sweetalert2";
+import { toast } from "react-toastify";
+import { MdViewModule } from "react-icons/md";
 
 const DropdownItem = ({ icon, label, sidebarOpen, subLinks = [] }) => {
     const [open, setOpen] = useState(false);
@@ -172,6 +174,8 @@ const Dashboard = () => {
         }
     };
 
+    // const profileImage = dbUser.photo || dbUser.image || `https://ui-avatars.com/api/?name=${dbUser.name}`;
+
     const handleLogout = async () => {
         try {
             await signOutUser(); // AuthContext theke logout
@@ -284,13 +288,13 @@ const Dashboard = () => {
                                     to="module-upload"
                                     className={({ isActive }) =>
                                         `group relative flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all ${isActive
-                                            ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md font-semibold"
+                                            ? " text-[#00baff] shadow-md font-semibold"
                                             : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                                         }`
                                     }
                                 >
                                     <span className="text-base">
-                                        <FaCertificate />
+                                        <MdViewModule />
                                     </span>
                                     {sidebarOpen && <span>Module Upload</span>}
                                 </NavLink>
@@ -301,7 +305,7 @@ const Dashboard = () => {
                                     to="certificate"
                                     className={({ isActive }) =>
                                         `group relative flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all ${isActive
-                                            ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md font-semibold"
+                                            ? " text-[#00baff] shadow-md font-semibold"
                                             : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                                         }`
                                     }
@@ -335,19 +339,11 @@ const Dashboard = () => {
                                 sidebarOpen={sidebarOpen}
                                 subLinks={[
                                     { label: "Order History", to: "orderhistory" },
-                                    { label: "Pending Payment", to: "pending-order", count: 2 },
+                                    // { label: "Pending Payment", to: "pending-order", count: 2 },
                                 ]}
                             />
 
-                            <DropdownItem
-                                icon={<FaWallet />}
-                                label="Withdraw Payment"
-                                sidebarOpen={sidebarOpen}
-                                subLinks={[
-                                    { label: "Withdraw Method", to: "withdraw-method" },
-                                    { label: "Withdraw List", to: "withdraw-list" },
-                                ]}
-                            />
+                            
 
                             <li>
                                 <NavLink
@@ -380,9 +376,9 @@ const Dashboard = () => {
                                     { label: "All Student", to: "all-student" },
                                     { label: "Instructor", to: "all-instructor" },
                                     { label: "Active Users", to: "active-user" },
-                                    { label: "Non Verified", to: "non-verified" },
-                                    { label: "Banned User", to: "banned-users" },
-                                    { label: "Send Bulk Mail", to: "bulk-mail" },
+                                    // { label: "Non Verified", to: "non-verified" },
+                                    // { label: "Banned User", to: "banned-users" },
+                                    // { label: "Send Bulk Mail", to: "bulk-mail" },
                                 ]}
                             />
 
@@ -417,10 +413,10 @@ const Dashboard = () => {
 
                             <li>
                                 <NavLink
-                                    to="/setting"
+                                    to="/dashboard/update-profile"
                                     className={({ isActive }) =>
                                         `group relative flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all ${isActive
-                                            ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md font-semibold"
+                                            ? " text-[#00baff] shadow-md font-semibold"
                                             : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                                         }`
                                     }
@@ -432,164 +428,7 @@ const Dashboard = () => {
                                 </NavLink>
                             </li>
 
-                            {/* ---- Student Section (Always Last) ---- */}
-                            {dbUser?.role === "student" && (
-                                <div className="mt-6 border-t border-gray-200 dark:border-gray-700 pt-4">
-                                    <div className="flex-col justify-center items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-                                        {user?.photoURL ? (
-                                            <img
-                                                src={user.photoURL}
-                                                alt="Student Avatar"
-                                                className="w-32 h-32 mx-auto rounded-full border-2 border-indigo-400"
-                                            />
-                                        ) : (
-                                            <FaUserCircle className="text-indigo-600 dark:text-indigo-300 text-3xl" />
-                                        )}
-
-                                        {sidebarOpen && (
-                                            <div>
-                                                <p className="font-semibold text-center text-sm text-[#00baff] mt-3">
-                                                    {user?.displayName || dbUser?.name}
-                                                </p>
-                                                <p className="text-xs text-center text-gray-500 dark:text-gray-400">
-                                                    {dbUser?.role}
-                                                </p>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <ul className="space-y-1 text-sm">
-                                        <li className="relative group">
-                                            <NavLink
-                                                to="user-home"
-                                                className={({
-                                                    isActive,
-                                                }) => `group relative flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all
-                    ${isActive
-                                                        ? " text-[#00baff] shadow-md font-semibold"
-                                                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                                    }`}
-                                            >
-                                                <span className="text-base">
-                                                    <FiHome />
-                                                </span>
-                                                {sidebarOpen && (
-                                                    <span className="whitespace-nowrap">Dashboard</span>
-                                                )}
-                                            </NavLink>
-                                        </li>
-
-                                        <li className="relative">
-                                            {/* Main button */}
-                                            <button
-                                                onClick={() =>
-                                                    setCourseDropdownOpen(!courseDropdownOpen)
-                                                }
-                                                className={`flex items-center justify-between w-full gap-3 px-4 py-2.5 rounded-lg transition-all
-          ${courseDropdownOpen
-                                                        ? "text-[#00baff] font-semibold shadow-md"
-                                                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                                    }`}
-                                            >
-                                                <div className="flex items-center gap-3">
-                                                    <FaBookReader className="text-base" />
-                                                    {sidebarOpen && (
-                                                        <span className="whitespace-nowrap">Course</span>
-                                                    )}
-                                                </div>
-                                                <div>
-                                                    {courseDropdownOpen ? (
-                                                        <FaChevronUp />
-                                                    ) : (
-                                                        <FaChevronDown />
-                                                    )}
-                                                </div>
-                                            </button>
-
-                                            {/* Smooth Dropdown */}
-                                            <AnimatePresence>
-                                                {courseDropdownOpen && (
-                                                    <motion.ul
-                                                        initial={{ opacity: 0, y: -5 }}
-                                                        animate={{ opacity: 1, y: 0 }}
-                                                        exit={{ opacity: 0, y: -5 }}
-                                                        transition={{ duration: 0.25 }}
-                                                        className="ml-6 mt-2 flex flex-col gap-2"
-                                                    >
-                                                        <NavLink
-                                                            to="purchase-course"
-                                                            className={({ isActive }) =>
-                                                                `flex items-center gap-2 px-4 py-2 rounded-lg transition-all
-                ${isActive
-                                                                    ? "text-[#00baff] font-semibold shadow-md"
-                                                                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                                                }`
-                                                            }
-                                                        >
-                                                            My Purchase
-                                                        </NavLink>
-
-                                                        <NavLink
-                                                            to="my-courses"
-                                                            className={({ isActive }) =>
-                                                                `flex items-center gap-2 px-4 py-2 rounded-lg transition-all
-                ${isActive
-                                                                    ? "text-[#00baff] font-semibold shadow-md"
-                                                                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                                                }`
-                                                            }
-                                                        >
-                                                            My Comment
-                                                        </NavLink>
-                                                    </motion.ul>
-                                                )}
-                                            </AnimatePresence>
-                                        </li>
-
-                                        {/* certificate */}
-                                        <li className="relative group">
-                                            <NavLink
-                                                to="student-certificate"
-                                                className={({
-                                                    isActive,
-                                                }) => `group relative flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all
-                    ${isActive
-                                                        ? " text-[#00baff] shadow-md font-semibold"
-                                                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                                    }`}
-                                            >
-                                                <span className="text-base">
-                                                    <AiFillSafetyCertificate />
-                                                </span>
-                                                {sidebarOpen && (
-                                                    <span className="whitespace-nowrap">Certificate</span>
-                                                )}
-                                            </NavLink>
-                                        </li>
-
-                                        {/* setting */}
-                                        <li className="relative group">
-                                            <NavLink
-                                                to="/dashboard/update-profile"
-                                                className={({
-                                                    isActive,
-                                                }) => `group relative flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all
-                    ${isActive
-                                                        ? " text-[#00baff] shadow-md font-semibold"
-                                                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                                    }`}
-                                            >
-                                                <span className="text-base">
-                                                    <IoSettingsOutline />
-                                                </span>
-                                                {sidebarOpen && (
-                                                    <span className="whitespace-nowrap">Setting</span>
-                                                )}
-                                            </NavLink>
-                                        </li>
-                                    </ul>
-                                </div>
-                            )}
+                        
                         </ul>
                     </nav>
                 </aside>
@@ -628,15 +467,10 @@ const Dashboard = () => {
                                     onClick={() => setOpen(!open)}
                                     className="flex items-center gap-3 group"
                                 >
-                                    {user?.photoURL ? (
-                                        <img
-                                            src={user.photoURL}
-                                            alt="User Avatar"
-                                            className="w-9 h-9 rounded-full border-2 border-indigo-400 group-hover:scale-105 transition"
-                                        />
-                                    ) : (
-                                        <FaUserCircle className="text-indigo-600 dark:text-indigo-300 text-3xl group-hover:scale-110 transition" />
-                                    )}
+                                    {/* Profile Image */}
+                                    <div className="relative w-10 h-10 rounded-full overflow-hidden border-4 border-purple-500 shadow-lg">
+                                        <img src={dbUser?.photo} alt={dbUser?.name} className="w-full h-full object-cover" />
+                                    </div>
                                     <div className="max-sm:flex-col md:block text-left">
                                         <p className="font-semibold text-sm text-gray-800 dark:text-white">
                                             {dbUser?.name}

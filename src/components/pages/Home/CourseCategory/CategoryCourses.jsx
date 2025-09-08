@@ -177,7 +177,7 @@ const CategoryCourses = () => {
                                     <p className="text-gray-700 dark:text-gray-400 text-sm mb-5 line-clamp-2">{course.description?.slice(0, 100)}...</p>
                                     <div className="flex items-center justify-between text-sm text-gray-700 dark:text-gray-400">
                                         <div className="flex items-center"><FaClock className="mr-1" /> <span>{course.duration || '10h'} Hours</span> </div>
-                                        <div className="flex items-center"><FaUsers className="mr-1" /> <span>{enrollCounts[String(course._id)] || 0}</span></div>
+                                
                                         <div className="flex justify-between items-center text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-lg shadow-sm">
                                             {/* Stars */}
                                             <div className="flex items-center">

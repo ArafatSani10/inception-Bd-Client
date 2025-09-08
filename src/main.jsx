@@ -87,9 +87,9 @@ const router = createBrowserRouter([
       {
         path: "/courses",
         element: (
-          <ProtectedRouter>
+        
             <Courses />
-          </ProtectedRouter>
+       
         ),
       },
 

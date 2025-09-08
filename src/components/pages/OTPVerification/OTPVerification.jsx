@@ -14,7 +14,7 @@ const OTPVerification = () => {
   const handleVerify = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    alert("verify hit")
+    // alert("verify hit")
     console.log("otp", otp)
     if (otp.length !== 6) {
       setError("OTP must be 6 digits");

@@ -26,11 +26,11 @@ export default function CouponSystemDemo() {
     const endDate = new Date(data.endDate);
 
     if (startDate < now) {
-      alert("Start date cannot be in the past!");
+      // alert("Start date cannot be in the past!");
       return;
     }
     if (endDate <= startDate) {
-      alert("End date must be after start date!");
+      // alert("End date must be after start date!");
       return;
     }
 

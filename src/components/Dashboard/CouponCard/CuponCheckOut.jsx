@@ -155,7 +155,7 @@ export default function CheckoutForm() {
   const { course } = location.state || {};
   const { user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState(null); // user state
-  console.log("user info",userInfo)
+  console.log("user info", userInfo)
 
   // ✅ Fetch logged-in user dynamically
   useEffect(() => {
@@ -196,13 +196,13 @@ export default function CheckoutForm() {
       // reset();
     } catch (err) {
       console.error("Order failed:", err);
-      alert("Failed to place order!");
+      // alert("Failed to place order!");
     }
   };
 
   const onApplyCoupon = (data) => {
     console.log("Coupon applied:", data.couponCode);
-    alert(`Coupon "${data.couponCode}" applied!`);
+    // alert(`Coupon "${data.couponCode}" applied!`);
   };
 
   if (!course) {
@@ -268,10 +268,14 @@ export default function CheckoutForm() {
           transition={{ duration: 0.6 }}
           className="rounded-2xl shadow-lg bg-white dark:bg-gray-800 p-8 flex flex-col justify-center"
         >
+
+          
           <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100">
             Checkout
           </h2>
 
+
+<p className="text-blue-400 font-bold">price : ৳{course?.price}</p>
           <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6">
             {/* Coupon Field */}
             <Field label="Coupon Code">
