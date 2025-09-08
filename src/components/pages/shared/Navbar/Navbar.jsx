@@ -28,7 +28,7 @@ const Navbar = () => {
     { name: "Founder Story", href: "/founder-story" },
     { name: "Contact us", href: "/contact" },
     { name: "Blog", href: "/blog" },
-  
+
   ];
 
   // Toggle Dark Mode
@@ -371,13 +371,20 @@ const Navbar = () => {
                   {dbUser.email || ""}
                 </p>
               </div>
-              <Link
-                to="/dashboard"
+              <button
+                onClick={() => {
+                  if (!dbUser) return;
+                  if (dbUser.role === "admin" || dbUser.role === "instructor") {
+                    navigate("/dashboard/admin-home");
+                  } else {
+                    navigate("/student-dashboard/user-home");
+                  }
+                }}
                 className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
               >
                 <MdDashboard className="text-gray-500 dark:text-gray-400" />
                 Dashboard
-              </Link>
+              </button>
               <button
                 onClick={handleLogout}
                 className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
