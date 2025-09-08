@@ -99,7 +99,7 @@ const ContactUs = () => {
             return;
         }
         setError('');
-        alert('Form submitted successfully!');
+        // alert('Form submitted successfully!');
     };
 
     return (

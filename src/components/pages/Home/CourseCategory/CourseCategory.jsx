@@ -93,7 +93,7 @@ const CourseCategory = () => {
           <SwiperSlide key={cat._id}>
             <div className="flex flex-col items-center">
               <div
-                onClick={() => navigate(`/courses/category/${cat.title}`)}
+                onClick={() => window.location.href = `/courses/category/${cat.title}`}
                 className="rounded-2xl h-60 w-72 flex-shrink-0 p-6 flex flex-col items-center justify-center cursor-pointer transform transition duration-500 hover:scale-105 shadow-2xl"
                 style={{ backgroundColor: cat.color }}
               >

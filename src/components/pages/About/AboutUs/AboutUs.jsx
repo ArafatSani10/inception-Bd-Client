@@ -117,13 +117,10 @@ const AboutUs = () => {
                 <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
                   {title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4 flex-grow">
+                <p className="text-gray-600 dark:text-gray-300 mb-1 mt-4 flex-grow">
                   {description}
                 </p>
-                <div className="flex items-center text-[#00baff] dark:text-[#00baff] font-medium group-hover:translate-x-1 transition-transform">
-                  <span className="mr-2">Explore</span>
-                  <FaArrowRight className="text-sm" />
-                </div>
+               
               </div>
             </motion.div>
           ))}

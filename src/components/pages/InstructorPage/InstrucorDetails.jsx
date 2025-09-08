@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaGithub, FaTwitter, FaYoutube } from "react-icons/fa";
 
 const InstructorDetails = () => {
   const { email } = useParams();
@@ -250,6 +251,75 @@ const InstructorDetails = () => {
                       <p>{new Date(instructor?.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                     </div>
                   </div>
+                </div>
+
+                {/* lets connent with */} <h1>Lets connet with</h1>
+                <div className="flex gap-4 justify-start items-center mt-6">
+
+                  <a
+                    href="https://www.facebook.com/inceptionforfuture"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative w-10 h-10 flex items-center justify-center rounded-full overflow-hidden
+               bg-gray-200 dark:bg-gray-800 transition-colors duration-500 group"
+                  >
+                    <span
+                      className="absolute inset-0 bg-blue-500 scale-0 group-hover:scale-100 rounded-full transition-transform duration-500"
+                    />
+                    <FaFacebookF className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-white transition-colors duration-500" />
+                  </a>
+
+                  <a
+                    href="https://www.youtube.com/@inceptionbd"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative w-10 h-10 flex items-center justify-center rounded-full overflow-hidden
+               bg-gray-200 dark:bg-gray-800 transition-colors duration-500 group"
+                  >
+                    <span
+                      className="absolute inset-0 bg-red-500 scale-0 group-hover:scale-100 rounded-full transition-transform duration-500"
+                    />
+                    <FaYoutube className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-white transition-colors duration-500" />
+                  </a>
+
+                  <a
+                    href="https://www.linkedin.com/company/inceptionbd"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative w-10 h-10 flex items-center justify-center rounded-full overflow-hidden
+               bg-gray-200 dark:bg-gray-800 transition-colors duration-500 group"
+                  >
+                    <span
+                      className="absolute inset-0 bg-blue-600 scale-0 group-hover:scale-100 rounded-full transition-transform duration-500"
+                    />
+                    <FaLinkedinIn className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-white transition-colors duration-500" />
+                  </a>
+
+                  <a
+                    href="https://x.com/Inceptionbd2024"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative w-10 h-10 flex items-center justify-center rounded-full overflow-hidden
+               bg-gray-200 dark:bg-gray-800 transition-colors duration-500 group"
+                  >
+                    <span
+                      className="absolute inset-0 bg-sky-400 scale-0 group-hover:scale-100 rounded-full transition-transform duration-500"
+                    />
+                    <FaTwitter className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-white transition-colors duration-500" />
+                  </a>
+
+                  <a
+                    href="https://github.com/Inceptionbd2024"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative w-10 h-10 flex items-center justify-center rounded-full overflow-hidden
+               bg-gray-200 dark:bg-gray-800 transition-colors duration-500 group"
+                  >
+                    <span
+                      className="absolute inset-0 bg-gray-500 scale-0 group-hover:scale-100 rounded-full transition-transform duration-500"
+                    />
+                    <FaGithub className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-white transition-colors duration-500" />
+                  </a>
                 </div>
               </div>
             </div>

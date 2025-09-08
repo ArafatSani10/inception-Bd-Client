@@ -28,10 +28,10 @@ export default function ModuleUpload() {
   const onSubmit = async (data) => {
     data.mode = moduleMode
     console.log("Form Data:", data);
-    
+
     try {
       const result = await createModule(data).unwrap();
-      window.location.href ="/dashboard/courses-list"
+      window.location.href = "/dashboard/courses-list"
     } catch (error) {
       console.log("module creation error", error);
     }
