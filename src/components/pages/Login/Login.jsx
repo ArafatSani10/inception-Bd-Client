@@ -284,14 +284,14 @@ const Login = () => {
             </button>
           </form>
 
-          {/* Social Login */}
+          {/* Social Login
           <div className="my-8 flex items-center">
             <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
             <span className="mx-4 text-gray-500 dark:text-gray-400">
               or continue with
             </span>
             <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
-          </div>
+          </div> */}
 
           {/* <SocialLogin /> */}
 

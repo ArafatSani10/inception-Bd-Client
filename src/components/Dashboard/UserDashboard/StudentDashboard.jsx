@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { NavLink, Link, Outlet, useNavigate } from "react-router-dom";
 import { FiHome, FiMenu, FiChevronDown, FiChevronUp, FiSearch } from "react-icons/fi";
-import { FaBookReader, FaUserCircle, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { FaBookReader, FaUserCircle, FaCog, FaSignOutAlt, FaHome } from "react-icons/fa";
 import { HiSun, HiMoon } from "react-icons/hi";
 import { AnimatePresence, motion } from "framer-motion";
 import AuthContext from "../../../Content/Authcontext";
@@ -237,6 +237,24 @@ const StudentDashboard = () => {
                                     {sidebarOpen && <span>Settings</span>}
                                 </NavLink>
                             </li>
+
+                            <hr className="border mt-5 dark:border-gray-50 opacity-50 border-blue-400 " />
+
+                             <li>
+                                <NavLink
+                                    to="/"
+                                    className={({ isActive }) =>
+                                        `flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all ${isActive
+                                            ? "text-[#00baff] shadow-md font-semibold"
+                                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#00132f]"
+                                        }`
+                                    }
+                                >
+                                    <span className="text-base"><FaHome /></span>
+                                    {sidebarOpen && <span>Home</span>}
+                                </NavLink>
+                            </li>
+
                         </ul>
                     </nav>
                 </aside>
