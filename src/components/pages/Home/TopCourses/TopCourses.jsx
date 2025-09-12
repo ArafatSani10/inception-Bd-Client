@@ -7,8 +7,7 @@ import 'swiper/css/pagination';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-
-import {motion} from "framer-motion"
+import { motion } from "framer-motion";
 
 const TopCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -22,23 +21,33 @@ const TopCourses = () => {
     const fetchCourses = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/courses`);
-        const data = response.data.data || [];
 
-        const coursesWithDefaults = data.map(course => ({
-          ...course,
-          instructorName: course.instructor?.name || 'Unknown',
-          instructorImage: course.instructorImage || course.instructor?.image || 'https://randomuser.me/api/portraits/lego/1.jpg',
-          category: course.category || { name: 'General' },
-          rating: course.rating || 0,
-          duration: course.duration || 'N/A',
-          price: course.price || 0,
-        }));
+        // Fetch courses
+        const courseRes = await axios.get(`${import.meta.env.VITE_API_URL}/courses`);
+        const coursesData = courseRes.data.data || [];
 
-        setCourses(coursesWithDefaults);
+        // Fetch all users once
+        const userRes = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
+        const users = userRes.data.data || [];
+
+        // Map courses with instructor info
+        const coursesWithInstructor = coursesData.map(course => {
+          const instructor = users.find(u => u.email === course.instructor?.email) || {};
+          return {
+            ...course,
+            instructorName: instructor.name || 'Unknown',
+            instructorImage: instructor.photo || instructor.image || 'https://randomuser.me/api/portraits/lego/1.jpg',
+            category: course.category || { name: 'General' },
+            rating: course.rating || 0,
+            duration: course.duration || 'N/A',
+            price: course.price || 0
+          };
+        });
+
+        setCourses(coursesWithInstructor);
       } catch (err) {
         console.error(err);
-        setError('Failed to fetch courses.');
+        setError('Failed to fetch courses or instructors.');
       } finally {
         setLoading(false);
       }
@@ -47,15 +56,18 @@ const TopCourses = () => {
     fetchCourses();
   }, []);
 
-  if (loading) return <div className="p-6 text-center">
+  if (loading) return (
+    <div className="p-6 text-center">
       <div className="flex items-center justify-center h-screen bg-white dark:bg-gray-900">
-      <motion.div
-        className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full"
-        animate={{ rotate: 360 }}
-        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-      />
+        <motion.div
+          className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full"
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+        />
+      </div>
     </div>
-  </div>;
+  );
+
   if (error) return <div className="p-6 text-center text-red-500">{error}</div>;
   if (!courses.length) return <div className="p-6 text-center text-gray-500">No courses available.</div>;
 
@@ -64,7 +76,7 @@ const TopCourses = () => {
       <div className="max-w-full mx-auto md:px-2 px-3">
         <div className="text-center mb-16">
           <h2 className="text-xl md:text-5xl font-extrabold text-[#00baff] dark:text-[#00baff]">
-            ✨Top Courses of our course
+            ✨Top Courses
           </h2>
           <p className="mt-4 text-sm md:text-xl text-gray-600 dark:text-gray-300">
             Crafted by industry pros, loved by thousands.
@@ -72,7 +84,6 @@ const TopCourses = () => {
         </div>
 
         <div className="relative">
-          {/* Swiper */}
           <Swiper
             modules={[Navigation, Pagination, Autoplay]}
             spaceBetween={30}
@@ -92,7 +103,7 @@ const TopCourses = () => {
             }}
             className="pb-12"
           >
-            {courses.map((course) => (
+            {courses.map(course => (
               <SwiperSlide key={course._id || course.id}>
                 <Link to={`/coursedetails/${course.slug}`}>
                   <div className="bg-white/70 dark:bg-white/5 backdrop-blur-lg rounded-3xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
@@ -104,17 +115,10 @@ const TopCourses = () => {
                         className="w-full h-full object-cover object-center rounded-t-3xl"
                       />
                       {course.category && (
-                        <div
-                          className="absolute top-4 left-4 
-               bg-[#00baff] text-white text-xs font-semibold 
-               px-4 py-1 
-               rounded-full shadow-lg 
-               hover:shadow-xl transform hover:-translate-y-0.5 transition-all"
-                        >
-                          {course.category?.name}
+                        <div className="absolute top-4 left-4 bg-[#00baff] text-white text-xs font-semibold px-4 py-1 rounded-full shadow-lg hover:shadow-xl transition-all">
+                          {course.category.name}
                         </div>
                       )}
-
                     </div>
 
                     {/* Content */}
@@ -123,30 +127,29 @@ const TopCourses = () => {
                         {course.title}
                       </h3>
 
-                      <p className="text-gray-700 dark:text-gray-400 text-sm mb-5 line-clamp-2">{course.description?.slice(0, 100)}...</p>
+                      <p className="text-gray-700 dark:text-gray-400 text-sm mb-5 line-clamp-2">
+                        {course.description?.slice(0, 100)}...
+                      </p>
 
                       {/* Instructor */}
                       <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                         <img
                           src={course.instructorImage}
                           alt={course.instructorName}
-                          className="w-6 h-6 rounded-full object-cover"
+                          className="w-8 h-8 rounded-full object-cover border-2 border-[#00baff]"
                         />
                         <span>
                           Instructor: <span className="font-medium">{course.instructorName}</span>
                         </span>
                       </div>
 
-                      {/* Rating & Students */}
+                      {/* Rating & Duration */}
                       <div className="flex justify-between items-center text-sm text-gray-700 dark:text-gray-300 py-2 rounded-lg shadow-sm">
                         <span className="flex items-center gap-1">
-                          <span className="text-yellow-400">⭐</span>
-                          <span className="text-yellow-400">⭐</span>
-                          <span className="text-yellow-400">⭐</span>
-                          <span className="text-yellow-400">⭐</span>
-                          <span className="text-yellow-400">⭐</span>
+                          {[...Array(5)].map((_, i) => (
+                            <span key={i} className="text-yellow-400">⭐</span>
+                          ))}
                         </span>
-
                         <span className="font-medium text-gray-900 dark:text-gray-100">
                           {course.duration} Hours
                         </span>
@@ -154,12 +157,9 @@ const TopCourses = () => {
 
                       {/* Price & Enroll */}
                       <div className="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <div>
-                          <span className="text-xl font-bold text-gray-900 dark:text-white">
-                            ৳{course.price}
-                          </span>
-                        </div>
-
+                        <span className="text-xl font-bold text-gray-900 dark:text-white">
+                          ৳{course.price}
+                        </span>
                         <button className="bg-[#00baff] hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">
                           Enroll Now
                         </button>
@@ -171,16 +171,16 @@ const TopCourses = () => {
             ))}
           </Swiper>
 
-          {/* Overlay Navigation Buttons */}
+          {/* Navigation Buttons */}
           <div
             ref={prevRef}
-            className="absolute top-1/3 -translate-y-1/2 left-2 md:left-4 z-10 bg-blue-600 text-white dark:bg-gray-400  dark:text-white p-3 rounded-full shadow-lg cursor-pointer  dark:hover:bg-gray-700 transition"
+            className="absolute top-1/3 -translate-y-1/2 left-2 md:left-4 z-10 bg-blue-600 text-white dark:bg-gray-400 dark:text-white p-3 rounded-full shadow-lg cursor-pointer hover:bg-blue-700 transition"
           >
             <FiChevronLeft size={24} />
           </div>
           <div
             ref={nextRef}
-            className="absolute top-1/3 -translate-y-1/2 right-2 md:right-4 z-10 bg-blue-600 text-white dark:bg-gray-400  dark:text-white p-3 rounded-full shadow-lg cursor-pointer  dark:hover:bg-gray-700 transition"
+            className="absolute top-1/3 -translate-y-1/2 right-2 md:right-4 z-10 bg-blue-600 text-white dark:bg-gray-400 dark:text-white p-3 rounded-full shadow-lg cursor-pointer hover:bg-blue-700 transition"
           >
             <FiChevronRight size={24} />
           </div>

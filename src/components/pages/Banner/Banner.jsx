@@ -12,6 +12,27 @@ import { AnimatePresence, motion } from "framer-motion";
 const Banner = () => {
   const [latestCourse, setLatestCourse] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [instructorData, setInstructorData] = useState(null);
+
+
+  useEffect(() => {
+    const fetchInstructor = async () => {
+      if (!latestCourse?.instructor?.email) return;
+
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
+        const allUsers = res?.data?.data || [];
+        const instructor = allUsers.find(u => u.email === latestCourse.instructor.email);
+        setInstructorData(instructor);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchInstructor();
+  }, [latestCourse]); // latestCourse dependency
+
+
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -113,7 +134,7 @@ const Banner = () => {
 
                         {/* Video */}
                         <div className="aspect-video w-full h-full">
-                          <iframe className="w-full h-full md:w-[900px] md:h-[500px]" 
+                          <iframe className="w-full h-full md:w-[900px] md:h-[500px]"
                             src="https://www.youtube.com/embed/PrBMuQxyUEc"
                             title="YouTube video player" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media;
@@ -165,30 +186,28 @@ const Banner = () => {
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center">
-                      <span className="text-xs font-medium text-indigo-700">
-                        {/* {latestCourse.instructor?.name?.charAt(0) || "U"} */}
-                        <img className="w-8 h-8 rounded-full" src={latestCourse.instructorImage} alt="" />
-                      </span>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
-                        {latestCourse.instructor?.name || "Unknown Instructor"}
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {latestCourse.instructorTitle || "Instructor"}
-                      </p>
+                  {/* Instructor */}
+                  <div className="flex items-center gap-3">
+                    <div className="flex gap-3 items-center">
+                      <img
+                        src={instructorData?.photo || "https://via.placeholder.com/150"}
+                        alt={instructorData?.name || "Instructor"}
+                        className="w-10 h-10 rounded-full object-cover border-2 border-[#00baff] shadow-md"
+                      />
+                      <h3 className="mt-1 text-sm font-semibold text-[#00baff] dark:text-[#00baff] text-center">
+                         {instructorData?.name || "Unknown"}
+                      </h3>
                     </div>
                   </div>
 
+                  {/* Price */}
                   <div className="text-right">
                     <div className="text-2xl font-bold text-[#00baff]">
                       ৳{latestCourse.price || "Free"}
                     </div>
-
                   </div>
                 </div>
+
               </div>
 
               {/* Decorative elements */}
