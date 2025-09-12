@@ -723,8 +723,8 @@ const UpdateProfile = () => {
                 <label className="block mb-1">Facebook</label>
                 <input
                   type="url"
-                  name="facebook"
-                  value={dbUser.facebook || ""}
+                  name="facebookUrl"
+                  value={dbUser.facebookUrl || ""}
                   onChange={handleChange}
                   placeholder="https://facebook.com/username"
                   className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
@@ -734,8 +734,8 @@ const UpdateProfile = () => {
                 <label className="block mb-1">Youtube</label>
                 <input
                   type="url"
-                  name="youtube"
-                  value={dbUser.youtube || ""}
+                  name="youtubeUrl"
+                  value={dbUser.youtubeUrl || ""}
                   onChange={handleChange}
                   placeholder="https://youtube.com/username"
                   className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
@@ -746,8 +746,8 @@ const UpdateProfile = () => {
                 <label className="block mb-1">LinkedIn</label>
                 <input
                   type="url"
-                  name="linkedin"
-                  value={dbUser.linkedin || ""}
+                  name="linkedInUrl"
+                  value={dbUser.linkedInUrl || ""}
                   onChange={handleChange}
                   placeholder="https://linkedin.com/in/username"
                   className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
@@ -758,8 +758,8 @@ const UpdateProfile = () => {
                 <label className="block mb-1">GitHub</label>
                 <input
                   type="url"
-                  name="github"
-                  value={dbUser.github || ""}
+                  name="githubUrl"
+                  value={dbUser.githubUrl || ""}
                   onChange={handleChange}
                   placeholder="https://github.com/username"
                   className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
@@ -770,8 +770,8 @@ const UpdateProfile = () => {
                 <label className="block mb-1">Twitter</label>
                 <input
                   type="url"
-                  name="twitter"
-                  value={dbUser.twitter || ""}
+                  name="twitterUrl"
+                  value={dbUser.twitterUrl || ""}
                   onChange={handleChange}
                   placeholder="https://twitter.com/username"
                   className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
