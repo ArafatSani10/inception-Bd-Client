@@ -47,6 +47,23 @@ const founders = [
       { icon: <FaGoogle />, url: "https://scholar.google.com/citations?hl=en&user=Z64la9EAAAAJ" },
     ],
   },
+  {
+    name: "DABASISH KUMAR BISWAS",
+    role: "Co-Founder & COO ",
+    bio: "CEmbedded Systems Engineer and Mentor with over 5 years of industry experience in Embedded Microcontroller Programming, RTOS, Hardware-Software Integration, IoT Systems, PLC, PCB Design, and ARM-based Architectures.",
+    image: "https://i.ibb.co.com/qF1yg8GM/IMG-8206.jpg",
+    link: "#",
+    socials: [
+      { icon: <FaLinkedin />, url: "https://www.linkedin.com/in/boktiarahmed73/" },
+      { icon: <FaYoutube />, url: "https://www.youtube.com/dswithbappy" },
+      { icon: <FaFacebook />, url: "https://web.facebook.com/profile.php?id=100005254877425" },
+      { icon: <FaInstagram />, url: "https://www.instagram.com/entbappy/" },
+      { icon: <FaXTwitter />, url: "https://twitter.com/bappy913873" },
+      { icon: <FaGithub />, url: "https://github.com/entbappy" },
+      { icon: <FaResearchgate />, url: "https://www.researchgate.net/profile/Boktiar-Bappy" },
+      { icon: <FaGoogle />, url: "https://scholar.google.com/citations?hl=en&user=Z64la9EAAAAJ" },
+    ],
+  },
   // baki founders...
 ];
 
