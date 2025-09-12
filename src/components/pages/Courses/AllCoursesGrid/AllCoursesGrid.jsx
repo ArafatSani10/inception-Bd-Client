@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
+import {motion} from "framer-motion"
+
 const AllCoursesGrid = () => {
     const [courses, setCourses] = useState([]);
     const [enrollCounts, setEnrollCounts] = useState({});
@@ -42,7 +44,13 @@ const AllCoursesGrid = () => {
 
 
 
-    if (loading) return <div className="text-center py-20 text-lg">Loading courses...</div>;
+    if (loading) return <div className="text-center py-20 text-lg"> <div className="flex items-center justify-center h-screen bg-white dark:bg-gray-900">
+      <motion.div
+        className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full"
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+      />
+    </div></div>;
     if (error) return <div className="text-center py-20 text-red-500">{error}</div>;
 
     return (

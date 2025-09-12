@@ -1,238 +1,299 @@
-import React, { useState } from "react";
-import { FaStar, FaRegStar } from "react-icons/fa";
+import React, { useEffect, useState, useContext } from "react";
+import AuthContext from "../../../../Content/Authcontext";
+import axios from "axios";
 
-const categories = [
-    "Content quality",
-    "Instructor skills",
-    "Purchase worth",
-    "Support quality",
-];
+// Emoji reactions allowed
+const EMOJIS = ["👍", "❤️", "😂", "😮", "😢"];
 
-// Sample reviews data
-const initialReviews = [
-    {
-        id: 1,
-        name: "Nishan Ahamed",
-        avatar: "https://i.pravatar.cc/40?img=1",
-        rating: 5,
-        date: "23 Jan 2025 | 19:26",
-        comment: "Thank you for creating this course in Bangla!",
-    },
-    {
-        id: 2,
-        name: "MD Redhwan",
-        avatar: null,
-        initials: "MR",
-        rating: 5,
-        date: "27 Jan 2025 | 21:12",
-        comment: "",
-    },
-    {
-        id: 3,
-        name: "Md Sohel Rana",
-        avatar: "https://i.pravatar.cc/40?img=3",
-        rating: 5,
-        date: "31 Jan 2025 | 17:43",
-        comment: "",
-    },
-    {
-        id: 4,
-        name: "Md Anamul Islam",
-        avatar: null,
-        initials: "MA",
-        rating: 4,
-        date: "4 Feb 2025 | 21:12",
-        comment: "",
-    },
-    {
-        id: 5,
-        name: "Nabil Sowrov",
-        avatar: null,
-        initials: "NS",
-        rating: 5,
-        date: "6 Feb 2025 | 18:58",
-        comment: "",
-    },
-];
+const ReviewsSection = ({ courseId }) => {
+  const { user } = useContext(AuthContext);
+  const [dbUser, setDbUser] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [newComment, setNewComment] = useState("");
 
-function StarRating({ rating }) {
-    return (
-        <div className="flex text-yellow-400">
-            {[1, 2, 3, 4, 5].map((i) =>
-                i <= rating ? (
-                    <FaStar key={i} />
-                ) : (
-                    <FaRegStar key={i} />
-                )
-            )}
-        </div>
+  // Fetch full user info from backend
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        if (!user?.email) return;
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
+        const singleUser = res.data.data.find((u) => u.email === user.email);
+        setDbUser(singleUser);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchUser();
+  }, [user]);
+
+  // Load reviews from localStorage
+ // Save reviews to localStorage whenever they change
+useEffect(() => {
+    if(courseId && reviews) {
+        localStorage.setItem(`courseReviews_${courseId}`, JSON.stringify(reviews));
+    }
+}, [reviews, courseId]);
+
+  // Save reviews to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem(`courseReviews_${courseId}`, JSON.stringify(reviews));
+  }, [reviews, courseId]);
+
+  // Post a new comment
+  const postComment = () => {
+    if (!newComment.trim() || !dbUser) return;
+    const comment = {
+      id: Date.now(),
+      user: {
+        id: dbUser.id || dbUser.email,
+        name: dbUser.name,
+        avatar:
+          dbUser.photo || dbUser.image || `https://ui-avatars.com/api/?name=${dbUser.name}`,
+      },
+      text: newComment,
+      createdAt: new Date().toISOString(),
+      reactions: {},
+      replies: [],
+    };
+    setReviews([comment, ...reviews]);
+    setNewComment("");
+  };
+
+  // Post a reply to a comment
+  const postReply = (commentId, replyText) => {
+    if (!replyText.trim() || !dbUser) return;
+
+    const reply = {
+      id: Date.now(),
+      user: {
+        id: dbUser.id || dbUser.email,
+        name: dbUser.name,
+        avatar:
+          dbUser.photo || dbUser.image || `https://ui-avatars.com/api/?name=${dbUser.name}`,
+      },
+      text: replyText,
+      createdAt: new Date().toISOString(),
+      reactions: {},
+    };
+
+    setReviews((prev) =>
+      prev.map((c) => (c.id === commentId ? { ...c, replies: [...c.replies, reply] } : c))
     );
-}
+  };
 
-export default function ReviewsSection() {
-    // For review form state
-    const [formRatings, setFormRatings] = useState({
-        "Content quality": 0,
-        "Instructor skills": 0,
-        "Purchase worth": 0,
-        "Support quality": 0,
-    });
-    const [formComment, setFormComment] = useState("");
-    const [reviews, setReviews] = useState(initialReviews);
+  // Add reaction to comment or reply
+  const addReaction = (commentId, emoji, isReply = false, replyId = null) => {
+    if (!dbUser) return;
 
-    // Calculate average rating
-    const averageRating = (
-        reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
-    ).toFixed(2);
+    setReviews((prev) =>
+      prev.map((c) => {
+        if (c.id !== commentId) return c;
 
-    // Calculate category averages (for bars)
-    const categoryAverages = {
-        "Content quality": 4.9,
-        "Instructor skills": 5,
-        "Purchase worth": 5,
-        "Support quality": 4.9,
-    };
+        if (!isReply) {
+          const userReacted = c.reactions[emoji]?.includes(dbUser.id);
+          if (userReacted) return c; // Only one reaction per user per emoji
+          const newReactions = { ...c.reactions };
+          newReactions[emoji] = [...(newReactions[emoji] || []), dbUser.id];
+          return { ...c, reactions: newReactions };
+        } else {
+          const newReplies = c.replies.map((r) => {
+            if (r.id !== replyId) return r;
+            const userReacted = r.reactions[emoji]?.includes(dbUser.id);
+            if (userReacted) return r;
+            const newReactions = { ...r.reactions };
+            newReactions[emoji] = [...(newReactions[emoji] || []), dbUser.id];
+            return { ...r, reactions: newReactions };
+          });
+          return { ...c, replies: newReplies };
+        }
+      })
+    );
+  };
 
-    const handleRatingClick = (category, value) => {
-        setFormRatings((prev) => ({ ...prev, [category]: value }));
-    };
+  // Delete comment or reply
+  const deleteCommentOrReply = (commentId, isReply = false, replyId = null) => {
+    if (!dbUser) return;
 
-    const handleSubmit = () => {
-        // For demo, add a new review with average of ratings and comment
-        const averageFormRating =
-            Object.values(formRatings).reduce((a, b) => a + b, 0) /
-            Object.values(formRatings).length;
+    if (!isReply) {
+      setReviews((prev) => prev.filter((c) => c.id !== commentId || c.user.id !== dbUser.id));
+    } else {
+      setReviews((prev) =>
+        prev.map((c) => {
+          if (c.id !== commentId) return c;
+          const newReplies = c.replies.filter((r) => r.id !== replyId || r.user.id !== dbUser.id);
+          return { ...c, replies: newReplies };
+        })
+      );
+    }
+  };
 
-        const newReview = {
-            id: reviews.length + 1,
-            name: "Anonymous User",
-            avatar: null,
-            initials: "AU",
-            rating: Math.round(averageFormRating),
-            date: new Date().toLocaleDateString("en-GB", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-            }),
-            comment: formComment,
-        };
-        setReviews([newReview, ...reviews]);
-        setFormComment("");
-        setFormRatings({
-            "Content quality": 0,
-            "Instructor skills": 0,
-            "Purchase worth": 0,
-            "Support quality": 0,
-        });
-    };
-
+  if (!dbUser)
     return (
-        <div className="max-w-full mx-auto p-4 bg-white dark:bg-gray-900 rounded-lg shadow-md">
-            {/* Rating summary */}
-            <div className="flex items-center gap-8 mb-6">
-                <div className="text-center">
-                    <div className="text-4xl font-extrabold text-green-500">{averageRating}</div>
-                    <StarRating rating={Math.round(averageRating)} />
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                        {reviews.length} Reviews
-                    </div>
-                </div>
-                <div className="flex-1 space-y-3">
-                    {Object.entries(categoryAverages).map(([cat, val]) => (
-                        <div key={cat} className="flex items-center gap-4">
-                            <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
-                                <div
-                                    className="bg-yellow-400 h-3 rounded-full"
-                                    style={{ width: `${(val / 5) * 100}%` }}
-                                />
-                            </div>
-                            <div className="w-32 text-right text-sm text-gray-600 dark:text-gray-400">
-                                {cat} ({val})
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
+      <p className="text-center text-gray-500 dark:text-gray-400 mt-10">Loading user...</p>
+    );
 
-            {/* Reviews header */}
-            <h2 className="font-semibold mb-3 border-b pb-1 dark:border-gray-700">
-                Reviews ({reviews.length})
-            </h2>
+  return (
+    <div className="max-w-full mx-auto p-4 space-y-6">
+      {/* New Comment */}
+      <div className="flex flex-col space-y-2">
+        <textarea
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+          className="border p-2 rounded-md w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+          placeholder="Write a comment..."
+        />
+        <button
+          onClick={postComment}
+          className="self-end px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition"
+        >
+          Post Comment
+        </button>
+      </div>
 
-            {/* Review form */}
-            <div className="mb-6 space-y-3">
-                <textarea
-                    rows="4"
-                    className="w-full border border-gray-300 dark:border-gray-700 rounded-md p-2 resize-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
-                    placeholder="Write your review here..."
-                    value={formComment}
-                    onChange={(e) => setFormComment(e.target.value)}
-                ></textarea>
+      {/* Reviews */}
+      {reviews.map((c) => (
+        <Comment
+          key={c.id}
+          comment={c}
+          postReply={postReply}
+          addReaction={addReaction}
+          deleteCommentOrReply={deleteCommentOrReply}
+          currentUser={dbUser}
+        />
+      ))}
+    </div>
+  );
+};
 
-                {/* Rating inputs */}
-                <div className="grid grid-cols-4 gap-3 text-center text-xs">
-                    {categories.map((cat) => (
-                        <div key={cat}>
-                            <div className="mb-1">{cat}</div>
-                            <div className="flex justify-center gap-1 cursor-pointer">
-                                {[1, 2, 3, 4, 5].map((star) => (
-                                    <span
-                                        key={star}
-                                        onClick={() => handleRatingClick(cat, star)}
-                                        className={`text-yellow-400 ${formRatings[cat] >= star ? "opacity-100" : "opacity-40"
-                                            }`}
-                                    >
-                                        <FaStar />
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                    ))}
-                </div>
+// Single Comment Component
+const Comment = ({
+  comment,
+  postReply,
+  addReaction,
+  deleteCommentOrReply,
+  currentUser,
+}) => {
+  const [showReplyInput, setShowReplyInput] = useState(false);
+  const [replyText, setReplyText] = useState("");
 
-                <button
-                    onClick={handleSubmit}
-                    className="bg-[#00baff] text-white px-4 py-1 rounded hover:bg-green-600 transition"
-                >
-                    Post review
-                </button>
-            </div>
+  return (
+    <div className="border p-4 rounded-md bg-gray-50 dark:bg-gray-900 shadow-sm">
+      {/* Comment header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-3">
+          <img
+            src={comment.user.avatar}
+            alt={comment.user.name}
+            className="w-10 h-10 rounded-full"
+          />
+          <div>
+            <p className="font-semibold text-gray-800 dark:text-gray-200">
+              {comment.user.name}
+            </p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">
+              {new Date(comment.createdAt).toLocaleString()}
+            </p>
+          </div>
+        </div>
 
-            {/* Reviews list */}
-            <div className="space-y-10">
-                {reviews.map((review) => (
-                    <div
-                        key={review.id}
-                        className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg flex gap-5 items-start shadow"
+        {/* Delete button */}
+        {comment.user.id === currentUser.id && (
+          <button
+            onClick={() => deleteCommentOrReply(comment.id)}
+            className="text-red-500 hover:underline"
+          >
+            Delete
+          </button>
+        )}
+      </div>
+
+      <p className="mt-2 text-gray-700 dark:text-gray-300">{comment.text}</p>
+
+      {/* Reactions */}
+      <div className="flex space-x-2 mt-2">
+        {EMOJIS.map((emoji) => (
+          <button
+            key={emoji}
+            onClick={() => addReaction(comment.id, emoji)}
+            className="px-2 py-1 border rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition"
+          >
+            {emoji} {comment.reactions[emoji]?.length || ""}
+          </button>
+        ))}
+      </div>
+
+      {/* Replies */}
+      <div className="pl-6 mt-2 space-y-2">
+        {comment.replies.map((r) => (
+          <div key={r.id} className="flex items-start justify-between">
+            <div className="flex items-start space-x-2">
+              <img src={r.user.avatar} alt={r.user.name} className="w-8 h-8 rounded-full" />
+              <div>
+                <p className="font-semibold text-gray-800 dark:text-gray-200">{r.user.name}</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                  {new Date(r.createdAt).toLocaleString()}
+                </p>
+                <p className="text-gray-700 dark:text-gray-300">{r.text}</p>
+
+                {/* Reactions on reply */}
+                <div className="flex space-x-2 mt-1">
+                  {EMOJIS.map((emoji) => (
+                    <button
+                      key={emoji}
+                      onClick={() => addReaction(comment.id, emoji, true, r.id)}
+                      className="px-2 py-1 border rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition"
                     >
-                        {/* Avatar */}
-                        {review.avatar ? (
-                            <img
-                                src={review.avatar}
-                                alt={review.name}
-                                className="w-10 h-10 rounded-full object-cover"
-                            />
-                        ) : (
-                            <div className="w-10 h-10 rounded-full bg-green-300 dark:bg-green-700 flex items-center justify-center text-white font-semibold">
-                                {review.initials}
-                            </div>
-                        )}
-
-                        <div className="flex-1">
-                            <div className="flex justify-between items-center">
-                                <div>
-                                    <h3 className="font-semibold text-gray-900 dark:text-white">{review.name}</h3>
-                                    <StarRating rating={review.rating} />
-                                </div>
-                                <div className="text-xs text-gray-500 dark:text-gray-400">{review.date}</div>
-                            </div>
-                            {review.comment && (
-                                <p className="mt-2 text-gray-800 dark:text-gray-300">{review.comment}</p>
-                            )}
-                        </div>
-                    </div>
-                ))}
+                      {emoji} {r.reactions[emoji]?.length || ""}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
-        </div>
-    );
-}
+
+            {/* Delete reply */}
+            {r.user.id === currentUser.id && (
+              <button
+                onClick={() => deleteCommentOrReply(comment.id, true, r.id)}
+                className="text-red-500 hover:underline"
+              >
+                Delete
+              </button>
+            )}
+          </div>
+        ))}
+
+        {/* Reply Input */}
+        {showReplyInput ? (
+          <div className="flex space-x-2">
+            <input
+              type="text"
+              value={replyText}
+              onChange={(e) => setReplyText(e.target.value)}
+              className="border p-1 rounded-md flex-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              placeholder="Write a reply..."
+            />
+            <button
+              className="bg-green-600 dark:bg-green-500 text-white px-3 rounded-md hover:bg-green-700 dark:hover:bg-green-600 transition"
+              onClick={() => {
+                postReply(comment.id, replyText);
+                setReplyText("");
+                setShowReplyInput(false);
+              }}
+            >
+              Reply
+            </button>
+          </div>
+        ) : (
+          <button
+            className="text-blue-600 dark:text-blue-400 mt-1"
+            onClick={() => setShowReplyInput(true)}
+          >
+            Reply
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ReviewsSection;

@@ -255,72 +255,32 @@ const InstructorDetails = () => {
 
                 {/* lets connent with */} <h1>Lets connet with</h1>
                 <div className="flex gap-4 justify-start items-center mt-6">
-
-                  <a
-                    href="https://www.facebook.com/inceptionforfuture"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="relative w-10 h-10 flex items-center justify-center rounded-full overflow-hidden
-               bg-gray-200 dark:bg-gray-800 transition-colors duration-500 group"
-                  >
-                    <span
-                      className="absolute inset-0 bg-blue-500 scale-0 group-hover:scale-100 rounded-full transition-transform duration-500"
-                    />
-                    <FaFacebookF className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-white transition-colors duration-500" />
-                  </a>
-
-                  <a
-                    href="https://www.youtube.com/@inceptionbd"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="relative w-10 h-10 flex items-center justify-center rounded-full overflow-hidden
-               bg-gray-200 dark:bg-gray-800 transition-colors duration-500 group"
-                  >
-                    <span
-                      className="absolute inset-0 bg-red-500 scale-0 group-hover:scale-100 rounded-full transition-transform duration-500"
-                    />
-                    <FaYoutube className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-white transition-colors duration-500" />
-                  </a>
-
-                  <a
-                    href="https://www.linkedin.com/company/inceptionbd"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="relative w-10 h-10 flex items-center justify-center rounded-full overflow-hidden
-               bg-gray-200 dark:bg-gray-800 transition-colors duration-500 group"
-                  >
-                    <span
-                      className="absolute inset-0 bg-blue-600 scale-0 group-hover:scale-100 rounded-full transition-transform duration-500"
-                    />
-                    <FaLinkedinIn className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-white transition-colors duration-500" />
-                  </a>
-
-                  <a
-                    href="https://x.com/Inceptionbd2024"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="relative w-10 h-10 flex items-center justify-center rounded-full overflow-hidden
-               bg-gray-200 dark:bg-gray-800 transition-colors duration-500 group"
-                  >
-                    <span
-                      className="absolute inset-0 bg-sky-400 scale-0 group-hover:scale-100 rounded-full transition-transform duration-500"
-                    />
-                    <FaTwitter className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-white transition-colors duration-500" />
-                  </a>
-
-                  <a
-                    href="https://github.com/Inceptionbd2024"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="relative w-10 h-10 flex items-center justify-center rounded-full overflow-hidden
-               bg-gray-200 dark:bg-gray-800 transition-colors duration-500 group"
-                  >
-                    <span
-                      className="absolute inset-0 bg-gray-500 scale-0 group-hover:scale-100 rounded-full transition-transform duration-500"
-                    />
-                    <FaGithub className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-white transition-colors duration-500" />
-                  </a>
+                  {[
+                    { type: "facebook", url: instructor?.facebookUrl, bg: "bg-blue-500", Icon: FaFacebookF },
+                    { type: "youtube", url: instructor?.youtubeUrl, bg: "bg-red-500", Icon: FaYoutube },
+                    { type: "linkedin", url: instructor?.linkedinUrl, bg: "bg-blue-600", Icon: FaLinkedinIn },
+                    { type: "twitter", url: instructor?.twitterUrl, bg: "bg-sky-400", Icon: FaTwitter },
+                    { type: "github", url: instructor?.githubUrl, bg: "bg-gray-500", Icon: FaGithub },
+                    { type: "instagram", url: instructor?.instagramUrl, bg: "bg-pink-500", Icon: FaInstagram },
+                  ]
+                    .filter(item => item.url) // URL আছে এমনগুলোই দেখাবে
+                    .map((item, idx) => (
+                      <a
+                        key={idx}
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="relative w-10 h-10 flex items-center justify-center rounded-full overflow-hidden
+                   bg-gray-200 dark:bg-gray-800 transition-colors duration-500 group"
+                      >
+                        <span
+                          className={`absolute inset-0 ${item.bg} scale-0 group-hover:scale-100 rounded-full transition-transform duration-500`}
+                        />
+                        <item.Icon className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-white transition-colors duration-500" />
+                      </a>
+                    ))}
                 </div>
+
               </div>
             </div>
           </div>
