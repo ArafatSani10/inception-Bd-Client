@@ -5,6 +5,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import {motion} from "framer-motion"
 
 const OurInstructor = () => {
   const [instructorData, setInstructorData] = useState([]);
@@ -38,7 +39,13 @@ const OurInstructor = () => {
       </p>
 
       {loading ? (
-        <p className="text-gray-600 dark:text-gray-300">Loading instructors...</p>
+        <p className="text-gray-600 dark:text-gray-300">  <div className="flex items-center justify-center h-screen bg-white dark:bg-gray-900">
+      <motion.div
+        className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full"
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+      />
+    </div></p>
       ) : (
         <Swiper
           modules={[Pagination, Autoplay]}
@@ -55,7 +62,7 @@ const OurInstructor = () => {
           {instructorData.length > 0 ? (
             instructorData.map((instructor) => (
               <SwiperSlide key={instructor._id || instructor.id}>
-                <div className="bg-white/30 dark:bg-white/5 backdrop-blur-md border border-white/10 dark:border-white/10 rounded-3xl p-5 hover:shadow-xl">
+                <div className="bg-white/30 dark:bg-white/5 backdrop-blur-md border border-black/50 dark:border-white/10 rounded-3xl p-5 hover:shadow-xl">
                   <img
                     src={instructor?.photo || instructor?.image || "https://via.placeholder.com/150"}
                     alt={instructor?.name}
@@ -73,12 +80,16 @@ const OurInstructor = () => {
                   </div>
 
                   {/* Dynamic Profile Link using email */}
-                  <button
-                    onClick={() => window.location.href = `/instructor/${instructor?.email}`}
-                    className="inline-block mt-6 px-5 py-2 rounded-full bg-[#00baff] hover:bg-indigo-600 text-white font-semibold shadow-md transition-all"
-                  >
-                    View Profile
-                  </button>
+
+                  <Link to={`/instructor/${instructor?.email}`}>
+                    <button
+
+                      className="inline-block mt-6 px-5 py-2 rounded-full bg-[#00baff] hover:bg-indigo-600 text-white font-semibold shadow-md transition-all"
+                    >
+                      View Profile
+                    </button>
+                  </Link>
+
 
                 </div>
               </SwiperSlide>

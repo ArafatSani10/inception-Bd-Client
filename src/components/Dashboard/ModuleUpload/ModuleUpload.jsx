@@ -328,7 +328,7 @@ export default function ModuleUpload() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-6">
-      <div className="w-full max-w-3xl bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-10">
+      <div className="w-full max-w-full bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-10">
         <h2 className="text-4xl font-bold mb-8 text-gray-800 dark:text-gray-100 text-center">
           Upload Module
         </h2>
