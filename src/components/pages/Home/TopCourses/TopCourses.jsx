@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
+import {motion} from "framer-motion"
+
 const TopCourses = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -45,7 +47,15 @@ const TopCourses = () => {
     fetchCourses();
   }, []);
 
-  if (loading) return <div className="p-6 text-center">⏳ Loading courses...</div>;
+  if (loading) return <div className="p-6 text-center">
+      <div className="flex items-center justify-center h-screen bg-white dark:bg-gray-900">
+      <motion.div
+        className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full"
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+      />
+    </div>
+  </div>;
   if (error) return <div className="p-6 text-center text-red-500">{error}</div>;
   if (!courses.length) return <div className="p-6 text-center text-gray-500">No courses available.</div>;
 

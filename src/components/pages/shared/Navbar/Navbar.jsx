@@ -1,7 +1,7 @@
 
 
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import AuthContext from "../../../../Content/Authcontext";
 import { AnimatePresence, motion } from "framer-motion";
 import { MdDashboard, MdLogout } from "react-icons/md";
@@ -153,14 +153,19 @@ const Navbar = () => {
             ))} */}
 
             {navItems.map(({ name, href }) => (
-              <button
+              <NavLink
                 key={name}
-                onClick={() => (window.location.href = href)}
-                className="relative group hover:text-[#00baff] dark:hover:text-[#00baff] transition-colors duration-300 text-sm"
+                to={href}
+                className={({ isActive }) =>
+                  `relative group transition-colors duration-300 text-sm ${isActive
+                    ? "text-[#00baff]"
+                    : "hover:text-[#00baff] dark:hover:text-[#00baff]"
+                  }`
+                }
               >
                 {name}
                 <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-[#00baff] dark:bg-[#00baff] group-hover:w-full transition-all duration-300"></span>
-              </button>
+              </NavLink>
             ))}
 
 

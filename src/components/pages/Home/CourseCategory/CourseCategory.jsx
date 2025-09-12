@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+import {motion} from "framer-motion"
+
 // Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
@@ -59,7 +61,7 @@ const CourseCategory = () => {
         setCategories(data);
       } catch (err) {
         console.error(err);
-        toast.error("Failed to load categories or courses");
+        // toast.error("Failed to load categories or courses");
       } finally {
         setLoading(false);
       }
@@ -69,7 +71,13 @@ const CourseCategory = () => {
   }, []);
 
   if (loading)
-    return <p className="text-center text-white py-10">Loading categories...</p>;
+    return <p className="text-center text-white py-10"> <div className="flex items-center justify-center h-screen bg-white dark:bg-gray-900">
+      <motion.div
+        className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full"
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+      />
+    </div></p>;
 
   return (
     <div className="py-12 px-4 dark:bg-[#00091a] transition-colors duration-500">
