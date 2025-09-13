@@ -644,7 +644,7 @@ const UpdateProfile = () => {
           {activeTab === "about" && (
             <div className="space-y-4">
               <div>
-                <label className="block mb-1">Job Title</label>
+                <label className="block mb-1"> Title</label>
                 <input
                   type="text"
                   name="jobTitle"

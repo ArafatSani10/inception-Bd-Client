@@ -422,15 +422,15 @@ const CourseForm = () => {
 
                 {/* File Uploads */}
                 <section className="grid md:grid-cols-2 gap-4 mt-5">
-                    <div>
-                        <label className="block mb-1 text-gray-700 font-bold dark:text-gray-300">Thumbnail</label>
+                    {/* <div>
+                        <label className="block mb-1 text-gray-700 font-bold dark:text-gray-300">demo</label>
                         <input
                             type="file"
                             {...register("demoImage", { valueAsFile: true })}
                             className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md 
                  bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
                         />
-                    </div>
+                    </div> */}
                     <div>
                         <label className="block mb-1 text-gray-700 font-bold dark:text-gray-300">Cover Photo</label>
                         <input
@@ -455,7 +455,7 @@ const CourseForm = () => {
                     </div>
 
                     <div>
-                        <label className="block font-bold mb-1 text-gray-700 dark:text-gray-300">Duration (hours)</label>
+                        <label className="block font-bold mb-1 text-gray-700 dark:text-gray-300">Duration   (optional)</label>
                         <input
                             type="number"
                             {...register("duration")}
@@ -466,7 +466,7 @@ const CourseForm = () => {
                     </div>
 
                     <div>
-                        <label className="block mb-1 font-bold text-gray-700 dark:text-gray-300">Number of Lecture</label>
+                        <label className="block mb-1 font-bold text-gray-700 dark:text-gray-300">Number of Lecture (optional)</label>
                         <input
                             type="number"
                             {...register("sessions")}
@@ -476,7 +476,7 @@ const CourseForm = () => {
                         />
                     </div>
 
-                    <div>
+                    {/* <div>
                         <label className="block font-bold mb-1 text-gray-700 dark:text-gray-300">Capacity</label>
                         <input 
                             type="text"
@@ -485,7 +485,7 @@ const CourseForm = () => {
                             className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md 
                  bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
                         />
-                    </div>
+                    </div> */}
                 </section>
 
 
