@@ -529,7 +529,7 @@ const CourseDetails = () => {
                                             <CiTimer />
                                             Duration:
                                         </span>
-                                        <h1>{course.duration} hours</h1>
+                                        <h1>{course.duration || "unlimited"} </h1>
                                     </div>
 
                                     <div className="flex justify-between">
@@ -537,7 +537,7 @@ const CourseDetails = () => {
                                             <FaAddressCard />
                                             Number of lectures:
                                         </span>
-                                        <h1>{course.sessions}</h1>
+                                        <h1>{course.sessions || "unlimited"}</h1>
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="flex items-center gap-2">

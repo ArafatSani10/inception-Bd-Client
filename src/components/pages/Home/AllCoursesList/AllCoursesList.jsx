@@ -126,7 +126,7 @@ const AllCoursesList = () => {
 
                     {/* Content */}
                     <div className="p-6 space-y-3">
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-white line-clamp-2">
+                      <h3 className="text-xl font-bold text-[#00baff] line-clamp-2">
                         {course.title}
                       </h3>
                       <p className="text-gray-700 dark:text-gray-400 text-sm mb-5 line-clamp-2">
@@ -146,15 +146,19 @@ const AllCoursesList = () => {
                       </div>
 
                       {/* Duration */}
-                      <div className="flex justify-between items-center text-sm text-gray-700 dark:text-gray-300 py-2 rounded-lg shadow-sm">
-                        <span className="font-medium text-gray-900 dark:text-gray-100">
-                          {course.duration} Hours
-                        </span>
-                      </div>
+                     {/* Rating & Duration */}
+                <div className="flex justify-between items-center text-sm text-gray-700 dark:text-gray-300 py-2 rounded-lg shadow-sm">
+                  <span className="flex items-center gap-1 text-yellow-400">
+                    ⭐⭐⭐⭐⭐
+                  </span>
+                  <span className="font-medium text-[#00baff]">
+                    {course.duration} Hours
+                  </span>
+                </div>
 
                       {/* Price & Enroll */}
                       <div className="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <span className="text-xl font-bold text-gray-900 dark:text-white">
+                        <span className="text-xl font-bold text-[#00baff]">
                           ৳{course.price}
                         </span>
                         <button className="bg-[#00baff] hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">
