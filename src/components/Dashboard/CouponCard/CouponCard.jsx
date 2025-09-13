@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 
 export default function CouponSystemDemo() {
   const {
@@ -17,25 +18,40 @@ export default function CouponSystemDemo() {
   });
 
   const [coupons, setCoupons] = useState([]);
-
   const watchAll = watch();
 
-  const onSubmit = (data) => {
+  // 🔹 API URL from .env
+  const API_URL = `${import.meta.env.VITE_API_URL}/coupons`;
+
+  // Load existing coupons (POST method)
+  useEffect(() => {
+    const fetchCoupons = async () => {
+      try {
+        const { data } = await axios.post(API_URL); // ✅ using POST instead of GET
+        setCoupons(data);
+      } catch (error) {
+        console.error("Error fetching coupons:", error);
+      }
+    };
+    fetchCoupons();
+  }, [API_URL]);
+
+  // Handle form submit (Create Coupon)
+  const onSubmit = async (data) => {
     const now = new Date();
     const startDate = new Date(data.startDate);
     const endDate = new Date(data.endDate);
 
     if (startDate < now) {
-      // alert("Start date cannot be in the past!");
+      alert("Start date cannot be in the past!");
       return;
     }
     if (endDate <= startDate) {
-      // alert("End date must be after start date!");
+      alert("End date must be after start date!");
       return;
     }
 
     const newCoupon = {
-      _id: Date.now(), // temporary id
       ...data,
       discountValue: Number(data.discountValue),
       maxUses: Number(data.maxUses),
@@ -45,8 +61,14 @@ export default function CouponSystemDemo() {
         : [],
     };
 
-    setCoupons([...coupons, newCoupon]);
-    reset();
+    try {
+      const { data: savedCoupon } = await axios.post(API_URL, newCoupon);
+      setCoupons((prev) => [...prev, savedCoupon]);
+      reset();
+    } catch (error) {
+      console.error("Error creating coupon:", error);
+      alert("Failed to create coupon!");
+    }
   };
 
   return (
@@ -67,7 +89,7 @@ export default function CouponSystemDemo() {
               placeholder="e.g. NEWYEAR25"
               className={inputClass}
             />
-            {errors.code && <p className="error">{errors.code.message}</p>}
+            {errors.code && <p className={errorClass}>{errors.code.message}</p>}
           </Field>
 
           <Field label="Discount Type">
@@ -88,7 +110,7 @@ export default function CouponSystemDemo() {
               className={inputClass}
             />
             {errors.discountValue && (
-              <p className="error">{errors.discountValue.message}</p>
+              <p className={errorClass}>{errors.discountValue.message}</p>
             )}
           </Field>
 
@@ -103,7 +125,7 @@ export default function CouponSystemDemo() {
               className={inputClass}
             />
             {errors.maxUses && (
-              <p className="error">{errors.maxUses.message}</p>
+              <p className={errorClass}>{errors.maxUses.message}</p>
             )}
           </Field>
 
@@ -135,7 +157,7 @@ export default function CouponSystemDemo() {
               className={inputClass}
             />
             {errors.startDate && (
-              <p className="error">{errors.startDate.message}</p>
+              <p className={errorClass}>{errors.startDate.message}</p>
             )}
           </Field>
 
@@ -145,7 +167,7 @@ export default function CouponSystemDemo() {
               {...register("endDate", { required: "End date required" })}
               className={inputClass}
             />
-            {errors.endDate && <p className="error">{errors.endDate.message}</p>}
+            {errors.endDate && <p className={errorClass}>{errors.endDate.message}</p>}
           </Field>
 
           <Field label="Applicable Course IDs (comma separated)">
@@ -241,4 +263,3 @@ const inputClass =
 
 // Error styling
 const errorClass = "text-red-500 text-sm mt-1";
-

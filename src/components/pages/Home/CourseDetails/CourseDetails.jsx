@@ -26,6 +26,11 @@ const CourseDetails = () => {
     const [course, setCourse] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const [instructorData, setInstructorData] = useState(null);
+
+
+    
+
 
     const { idOrSlug } = useParams();
 
@@ -67,6 +72,25 @@ const CourseDetails = () => {
 
 
 
+
+
+   useEffect(() => {
+  const fetchInstructor = async () => {
+    try {
+      const email = course?.instructor?.email; // or ID
+      if (!email) return;
+
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
+      const allUsers = res?.data?.data || [];
+      const instructor = allUsers.find((u) => u.email === email);
+      setInstructorData(instructor);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchInstructor();
+}, [course]);
 
 
 
@@ -505,7 +529,7 @@ const CourseDetails = () => {
                                             <CiTimer />
                                             Duration:
                                         </span>
-                                        <h1>{course.duration} hours</h1>
+                                        <h1>{course.duration || "unlimited"} </h1>
                                     </div>
 
                                     <div className="flex justify-between">
@@ -513,7 +537,7 @@ const CourseDetails = () => {
                                             <FaAddressCard />
                                             Number of lectures:
                                         </span>
-                                        <h1>{course.sessions}</h1>
+                                        <h1>{course.sessions || "unlimited"}</h1>
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="flex items-center gap-2">
@@ -526,7 +550,7 @@ const CourseDetails = () => {
                             </div>
 
                             {/* Instructor */}
-                            <div className="mt-5 border-2 shadow-xl rounded-lg p-4 dark:border-gray-700">
+                            {/* <div className="mt-5 border-2 shadow-xl rounded-lg p-4 dark:border-gray-700">
                                 <h2 className="font-bold text-[#00baff] mb-3">
                                     Instructor
                                 </h2>
@@ -551,7 +575,34 @@ const CourseDetails = () => {
                                         </button>
                                     </Link>
                                 </div>
-                            </div>
+                            </div> */}
+
+                            {instructorData && (
+  <div className="bg-white/30 dark:bg-transparent border border-black/50 dark:border-white/10 rounded-3xl p-5 hover:shadow-xl max-w-full mx-auto">
+    <img
+      src={instructorData?.photo || "https://via.placeholder.com/150"}
+      alt={instructorData?.name}
+      className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-indigo-500 shadow-lg"
+    />
+    <h3 className="mt-5 text-xl font-semibold text-[#00baff] dark:text-[#00baff] text-center">
+      {instructorData?.name}
+    </h3>
+    <p className="text-[#00baff] dark:text-[#00baff] text-sm font-medium mt-2 text-center">
+      {instructorData?.jobTitle}
+    </p>
+    <div className="mt-3 text-yellow-400 text-lg text-center">
+      ⭐⭐⭐⭐⭐
+    </div>
+    <div className="flex justify-center mt-6">
+      <Link to={`/instructor/${instructorData?.email}`}>
+        <button className="px-5 py-2 rounded-full bg-[#00baff] hover:bg-indigo-600 text-white font-semibold shadow-md transition-all">
+          View Profile
+        </button>
+      </Link>
+    </div>
+  </div>
+)}
+
 
                             {/* Tags */}
                             <div className="mt-5 border-2 shadow-xl rounded-lg p-4 dark:border-gray-700">
