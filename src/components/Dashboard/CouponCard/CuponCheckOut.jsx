@@ -11,6 +11,8 @@ export default function CheckoutPage() {
   const { course } = location.state || {};
   const { user } = useContext(AuthContext);
 
+  // console.log("course data",course?.price)
+
   const [userInfo, setUserInfo] = useState(null);
   const [coupons, setCoupons] = useState([]);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
@@ -58,21 +60,25 @@ export default function CheckoutPage() {
         courseId: course._id,
       });
 
-      const coupon = res.data.coupon;
+      console.log("courpon res", res?.data?.data);
 
-      if (coupon) {
+      const couponData =  res?.data?.data;
+
+      if (couponData) {
         const originalPrice = Number(course.price || 0);
         let discountAmount = 0;
 
-        if (coupon.type === "fixed") discountAmount = Number(coupon.discountValue);
-        if (coupon.type === "percentage")
-          discountAmount = (originalPrice * Number(coupon.discountValue)) / 100;
+        if (couponData.discountType === "fixed")
+          discountAmount = Number(couponData.discountValue);
+        if (couponData.discountType === "percentage")
+          discountAmount = (originalPrice * Number(couponData.discountValue)) / 100;
 
         let finalPrice = originalPrice - discountAmount;
+        console.log("final price",finalPrice)
         if (finalPrice < 0) finalPrice = 0;
 
         setDiscountedPrice(finalPrice);
-        setAppliedCoupon(coupon);
+        setAppliedCoupon(couponData);
         setCouponMessage(`✅ Coupon applied! You saved ৳${discountAmount}`);
       } else {
         setAppliedCoupon(null);
@@ -93,9 +99,7 @@ export default function CheckoutPage() {
       const payload = {
         user: userInfo?._id,
         course: course._id,
-        originalPrice: course.price,
-        finalPrice: discountedPrice,
-        coupon: appliedCoupon?._id || null,
+        price: discountedPrice
       };
       const res = await axios.post(`${API_URL}/orders`, payload);
       window.location.href = res?.data?.data?.url;
@@ -116,7 +120,6 @@ export default function CheckoutPage() {
   return (
     <div className="max-sm:mt-20 mt-10 bg-gray-100 dark:bg-gray-900 p-6">
       <div className="max-w-full mx-auto grid md:grid-cols-2 gap-10">
-
         {/* Course Card */}
         <motion.div
           initial={{ opacity: 0, x: -40 }}
@@ -156,8 +159,12 @@ export default function CheckoutPage() {
                 </span>
               </div>
               <div className="flex flex-col text-right">
-                <span className="text-sm text-gray-500 line-through">৳{course.price}</span>
-                <span className="text-xl font-bold text-purple-600">৳{discountedPrice}</span>
+                <span className="text-sm text-gray-500 line-through">
+                  ৳{course.price}
+                </span>
+                <span className="text-xl font-bold text-purple-600">
+                  ৳{discountedPrice}
+                </span>
               </div>
             </div>
           </div>
@@ -170,12 +177,16 @@ export default function CheckoutPage() {
           transition={{ duration: 0.6 }}
           className="rounded-2xl shadow-lg bg-white dark:bg-gray-800 p-8 flex flex-col justify-center"
         >
-          <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100">Checkout</h2>
+          <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100">
+            Checkout
+          </h2>
 
           <form onSubmit={handleSubmit(onApplyCoupon)} className="grid gap-6">
             {/* Coupon Field */}
             <label className="block">
-              <div className="mb-1 text-sm text-gray-600 dark:text-gray-300">Coupon Code</div>
+              <div className="mb-1 text-sm text-gray-600 dark:text-gray-300">
+                Coupon Code
+              </div>
               <div className="flex gap-2">
                 <input
                   {...register("couponCode")}
@@ -192,7 +203,8 @@ export default function CheckoutPage() {
             </label>
 
             {/* Coupon Message */}
-            {couponMessage && <p className="text-sm mt-2">{couponMessage}</p>}
+            <p className="text-sm mt-2">Price: {discountedPrice}</p>
+            {/* {couponMessage && <p className="text-sm mt-2">{couponMessage}</p>} */}
 
             {/* Checkout Button */}
             <button
@@ -205,7 +217,7 @@ export default function CheckoutPage() {
           </form>
 
           {/* Available Coupons */}
-          {coupons.length > 0 && (
+          {/* {coupons.length > 0 && (
             <div className="mt-6">
               <h3 className="text-gray-700 dark:text-gray-200 font-semibold mb-2">
                 Available Coupons:
@@ -216,12 +228,15 @@ export default function CheckoutPage() {
                     key={c._id}
                     className="px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 text-sm"
                   >
-                    {c.code} - {c.type === "percentage" ? `${c.discountValue}%` : `৳${c.discountValue}`}
+                    {c.code} -{" "}
+                    {c.type === "percentage"
+                      ? `${c.discountValue}%`
+                      : `৳${c.discountValue}`}
                   </span>
                 ))}
               </div>
             </div>
-          )}
+          )} */}
         </motion.div>
       </div>
     </div>
