@@ -8,6 +8,7 @@ import './Banner.css'
 
 import video from "../../../../public/demovideo/snapsave-app_1793955564433189_hd.mp4"
 import { AnimatePresence, motion } from "framer-motion";
+import LoadingModal from "../../hooks/LoadingModal";
 
 const Banner = () => {
   const [latestCourse, setLatestCourse] = useState(null);
@@ -55,7 +56,9 @@ const Banner = () => {
   }, []);
 
   if (!latestCourse) {
-    return <p className="text-center text-gray-600">Loading latest course...</p>;
+    return <p className="text-center text-gray-600">
+      <LoadingModal></LoadingModal>
+    </p>;
   }
 
   return (

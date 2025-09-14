@@ -47,7 +47,7 @@ const TopCourses = () => {
         setCourses(coursesWithInstructor);
       } catch (err) {
         console.error(err);
-        setError('Failed to fetch courses or instructors.');
+        // setError('Failed to fetch courses or instructors.');
       } finally {
         setLoading(false);
       }

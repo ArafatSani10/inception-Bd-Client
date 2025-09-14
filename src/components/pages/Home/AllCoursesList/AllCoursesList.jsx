@@ -41,7 +41,7 @@ const AllCoursesList = () => {
         setCourses(coursesWithInstructor);
       } catch (err) {
         console.error(err);
-        setError('Failed to fetch courses.');
+        // setError('Failed to fetch courses.');
       } finally {
         setLoading(false);
       }
