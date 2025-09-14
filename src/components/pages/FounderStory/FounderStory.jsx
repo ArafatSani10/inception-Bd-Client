@@ -16,9 +16,7 @@ const founders = [
     name: "MD. RIDOY HOSSAIN",
     role: "Founder & CEO",
     bio: "Robotics Engineer and Mentor with more than 7 years of industry experience in Robotics Systems, Embedded Systems, Control Engineering, Autonomous Navigation, Python, ROS, and Mechatronic Integration.",
-    image:
-      "https://i.ibb.co.com/MkWTVbXP/353055540-3382191028762726-6439950272090551511-n.jpg",
-    link: "#",
+    image: "https://i.ibb.co/MkWTVbXP/353055540-3382191028762726-6439950272090551511-n.jpg",
     socials: [
       { icon: <FaLinkedin />, url: "https://www.linkedin.com/in/boktiarahmed73/" },
       { icon: <FaYoutube />, url: "https://www.youtube.com/dswithbappy" },
@@ -33,9 +31,8 @@ const founders = [
   {
     name: "BOKTIAR AHMED BAPPY",
     role: "Co-Founder & CTO",
-    bio: "Chief AI Engineer and Mentor with more than 6 years of industry working experience in the field of Python, Machine Learning, Deep Learning, MLOps, Cloud, Generative AI, AI Agents, and Robotics systems.",
-    image: "https://i.ibb.co.com/qF1yg8GM/IMG-8206.jpg",
-    link: "#",
+    bio: "Chief AI Engineer and Mentor with more than 6 years of industry working experience in Python, Machine Learning, Deep Learning, MLOps, Cloud, Generative AI, AI Agents, and Robotics systems.",
+    image: "https://i.ibb.co/qF1yg8GM/IMG-8206.jpg",
     socials: [
       { icon: <FaLinkedin />, url: "https://www.linkedin.com/in/boktiarahmed73/" },
       { icon: <FaYoutube />, url: "https://www.youtube.com/dswithbappy" },
@@ -49,10 +46,9 @@ const founders = [
   },
   {
     name: "DABASISH KUMAR BISWAS",
-    role: "Co-Founder & COO ",
-    bio: "CEmbedded Systems Engineer and Mentor with over 5 years of industry experience in Embedded Microcontroller Programming, RTOS, Hardware-Software Integration, IoT Systems, PLC, PCB Design, and ARM-based Architectures.",
-    image: "https://i.ibb.co.com/qF1yg8GM/IMG-8206.jpg",
-    link: "#",
+    role: "Co-Founder & COO",
+    bio: "Embedded Systems Engineer and Mentor with over 5 years of industry experience in Embedded Microcontroller Programming, RTOS, Hardware-Software Integration, IoT Systems, PLC, PCB Design, and ARM-based Architectures.",
+    image: "https://i.ibb.co/qF1yg8GM/IMG-8206.jpg",
     socials: [
       { icon: <FaLinkedin />, url: "https://www.linkedin.com/in/boktiarahmed73/" },
       { icon: <FaYoutube />, url: "https://www.youtube.com/dswithbappy" },
@@ -64,7 +60,22 @@ const founders = [
       { icon: <FaGoogle />, url: "https://scholar.google.com/citations?hl=en&user=Z64la9EAAAAJ" },
     ],
   },
-  // baki founders...
+  {
+    name: "MAMUN OR RASHID",
+    role: "Co-founder & Operating Officer",
+    bio: "Marketing Operations Specialist with over 4 years of industry experience in Marketing Automation, Campaign Analytics, Lead Management, Martech Stack Optimization, Data-Driven Strategy, and Cross-Channel Execution.",
+    image: "https://i.ibb.co/qF1yg8GM/IMG-8206.jpg", // replace with actual image from your Drive
+    socials: [
+      { icon: <FaLinkedin />, url: "#" },
+      { icon: <FaYoutube />, url: "#" },
+      { icon: <FaFacebook />, url: "#" },
+      { icon: <FaInstagram />, url: "#" },
+      { icon: <FaXTwitter />, url: "#" },
+      { icon: <FaGithub />, url: "#" },
+      { icon: <FaResearchgate />, url: "#" },
+      { icon: <FaGoogle />, url: "#" },
+    ],
+  },
 ];
 
 const FounderStory = () => {
@@ -76,7 +87,7 @@ const FounderStory = () => {
 
       <div className="max-w-full mx-auto space-y-24 px-6 flex flex-col items-center">
         {founders.map((person, index) => {
-          const isEven = index % 2 === 0; // 0,2,4... → left image, right text
+          const isEven = index % 2 === 0;
 
           return (
             <motion.div

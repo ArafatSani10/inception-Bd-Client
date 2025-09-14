@@ -38,18 +38,16 @@ export default function CouponSystemDemo() {
 
   // Handle form submit (Create Coupon)
   const onSubmit = async (data) => {
-    const now = new Date();
-    const startDate = new Date(data.startDate);
-    const endDate = new Date(data.endDate);
+   
 
-    if (startDate < now) {
-      alert("Start date cannot be in the past!");
-      return;
-    }
-    if (endDate <= startDate) {
-      alert("End date must be after start date!");
-      return;
-    }
+    // if (startDate < now) {
+    //   alert("Start date cannot be in the past!");
+    //   return;
+    // }
+    // if (endDate <= startDate) {
+    //   alert("End date must be after start date!");
+    //   return;
+    // }
 
     const newCoupon = {
       ...data,
@@ -129,13 +127,7 @@ export default function CouponSystemDemo() {
             )}
           </Field>
 
-          <Field label="Current Uses">
-            <input
-              type="number"
-              {...register("currentUses")}
-              className={inputClass}
-            />
-          </Field>
+        
 
           <Field label="Status">
             <div className="flex gap-4 items-center">
