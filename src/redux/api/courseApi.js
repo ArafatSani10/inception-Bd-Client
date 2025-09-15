@@ -12,7 +12,7 @@ export const courseApi = baseApi.injectEndpoints({
           method: "GET", // usually GET for fetching role
         };
       },
-      invalidatesTags: [tagTypes.COURSE],
+      providesTags: [tagTypes.COURSE],
     }),
     getSingleCourse: build.query({
       query: (id) => {
@@ -21,9 +21,33 @@ export const courseApi = baseApi.injectEndpoints({
           method: "GET", // usually GET for fetching role
         };
       },
+      providesTags: [tagTypes.COURSE],
+    }),
+
+    updateOne: build.mutation({
+      query: ({ id, ...data }) => ({
+        url: `${AUTH_URL}/update/${id}`,
+        method: "PATCH",
+        body: data, // ✅ সরাসরি পাঠানো হচ্ছে
+      }),
+      invalidatesTags: [tagTypes.COURSE], // ✅ mutation এ invalidatesTags হবে
+    }),
+
+    deleteOne: build.mutation({
+      query: (id) => {
+        return {
+          url: `${AUTH_URL}/delete/${id}`,
+          method: "DELETE", // usually GET for fetching role
+        };
+      },
       invalidatesTags: [tagTypes.COURSE],
     }),
   }),
 });
 
-export const { useGetAllCourseQuery,useGetSingleCourseQuery } = courseApi;
+export const {
+  useGetAllCourseQuery,
+  useGetSingleCourseQuery,
+  useUpdateOneMutation,
+  useDeleteOneMutation,
+} = courseApi;
