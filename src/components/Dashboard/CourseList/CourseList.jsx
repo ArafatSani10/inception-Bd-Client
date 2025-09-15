@@ -2,6 +2,12 @@ import React, { useState, useEffect } from "react";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import {
+  useDeleteOneMutation,
+  useUpdateOneMutation,
+} from "../../../redux/api/courseApi";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 const statusColors = {
   Draft: "bg-yellow-400",
@@ -35,12 +41,18 @@ const CourseList = () => {
   const [perPage, setPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const [status, setStatus] = useState("");
+  const [updateCourse] = useUpdateOneMutation();
+  const [deleteCourse] = useDeleteOneMutation();
+
   // Fetch courses
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/courses`);
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/courses`
+        );
         const data = response.data.data || [];
         const coursesWithDefaults = data.map((course) => ({
           ...course,
@@ -66,15 +78,16 @@ const CourseList = () => {
         const allOrders = Array.isArray(res.data)
           ? res.data
           : Array.isArray(res.data.data)
-            ? res.data.data
-            : Array.isArray(res.data.orders)
-              ? res.data.orders
-              : [];
+          ? res.data.data
+          : Array.isArray(res.data.orders)
+          ? res.data.orders
+          : [];
         const counts = {};
         allOrders.forEach((order) => {
           if (!order.course) return;
           let courseId = order.course;
-          if (typeof courseId === "object" && courseId._id) courseId = courseId._id;
+          if (typeof courseId === "object" && courseId._id)
+            courseId = courseId._id;
           courseId = String(courseId);
           counts[courseId] = (counts[courseId] || 0) + 1;
         });
@@ -104,32 +117,99 @@ const CourseList = () => {
           c.instructor?.name?.toLowerCase().includes(s)
       );
     }
-    if (categoryFilter) temp = temp.filter((c) => c.category?.name === categoryFilter);
-    if (instructorFilter) temp = temp.filter((c) => c.instructor?.name === instructorFilter);
-    if (approvalFilter) temp = temp.filter((c) => c.approval === approvalFilter);
+    if (categoryFilter)
+      temp = temp.filter((c) => c.category?.name === categoryFilter);
+    if (instructorFilter)
+      temp = temp.filter((c) => c.instructor?.name === instructorFilter);
+    if (approvalFilter)
+      temp = temp.filter((c) => c.approval === approvalFilter);
     if (statusFilter) temp = temp.filter((c) => c.status === statusFilter);
 
     const start = (currentPage - 1) * perPage;
     const end = start + perPage;
     setFilteredCourses(temp.slice(start, end));
-  }, [courses, search, categoryFilter, instructorFilter, approvalFilter, statusFilter, perPage, currentPage]);
+  }, [
+    courses,
+    search,
+    categoryFilter,
+    instructorFilter,
+    approvalFilter,
+    statusFilter,
+    perPage,
+    currentPage,
+  ]);
 
   const totalPages = Math.ceil(
     courses.filter((c) => {
       let match = true;
-      if (search) match = match && (c.title?.toLowerCase().includes(search.toLowerCase()) || c.category?.name?.toLowerCase().includes(search.toLowerCase()) || c.instructor?.name?.toLowerCase().includes(search.toLowerCase()));
+      if (search)
+        match =
+          match &&
+          (c.title?.toLowerCase().includes(search.toLowerCase()) ||
+            c.category?.name?.toLowerCase().includes(search.toLowerCase()) ||
+            c.instructor?.name?.toLowerCase().includes(search.toLowerCase()));
       if (categoryFilter) match = match && c.category?.name === categoryFilter;
-      if (instructorFilter) match = match && c.instructor?.name === instructorFilter;
+      if (instructorFilter)
+        match = match && c.instructor?.name === instructorFilter;
       if (approvalFilter) match = match && c.approval === approvalFilter;
       if (statusFilter) match = match && c.status === statusFilter;
       return match;
     }).length / perPage
   );
 
+  const handleUpdateCourseStatus = async (courseId, data) => {
+    console.log({ id: courseId, status: data });
+    try {
+      const res = await updateCourse({ id: courseId, status: data }).unwrap();
+      if (!!res?.success) {
+        toast.success(res?.message);
+      }
+      console.log("res", res);
+    } catch (error) {
+      console.log("update error", error);
+    }
+  };
+const handleDeleteCourse = async (courseId) => {
+  try {
+    // 1️⃣ প্রথমে confirmation popup দেখানো হলো
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    // 2️⃣ যদি ইউজার confirm করে
+    if (result.isConfirmed) {
+      const res = await deleteCourse(courseId).unwrap(); // ✅ async await ইউজ করা হলো
+
+      if (res?.success) {
+        await Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    }
+  } catch (error) {
+    console.log("delete error", error);
+    Swal.fire({
+      title: "Error!",
+      text: "Something went wrong while deleting.",
+      icon: "error",
+    });
+  }
+};
+
+
   const handleEdit = (course) => console.log("Edit clicked:", course.title);
   const handleDelete = (course) => console.log("Delete clicked:", course.title);
 
-  if (loading) return <div className="p-6 text-center">⏳ Loading courses...</div>;
+  if (loading)
+    return <div className="p-6 text-center">⏳ Loading courses...</div>;
   if (error) return <div className="p-6 text-center text-red-500">{error}</div>;
 
   return (
@@ -160,7 +240,9 @@ const CourseList = () => {
         >
           <option value="">All Categories</option>
           {categories.map((cat, i) => (
-            <option key={i} value={cat}>{cat}</option>
+            <option key={i} value={cat}>
+              {cat}
+            </option>
           ))}
         </select>
         <select
@@ -170,7 +252,9 @@ const CourseList = () => {
         >
           <option value="">All Instructors</option>
           {instructorNames.map((name, i) => (
-            <option key={i} value={name}>{name}</option>
+            <option key={i} value={name}>
+              {name}
+            </option>
           ))}
         </select>
         <select
@@ -180,7 +264,9 @@ const CourseList = () => {
         >
           <option value="">All Status</option>
           {statuses.map((s, i) => (
-            <option key={i} value={s}>{s}</option>
+            <option key={i} value={s}>
+              {s}
+            </option>
           ))}
         </select>
         <select
@@ -190,7 +276,9 @@ const CourseList = () => {
         >
           <option value="">All Approvals</option>
           {approvals.map((a, i) => (
-            <option key={i} value={a}>{a}</option>
+            <option key={i} value={a}>
+              {a}
+            </option>
           ))}
         </select>
       </div>
@@ -200,18 +288,40 @@ const CourseList = () => {
         <table className="w-full text-sm border-collapse">
           <thead className="bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300">
             <tr>
-              {["SN", "Course Name", "Instructor", "Price", "Students", "Created", "Updated", "Status", "Approval", "Actions"].map((h, i) => (
-                <th key={i} className="px-4 py-3 text-left font-medium">{h}</th>
+              {[
+                "SN",
+                "Course Name",
+                "Instructor",
+                "Price",
+                "Students",
+                "Created",
+                "Updated",
+                "Status",
+                "Approval",
+                "Actions",
+              ].map((h, i) => (
+                <th key={i} className="px-4 py-3 text-left font-medium">
+                  {h}
+                </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {filteredCourses.map((course, i) => (
-              <tr key={i} className="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                <td className="px-4 py-3">{(currentPage - 1) * perPage + i + 1}</td>
+              <tr
+                key={i}
+                className="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+              >
                 <td className="px-4 py-3">
-                  <div className="font-semibold text-gray-800 dark:text-gray-200">{course.title}</div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">{course.category?.name}</div>
+                  {(currentPage - 1) * perPage + i + 1}
+                </td>
+                <td className="px-4 py-3">
+                  <div className="font-semibold text-gray-800 dark:text-gray-200">
+                    {course.title}
+                  </div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                    {course.category?.name}
+                  </div>
                 </td>
                 <td className="px-4 py-3">{course.instructor?.name}</td>
                 <td className="px-4 py-3">${course.price}</td>
@@ -226,32 +336,39 @@ const CourseList = () => {
                 <td className="px-4 py-3">{formatDate(course.createdAt)}</td>
                 <td className="px-4 py-3">{formatDate(course.updatedAt)}</td>
                 <td className="px-4 py-3">
-                  <span className={`px-3 py-1 text-xs rounded-full text-white ${statusColors[course.status] || "bg-gray-500"}`}>
+                  <span
+                    className={`px-3 py-1 text-xs rounded-full text-white ${
+                      statusColors[course.status] || "bg-gray-500"
+                    }`}
+                  >
                     {course.status}
                   </span>
                 </td>
                 <td className="px-4 py-3">
                   <select
-                    defaultValue={course.approval}
+                    defaultValue={course.status}
                     className="p-1 border rounded text-sm dark:bg-gray-900 dark:text-white"
+                    onChange={(e) =>
+                      handleUpdateCourseStatus(course?._id, e.target.value)
+                    }
                   >
-                    <option>Pending</option>
-                    <option>Approved</option>
-                    <option>Rejected</option>
+                    <option value="upcoming">UPCOMING</option>
+                    <option value={"published"}>PUBLISHED</option>
+                    <option value={"unPublished"}>UNPUBLISHED</option>
                   </select>
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center space-x-2">
-                    <Link to={`/dashboard/update-course/${course._id}`}>
+                    {/* <Link to={`/dashboard/update-course/${course._id}`}>
                       <button
                         onClick={() => handleEdit(course)}
                         className="flex items-center px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm transition"
                       >
                         <FiEdit className="mr-1" /> Edit
                       </button>
-                    </Link>
+                    </Link> */}
                     <button
-                      onClick={() => handleDelete(course)}
+                      onClick={() => handleDeleteCourse(course?._id)}
                       className="flex items-center px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm transition"
                     >
                       <FiTrash2 className="mr-1" /> Delete
@@ -271,13 +388,15 @@ const CourseList = () => {
             className="px-3 py-1  rounded hover:bg-gray-300 dark:hover:bg-gray-600"
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((prev) => prev - 1)}
-          >
-           
-          </button>
+          ></button>
           {Array.from({ length: totalPages }, (_, i) => (
             <button
               key={i}
-              className={`px-3 py-1 rounded ${currentPage === i + 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600'}`}
+              className={`px-3 py-1 rounded ${
+                currentPage === i + 1
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 dark:bg-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600"
+              }`}
               onClick={() => setCurrentPage(i + 1)}
             >
               {i + 1}
@@ -287,9 +406,7 @@ const CourseList = () => {
             className="px-3 py-1   rounded hover:bg-gray-300 dark:hover:bg-gray-600"
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage((prev) => prev + 1)}
-          >
-           
-          </button>
+          ></button>
         </div>
       )}
     </div>
