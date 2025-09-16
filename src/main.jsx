@@ -70,6 +70,7 @@ import InstrucorDetails from "./components/pages/InstructorPage/InstrucorDetails
 import ModuleUpload from "./components/Dashboard/ModuleUpload/ModuleUpload";
 import CourseStudents from "./components/Dashboard/CourseList/CourseStudents/CourseStudents";
 import FounderStory from "./components/pages/FounderStory/FounderStory";
+import AddCourseOutline from "./components/AddCourseOutline";
 
 const router = createBrowserRouter([
   {
@@ -214,6 +215,11 @@ const router = createBrowserRouter([
       {
         path: "update-course",
         element: <UpdateCourse></UpdateCourse>,
+      },
+
+      {
+        path:"outline",
+        element:<AddCourseOutline></AddCourseOutline>
       },
 
       // category

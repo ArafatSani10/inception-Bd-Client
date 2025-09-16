@@ -75,9 +75,9 @@ const ModulePage = () => {
         <button className="text-green-600 font-semibold border-b-2 border-green-600">
           Content
         </button>
-        <button className="text-gray-600 dark:text-gray-300 hover:text-green-600">
+        {/* <button className="text-gray-600 dark:text-gray-300 hover:text-green-600">
           Certificates
-        </button>
+        </button> */}
       </div>
 
       {/* Main */}

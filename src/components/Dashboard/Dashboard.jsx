@@ -264,8 +264,9 @@ const Dashboard = () => {
                                 label="Manage Courses"
                                 sidebarOpen={sidebarOpen}
                                 subLinks={[
-                                    { label: "Courses List", to: "courses-list" },
                                     { label: "Add Course", to: "course-form" },
+                                    { label: "Outline", to: "outline" },
+                                    { label: "Courses List", to: "courses-list" },
                                     { label: "Categories", to: "categories" },
                                     { label: "Add Categories", to: "add-category" },
                                 ]}
