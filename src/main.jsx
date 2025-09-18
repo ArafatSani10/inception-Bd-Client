@@ -70,6 +70,9 @@ import InstrucorDetails from "./components/pages/InstructorPage/InstrucorDetails
 import ModuleUpload from "./components/Dashboard/ModuleUpload/ModuleUpload";
 import CourseStudents from "./components/Dashboard/CourseList/CourseStudents/CourseStudents";
 import FounderStory from "./components/pages/FounderStory/FounderStory";
+import AddCourseOutline from "./components/AddCourseOutline";
+import UpdateCourseForm from "./components/UpdateCourseForm";
+import UpdateCategoryForm from "./components/UpdateCategoryForm";
 
 const router = createBrowserRouter([
   {
@@ -204,6 +207,10 @@ const router = createBrowserRouter([
         element: <CourseList></CourseList>,
       },
       {
+        path: "edit-course/:courseId",
+        element: <UpdateCourseForm></UpdateCourseForm>,
+      },
+      {
         path:"course-students/:courseId",
         element:<CourseStudents></CourseStudents>
       },
@@ -214,6 +221,11 @@ const router = createBrowserRouter([
       {
         path: "update-course",
         element: <UpdateCourse></UpdateCourse>,
+      },
+
+      {
+        path:"outline",
+        element:<AddCourseOutline></AddCourseOutline>
       },
 
       // category
@@ -227,8 +239,9 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "update-category",
-        element: <Updatecategory></Updatecategory>,
+        path: "update-category/:id",
+        element:<UpdateCategoryForm></UpdateCategoryForm>,
+        // element: <Updatecategory></Updatecategory>,
       },
 
       // moduleupload
