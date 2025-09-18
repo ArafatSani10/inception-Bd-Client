@@ -1,47 +1,23 @@
 import { useState } from "react";
 import { ChevronRight, Lock, Play } from "lucide-react";
 
-export default function CourseOutlineTab() {
+export default function CourseOutlineTab({course}) {
   const [activeModule, setActiveModule] = useState(3);
+  const outline = course?.outline;
 
-  const modules = [
-    {
-      id: 1,
-      title: "Course Introduction",
-      lessons: [],
-    },
-    {
-      id: 2,
-      title: "Python Basic",
-      lessons: [],
-    },
-    {
-      id: 3,
-      title: "String Objects in Python",
-      lessons: [
-        { id: 1, title: "Basic Data Structure In Python", locked: true },
-        { id: 2, title: "String Object Basics", locked: true },
-        { id: 3, title: "String Inbuilt Methods", locked: true },
-        { id: 4, title: "Splitting And Joining Strings", locked: true },
-        { id: 5, title: "String Format Functions", locked: true },
-      ],
-    },
-    {
-      id: 4,
-      title: "List Object Basics in Python",
-      lessons: [],
-    },
-    {
-      id: 5,
-      title: "Tuples, Set, Dictionaries & Its Function in Python",
-      lessons: [],
-    },
-    {
-      id: 6,
-      title: "Function in Python",
-      lessons: [],
-    },
-  ];
+  const outlinesData = outline?.topic?.map((item,index) => {
+    return {
+      id: index + 1,
+      title: item?.title,
+      lessons:item?.subtopics?.map((subtopic, subIndex) => {
+        return {
+          id: subIndex + 1,
+          title: subtopic?.title,
+        };
+      })
+    }
+  })
+  
 
   const toggleModule = (moduleId) => {
     setActiveModule(activeModule === moduleId ? null : moduleId);
@@ -52,7 +28,7 @@ export default function CourseOutlineTab() {
       {/* Sidebar */}
       <div className="w-full bg-slate-800 overflow-y-auto">
         <div className="p-4 space-y-2">
-          {modules.map((module) => (
+          {outlinesData?.map((module) => (
             <div
               key={module.id}
               className="bg-slate-600 rounded-lg overflow-hidden"

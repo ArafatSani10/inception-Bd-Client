@@ -14,10 +14,10 @@ const CourseContent = ({ course, isEnrolled }) => {
         );
     }
 
-    const handleModuleClick = () => {
-        if (!isEnrolled) return; // Do nothing if not enrolled
-        navigate(`/student-dashboard/module-page/${course.id}`);
-    };
+    // const handleModuleClick = () => {
+    //     if (!isEnrolled) return; // Do nothing if not enrolled
+    //     navigate(`/student-dashboard/module-page/${course.id}`);
+    // };
 
     return (
         // <div className=" bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#0a1128] dark:to-[#00091a] font-montserrat p-4 md:p-2">
@@ -61,7 +61,7 @@ const CourseContent = ({ course, isEnrolled }) => {
         // </div>
 
         <>
-        <CourseOutlineTab/>
+        <CourseOutlineTab course={course} />
         </>
     );
 };

@@ -42,6 +42,23 @@ export const courseApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.COURSE],
     }),
+    createOutline: build.mutation({
+      query: ({ courseId, ...data }) => ({
+        url: `${AUTH_URL}/outline/${courseId}/create`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: [tagTypes.COURSE], // Refresh course data after outline create
+    }),
+
+    updateOutline: build.mutation({
+      query: ({ outlineId, ...data }) => ({
+        url: `${AUTH_URL}/outline/${outlineId}/update`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: [tagTypes.COURSE], // Refresh course data after outline update
+    }),
   }),
 });
 
@@ -50,4 +67,6 @@ export const {
   useGetSingleCourseQuery,
   useUpdateOneMutation,
   useDeleteOneMutation,
+  useCreateOutlineMutation,
+  useUpdateOutlineMutation,
 } = courseApi;

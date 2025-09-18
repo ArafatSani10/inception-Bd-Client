@@ -188,7 +188,7 @@ export default function CouponSystemDemo() {
         </form>
 
         {/* Live Preview */}
-        <div className="mt-8 p-4 rounded-xl bg-gray-100 dark:bg-gray-700">
+        {/* <div className="mt-8 p-4 rounded-xl bg-gray-100 dark:bg-gray-700">
           <h3 className="font-semibold mb-2">Preview</h3>
           <p>Code: {watchAll.code || "Not set"}</p>
           <p>Type: {watchAll.type || "Not set"}</p>
@@ -203,10 +203,10 @@ export default function CouponSystemDemo() {
               ? watchAll.applicableCourses
               : "No courses"}
           </p>
-        </div>
+        </div> */}
 
         {/* Existing Coupons */}
-        <div className="mt-10">
+        {/* <div className="mt-10">
           <h3 className="font-semibold mb-4 text-gray-700 dark:text-gray-200">
             Existing Coupons
           </h3>
@@ -234,7 +234,7 @@ export default function CouponSystemDemo() {
               ))}
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );

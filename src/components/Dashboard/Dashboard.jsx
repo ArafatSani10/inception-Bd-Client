@@ -301,7 +301,7 @@ const Dashboard = () => {
                                 </NavLink>
                             </li>
 
-                            <li>
+                            {/* <li>
                                 <NavLink
                                     to="certificate"
                                     className={({ isActive }) =>
@@ -316,7 +316,7 @@ const Dashboard = () => {
                                     </span>
                                     {sidebarOpen && <span>Certificate Builder</span>}
                                 </NavLink>
-                            </li>
+                            </li> */}
 
                             <DropdownItem
                                 icon={<FaBlog />}

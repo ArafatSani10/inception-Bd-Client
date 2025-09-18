@@ -60,15 +60,15 @@ const AllCoursesList = () => {
     }
   }, [swiperInstance]);
 
-  if (loading) return (
-    <div className="flex items-center justify-center h-screen bg-white dark:bg-gray-900">
-      <motion.div
-        className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full"
-        animate={{ rotate: 360 }}
-        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-      />
-    </div>
-  );
+  // if (loading) return (
+  //   <div className="flex items-center justify-center h-screen bg-white dark:bg-gray-900">
+  //     <motion.div
+  //       className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full"
+  //       animate={{ rotate: 360 }}
+  //       transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+  //     />
+  //   </div>
+  // );
   if (error) return <div className="text-center text-red-500 p-6">{error}</div>;
   if (!courses.length) return <div className="text-center text-gray-500 p-6">No courses available.</div>;
 

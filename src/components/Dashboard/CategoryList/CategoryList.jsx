@@ -171,7 +171,7 @@ const CategoryList = () => {
                         <FaEdit />
                       </button>
                     </Link>
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded">
+                    {/* <button className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded">
                       <FaList />
                     </button>
                     <button
@@ -179,7 +179,7 @@ const CategoryList = () => {
                       className="bg-red-600 hover:bg-red-700 text-white p-2 rounded"
                     >
                       <FaTrash />
-                    </button>
+                    </button> */}
                   </div>
                 </td>
               </tr>

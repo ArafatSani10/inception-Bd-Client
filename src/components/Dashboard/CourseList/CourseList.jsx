@@ -359,14 +359,14 @@ const handleDeleteCourse = async (courseId) => {
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center space-x-2">
-                    {/* <Link to={`/dashboard/update-course/${course._id}`}>
+                    <Link to={`/dashboard/edit-course/${course.id}`}>
                       <button
                         onClick={() => handleEdit(course)}
                         className="flex items-center px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm transition"
                       >
                         <FiEdit className="mr-1" /> Edit
                       </button>
-                    </Link> */}
+                    </Link>
                     <button
                       onClick={() => handleDeleteCourse(course?._id)}
                       className="flex items-center px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm transition"
