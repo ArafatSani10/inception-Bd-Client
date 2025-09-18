@@ -5,11 +5,26 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  useGetSingleCourseQuery,
+  useUpdateOneMutation,
+} from "../redux/api/courseApi";
 
-const CourseForm = () => {
+const UpdateCourseForm = () => {
+  const { courseId } = useParams();
+  const navigate = useNavigate();
   const [instructors, setInstructors] = useState([]);
   const [loading, setLoading] = useState(false);
   const tagInput = useRef("");
+
+  // RTK Query hooks
+  const {
+    data: courseData,
+    isLoading: courseLoading,
+    error: courseError,
+  } = useGetSingleCourseQuery(courseId);
+  const [updateCourse] = useUpdateOneMutation();
 
   const { register, control, handleSubmit, watch, setValue, reset } = useForm({
     defaultValues: {
@@ -26,7 +41,7 @@ const CourseForm = () => {
       duration: "",
       sessions: "",
       capacity: "",
-      status: "",
+      status: courseData?.data?.status || "",
       learningPoints: [{ subject: "", subtitles: [{ point: "" }] }],
       requirements: [""],
       faqs: [{ question: "", answer: "" }],
@@ -50,6 +65,53 @@ const CourseForm = () => {
     };
     fetchInstructors();
   }, []);
+
+  // Populate form with existing course data
+  useEffect(() => {
+    if (courseData?.data) {
+      const course = courseData.data;
+
+      // Format learning points
+      const formattedLearningPoints = course.learningPoints?.map((lp) => ({
+        subject: lp.subject || "",
+        subtitles: lp.subtitle?.map((point) => ({ point })) || [{ point: "" }],
+      })) || [{ subject: "", subtitles: [{ point: "" }] }];
+
+      // Format date for input field
+      const formatDate = (dateString) => {
+        if (!dateString) return "";
+        const date = new Date(dateString);
+        return date.toISOString().split("T")[0];
+      };
+
+      // Reset form with course data
+      reset({
+        instructor: course.instructor?._id || course.instructor || "",
+        instructorTitle: course.instructorTitle || "",
+        title: course.title || "",
+        price: course.price || "",
+        description: course.description || "",
+        startingDate: formatDate(course.startingDate),
+        duration: course.duration || "",
+        sessions: course.sessions || "",
+        capacity: course.capacity || "",
+        status: course.status || "",
+        learningPoints: formattedLearningPoints,
+        requirements:
+          course.requirements?.length > 0 ? course.requirements : [""],
+        faqs:
+          course.faqs?.length > 0
+            ? course.faqs
+            : [{ question: "", answer: "" }],
+        tags: course.tags || [],
+        // Don't set file inputs as they should remain empty for new uploads
+        thumbnail: null,
+        demoImage: null,
+        coverPhoto: null,
+        instructorImage: null,
+      });
+    }
+  }, [courseData, reset]);
 
   // Field arrays
   const {
@@ -89,88 +151,164 @@ const CourseForm = () => {
   // Submit
   const onSubmit = async (data) => {
     try {
-      setLoading(true); // Start loader immediately
+      setLoading(true);
 
-      data.category = "68a21bbad929bc483f4a7a66";
-
-      const { demoImage, thumbnail, coverPhoto, instructorImage, ...rest } =
+      const { thumbnail, coverPhoto, instructorImage, ...rest } =
         data;
-      const form_data = new FormData();
 
-      if (thumbnail?.[0]) form_data.append("thumbnail", thumbnail[0]);
-      if (coverPhoto?.[0]) form_data.append("coverPhoto", coverPhoto[0]);
-      if (demoImage?.[0]) form_data.append("demoImage", demoImage[0]);
-      if (instructorImage?.[0])
-        form_data.append("instructorImage", instructorImage[0]);
+      // Create FormData only if there are files to upload
+      const hasFiles =
+        thumbnail?.[0] ||
+        coverPhoto?.[0] ||
+        instructorImage?.[0];
 
-      const payload = {
-        ...rest,
-        learningPoints: data.learningPoints.map((lp) => ({
-          subject: lp.subject,
-          subtitle: lp.subtitles.map((s) => s.point),
-        })),
-      };
+      if (hasFiles) {
+        // If files are present, use FormData
+        const form_data = new FormData();
 
-      form_data.append("data", JSON.stringify(payload));
+        if (thumbnail?.[0]) form_data.append("thumbnail", thumbnail[0]);
+        if (coverPhoto?.[0]) form_data.append("coverPhoto", coverPhoto[0]);
+        if (instructorImage?.[0])
+          form_data.append("instructorImage", instructorImage[0]);
 
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/courses`,
-        form_data,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
+        const payload = {
+          ...rest,
+          learningPoints: data.learningPoints.map((lp) => ({
+            subject: lp.subject,
+            subtitle: lp.subtitles.map((s) => s.point),
+          })),
+        };
 
-      if (res.data.success) {
-        Swal.fire({
-          title: "<strong>🎉 Course Created!</strong>",
-          html: "Your course has been successfully <b>added</b> ✅",
-          icon: "success",
-          showCloseButton: true,
-          focusConfirm: false,
-          confirmButtonText: '<i class="fa fa-thumbs-up"></i> Great!',
-          confirmButtonColor: "#00baff",
-          background: "linear-gradient(135deg, #1f2937, #111827)", // dark gradient
-          color: "#ffffff", // text color
-          iconColor: "#00baff",
-          customClass: {
-            popup:
-              "rounded-3xl shadow-2xl p-6 border-2 border-cyan-500 animate-fadeIn",
-            title: "text-2xl font-bold text-cyan-400",
-            content: "text-lg text-gray-300",
-            confirmButton:
-              "text-white bg-cyan-500 hover:bg-cyan-400 px-6 py-2 rounded-full font-semibold transition-all duration-300",
-          },
-        });
+        form_data.append("data", JSON.stringify(payload));
 
-        reset();
+        // Use axios directly for FormData
+        const res = await axios.patch(
+          `${import.meta.env.VITE_API_URL}/courses/update/${courseId}`,
+          form_data,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+
+        if (res.data.success) {
+          showSuccessAlert();
+        } else {
+          toast.error("Something went wrong!");
+        }
       } else {
-        toast.error("Something went wrong!");
+        // If no files, use RTK Query mutation with JSON data
+        const payload = {
+          ...rest,
+          learningPoints: data.learningPoints.map((lp) => ({
+            subject: lp.subject,
+            subtitle: lp.subtitles.map((s) => s.point),
+          })),
+        };
+
+        const result = await updateCourse({
+          id: courseId,
+          ...payload,
+        }).unwrap();
+
+        if (result.success) {
+          showSuccessAlert();
+        } else {
+          toast.error("Something went wrong!");
+        }
       }
     } catch (err) {
-      console.error("Error:", err.response?.data || err.message);
-      toast.error("Failed to create course!");
+      console.error("Error:", err);
+      toast.error("Failed to update course!");
     } finally {
-      setLoading(false); // Hide loader after response
+      setLoading(false);
     }
   };
+
+  const showSuccessAlert = () => {
+    Swal.fire({
+      title: "<strong>🎉 Course Updated!</strong>",
+      html: "Your course has been successfully <b>updated</b> ✅",
+      icon: "success",
+      showCloseButton: true,
+      focusConfirm: false,
+      confirmButtonText: '<i class="fa fa-thumbs-up"></i> Great!',
+      confirmButtonColor: "#00baff",
+      background: "linear-gradient(135deg, #1f2937, #111827)",
+      color: "#ffffff",
+      iconColor: "#00baff",
+      customClass: {
+        popup:
+          "rounded-3xl shadow-2xl p-6 border-2 border-cyan-500 animate-fadeIn",
+        title: "text-2xl font-bold text-cyan-400",
+        content: "text-lg text-gray-300",
+        confirmButton:
+          "text-white bg-cyan-500 hover:bg-cyan-400 px-6 py-2 rounded-full font-semibold transition-all duration-300",
+      },
+    }).then(() => {
+      navigate("/dashboard/courses-list"); // Adjust the navigation path as needed
+    });
+  };
+
+  // Loading and error states
+  if (courseLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div className="flex flex-col items-center">
+          <div className="flex space-x-2">
+            <span className="w-3 h-3 bg-blue-500 rounded-full animate-bounce"></span>
+            <span className="w-3 h-3 bg-blue-500 rounded-full animate-bounce delay-200"></span>
+            <span className="w-3 h-3 bg-blue-500 rounded-full animate-bounce delay-400"></span>
+          </div>
+          <p className="mt-3 text-gray-700 dark:text-gray-300 text-lg font-semibold">
+            Loading course...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (courseError) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-red-600 mb-2">
+            Error Loading Course
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400">
+            Course not found or failed to load.
+          </p>
+          <button
+            onClick={() => navigate("/courses")}
+            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-100 dark:bg-gray-900 text-sm">
       <div className="border-b px-6 py-4 bg-white dark:bg-gray-800 flex justify-between items-center shadow">
-        <h1 className="text-lg font-semibold text-[#00baff]">Create Course</h1>
+        <h1 className="text-lg font-semibold text-[#00baff]">Update Course</h1>
+        <button
+          onClick={() => navigate("/courses")}
+          className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+        >
+          Back to Courses
+        </button>
       </div>
 
       {/* Loading overlay */}
       {loading && (
-        <div className="absolute inset-0 bg-black/40 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="flex flex-col items-center">
-            {/* Animated loader */}
             <div className="flex space-x-2">
               <span className="w-3 h-3 bg-white rounded-full animate-bounce"></span>
               <span className="w-3 h-3 bg-white rounded-full animate-bounce delay-200"></span>
               <span className="w-3 h-3 bg-white rounded-full animate-bounce delay-400"></span>
             </div>
             <p className="mt-3 text-white text-lg font-semibold">
-              Creating course...
+              Updating course...
             </p>
           </div>
         </div>
@@ -180,6 +318,65 @@ const CourseForm = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="p-6 space-y-10 bg-white dark:bg-gray-800 rounded shadow"
       >
+        {/* Display current images */}
+        {/* {courseData?.data && (
+          <section className="mb-6">
+            <h3 className="font-semibold mb-3 text-gray-800 dark:text-gray-200">
+              Current Images
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {courseData.data.thumbnail && (
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Current Thumbnail
+                  </label>
+                  <img
+                    src={courseData.data.thumbnail}
+                    alt="Current thumbnail"
+                    className="w-full h-24 object-cover rounded border"
+                  />
+                </div>
+              )}
+              {courseData.data.coverPhoto && (
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Current Cover Photo
+                  </label>
+                  <img
+                    src={courseData.data.coverPhoto}
+                    alt="Current cover"
+                    className="w-full h-24 object-cover rounded border"
+                  />
+                </div>
+              )}
+              {courseData.data.instructorImage && (
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Current Instructor Image
+                  </label>
+                  <img
+                    src={courseData.data.instructorImage}
+                    alt="Current instructor"
+                    className="w-full h-24 object-cover rounded border"
+                  />
+                </div>
+              )}
+              {courseData.data.demoImage && (
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Current Demo Image
+                  </label>
+                  <img
+                    src={courseData.data.demoImage}
+                    alt="Current demo"
+                    className="w-full h-24 object-cover rounded border"
+                  />
+                </div>
+              )}
+            </div>
+          </section>
+        )} */}
+
         {/* Basic Info */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
@@ -220,30 +417,35 @@ const CourseForm = () => {
             <textarea
               {...register("description")}
               placeholder="About Courses"
-              rows={4} // Adjust height
+              rows={4}
               className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg 
-                   bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 
-                   placeholder-gray-400 dark:placeholder-gray-500 
-                   "
+                       bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 
+                       placeholder-gray-400 dark:placeholder-gray-500"
             />
           </div>
 
-          <div>
-            <label className="font-bold">Thumbnail</label>
+          {/* <div>
+            <label className="font-bold">New Thumbnail (optional)</label>
             <input
               type="file"
               {...register("thumbnail", { valueAsFile: true })}
               className="w-full"
             />
-          </div>
-          <div>
-            <label className="font-bold">Instructor Image</label>
+            <small className="text-gray-500">
+              Leave empty to keep current thumbnail
+            </small>
+          </div> */}
+          {/* <div>
+            <label className="font-bold">New Instructor Image (optional)</label>
             <input
               type="file"
               {...register("instructorImage", { valueAsFile: true })}
               className="w-full"
             />
-          </div>
+            <small className="text-gray-500">
+              Leave empty to keep current image
+            </small>
+          </div> */}
 
           <div>
             <label>Price</label>
@@ -301,15 +503,15 @@ const CourseForm = () => {
             <div
               key={index}
               className="relative mb-2 bg-white dark:bg-gray-800 border border-gray-300 
-                 dark:border-gray-700 rounded-lg shadow-sm"
+                     dark:border-gray-700 rounded-lg shadow-sm"
             >
               <input
                 type="text"
                 {...register(`requirements.${index}`)}
                 className="w-full p-2 pr-8 rounded-md border-none 
-                   bg-transparent text-gray-800 dark:text-gray-100 
-                   placeholder-gray-500 dark:placeholder-gray-400 
-                   focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                       bg-transparent text-gray-800 dark:text-gray-100 
+                       placeholder-gray-500 dark:placeholder-gray-400 
+                       focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 placeholder="Enter requirement"
               />
               {requirementFields.length > 1 && (
@@ -317,7 +519,7 @@ const CourseForm = () => {
                   type="button"
                   onClick={() => removeRequirement(index)}
                   className="absolute right-2 top-1/2 -translate-y-1/2 
-                     text-red-600 dark:text-red-400 hover:scale-110 transition"
+                         text-red-600 dark:text-red-400 hover:scale-110 transition"
                 >
                   <IoRemoveCircle size={20} />
                 </button>
@@ -347,16 +549,16 @@ const CourseForm = () => {
                 {...register(`faqs.${index}.question`)}
                 placeholder="Question"
                 className="w-full p-2 mb-2 rounded-md border border-gray-300 dark:border-gray-600 
-                   bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 
-                   focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                       bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 
+                       focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               />
               <textarea
                 {...register(`faqs.${index}.answer`)}
                 placeholder="Answer"
                 rows={3}
                 className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-600 
-                   bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 
-                   focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                       bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 
+                       focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               />
               {faqFields.length > 1 && (
                 <button
@@ -385,13 +587,13 @@ const CourseForm = () => {
             <span className="text-sm text-gray-500 dark:text-gray-400 font-normal">
               (Press Enter to add)
             </span>
-          </h3>{" "}
+          </h3>
           <div className="flex flex-wrap mt-4 gap-2 border border-gray-300 dark:border-gray-700 rounded-lg p-2 bg-white dark:bg-gray-800">
             {tags.map((tag, index) => (
               <span
                 key={index}
                 className="flex items-center bg-indigo-100 dark:bg-indigo-900/40 
-                   text-indigo-800 dark:text-indigo-200 rounded-full px-3 py-1 text-sm font-medium"
+                       text-indigo-800 dark:text-indigo-200 rounded-full px-3 py-1 text-sm font-medium"
               >
                 {tag}
                 <button
@@ -409,34 +611,28 @@ const CourseForm = () => {
               ref={tagInput}
               onKeyDown={handleAddTag}
               className="flex-grow min-w-[120px] bg-transparent border-none focus:ring-0 
-                 text-gray-800 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400"
+                     text-gray-800 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400"
             />
           </div>
         </section>
 
         {/* File Uploads */}
-        <section className="grid md:grid-cols-2 gap-4 mt-5">
-          {/* <div>
-                        <label className="block mb-1 text-gray-700 font-bold dark:text-gray-300">demo</label>
-                        <input
-                            type="file"
-                            {...register("demoImage", { valueAsFile: true })}
-                            className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md 
-                 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
-                        />
-                    </div> */}
+        {/* <section className="grid md:grid-cols-2 gap-4 mt-5">
           <div>
             <label className="block mb-1 text-gray-700 font-bold dark:text-gray-300">
-              Cover Photo
+              New Cover Photo (optional)
             </label>
             <input
               type="file"
               {...register("coverPhoto", { valueAsFile: true })}
               className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md 
-                 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
+                     bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
             />
+            <small className="text-gray-500">
+              Leave empty to keep current cover photo
+            </small>
           </div>
-        </section>
+        </section> */}
 
         {/* More Infos */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
@@ -448,7 +644,7 @@ const CourseForm = () => {
               type="date"
               {...register("startingDate")}
               className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md 
-                 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
+                     bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
             />
           </div>
 
@@ -461,7 +657,7 @@ const CourseForm = () => {
               {...register("duration")}
               placeholder="Duration in hours"
               className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md 
-                 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
+                     bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
             />
           </div>
 
@@ -474,47 +670,41 @@ const CourseForm = () => {
               {...register("sessions")}
               placeholder="Number of sessions"
               className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md 
-                 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
+                     bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
             />
           </div>
-
-          {/* <div>
-                        <label className="block font-bold mb-1 text-gray-700 dark:text-gray-300">Capacity</label>
-                        <input 
-                            type="text"
-                            {...register("capacity")}
-                            placeholder="Capacity"
-                            className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md 
-                 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
-                        />
-                    </div> */}
         </section>
 
         {/* Status */}
-        <section className="mt-5">
-          <label className="block font-bold mb-1 text-gray-700 dark:text-gray-300">
-            Status
-          </label>
-          <select
-            {...register("status")}
-            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md 
-               bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
-          >
-            <option value="" disabled>
-              Select status
-            </option>
-            <option value="published">Publish</option>
-            {/* <option value="unPublished">Unpublish</option> */}
-            {/* <option value="drafted">Draft</option> */}
-          </select>
-        </section>
+        {/* <select
+  {...register("status")}
+  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md 
+             bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200
+             dark:[&>option]:bg-gray-900 dark:[&>option]:text-gray-200"
+>
+  <option value="" disabled>
+    Select status
+  </option>
+  <option value="published">Publish</option>
+  <option value="unPublished">Unpublish</option>
+</select> */}
 
-        <button
-          type="submit"
-          className="mt-5 bg-indigo-600 text-white px-4 py-2 rounded"
-        >
-          Submit
-        </button>
+        <div className="flex gap-4 mt-5">
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700 disabled:opacity-50"
+          >
+            {loading ? "Updating..." : "Update Course"}
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate("/courses")}
+            className="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600"
+          >
+            Cancel
+          </button>
+        </div>
       </form>
 
       <ToastContainer />
@@ -560,4 +750,4 @@ const Subtitles = ({ nestIndex, control, register }) => {
   );
 };
 
-export default CourseForm;
+export default UpdateCourseForm;

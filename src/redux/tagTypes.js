@@ -5,6 +5,7 @@ export const tagTypes = {
   COURSE:"course",
   MODULE:"module",
   ORDER:"order",
+  CATEGORY:"category",
 };
 
 // if you need a list of all tag types
