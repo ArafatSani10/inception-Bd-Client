@@ -18,7 +18,13 @@ export const userApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.USER],
     }),
+    getInitialLandingPageData: build.query({
+      query: () => ({
+        url: `${AUTH_URL}/initial-data`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useGetMyDataQuery,useLazyGetMyDataQuery } = userApi;
+export const { useGetMyDataQuery, useLazyGetMyDataQuery, useGetInitialLandingPageDataQuery } = userApi;
