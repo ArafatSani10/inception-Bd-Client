@@ -11,8 +11,21 @@ import Podcast from "./Podcast/Podcast";
 import BlogSection from "./Blogsection/BlogSection";
 import VideoSection from "./VideoSection/VideoSection";
 import PartnershipLogo from "./PartnershipLogo/PartnershipLogo";
+import { useGetInitialLandingPageDataQuery } from "../../../redux/api/userApi";
 
 const Home = () => {
+  const {
+    data: initialLandingPageDataRes,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetInitialLandingPageDataQuery();
+  const initialData = initialLandingPageDataRes?.data;
+
+  // Handle loading and error states
+  if (isLoading) {
+    return <div>Loading...</div>; // You can replace this with a spinner or a skeleton loader
+  }
   return (
     <div className=" w-full relative pt-20 px-2 text-gray-900 dark:text-gray-100 transition-colors duration-500 overflow-hidden">
       {/* Light mode background */}
@@ -44,30 +57,31 @@ const Home = () => {
 
           backgroundBlendMode: "screen",
           backgroundRepeat: "no-repeat",
-
         }}
       />
 
       {/* Content */}
       <div className="relative z-10 ">
-
-        <Banner></Banner>
+        <Banner latestCourse={initialData?.latestCourse}></Banner>
         {/* Add more content here */}
 
-        <EstimatedCount></EstimatedCount>
-
+        <EstimatedCount
+          totalEnrolled={initialData?.totalEnrolledStudents}
+          totalCourse={initialData?.totalCourse}
+          totalInstructor={initialData?.totalInstructor}
+        ></EstimatedCount>
 
         {/* top course */}
-        <TopCourses></TopCourses>
+        <TopCourses courses={initialData?.courses} />
 
         {/* all course */}
-        <AllCoursesList></AllCoursesList>
+        <AllCoursesList courses={initialData?.courses} />
 
         {/* our instructor */}
-        <OurInstructor></OurInstructor>
+        <OurInstructor instructors={initialData?.allInstructors} />
 
         {/* coursecategory */}
-        <CourseCategory></CourseCategory>
+        <CourseCategory categories={initialData?.categories} />
 
         {/* video section */}
         <VideoSection></VideoSection>
@@ -81,17 +95,11 @@ const Home = () => {
         {/* podcast */}
         <Podcast></Podcast>
 
-
         {/* blog */}
-        <BlogSection></BlogSection>
+        <BlogSection blogPosts={initialData?.blogs} />
 
         {/* partnershiplogo */}
-        <PartnershipLogo></PartnershipLogo>
-
-
-
-
-
+        <PartnershipLogo brands={initialData?.brands} />
       </div>
     </div>
   );

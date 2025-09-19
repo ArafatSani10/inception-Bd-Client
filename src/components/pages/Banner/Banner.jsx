@@ -10,56 +10,9 @@ import video from "../../../../public/demovideo/snapsave-app_1793955564433189_hd
 import { AnimatePresence, motion } from "framer-motion";
 import LoadingModal from "../../hooks/LoadingModal";
 
-const Banner = () => {
-  const [latestCourse, setLatestCourse] = useState(null);
+const Banner = ({latestCourse}) => {
+
   const [isOpen, setIsOpen] = useState(false);
-  const [instructorData, setInstructorData] = useState(null);
-
-
-  useEffect(() => {
-    const fetchInstructor = async () => {
-      if (!latestCourse?.instructor?.email) return;
-
-      try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
-        const allUsers = res?.data?.data || [];
-        const instructor = allUsers.find(u => u.email === latestCourse.instructor.email);
-        setInstructorData(instructor);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchInstructor();
-  }, [latestCourse]); // latestCourse dependency
-
-
-
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/courses`);
-
-        const courses = res.data.data || [];
-
-        // createdAt field থাকলে sort করে latest নাও
-        const sorted = [...courses].sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-        setLatestCourse(sorted[0]); // সর্বশেষ course
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchCourses();
-  }, []);
-
-  if (!latestCourse) {
-    return <p className="text-center text-gray-600">
-      <LoadingModal></LoadingModal>
-    </p>;
-  }
 
   return (
     <div className="py-16 md:py-24 p-5 max-w-full mx-auto">
@@ -157,12 +110,12 @@ const Banner = () => {
 
           <div className="lg:w-1/2 relative mt-10 lg:mt-0">
 
-            <Link to={`/coursedetails/${latestCourse.slug}`}> <div className="relative max-w-2xl mx-auto w-full">
+            <Link to={`/coursedetails/${latestCourse?.slug}`}> <div className="relative max-w-2xl mx-auto w-full">
               <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-3 w-full relative z-10">
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h3 className="text-xl max-sm:text-xs text-[#00baff] font-bold">
-                      {latestCourse.title}
+                      {latestCourse?.title}
                     </h3>
                     <div className="flex items-center gap-2 mt-2">
                       <div className="flex items-center">
@@ -182,8 +135,8 @@ const Banner = () => {
 
                 <div className="aspect-video rounded-lg mb-4 overflow-hidden">
                   <img
-                    src={latestCourse.thumbnail || "https://via.placeholder.com/600x400"}
-                    alt={latestCourse.name}
+                    src={latestCourse?.thumbnail || "https://via.placeholder.com/600x400"}
+                    alt={latestCourse?.name}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -193,12 +146,12 @@ const Banner = () => {
                   <div className="flex items-center gap-3">
                     <div className="flex gap-3 items-center">
                       <img
-                        src={instructorData?.photo || "https://via.placeholder.com/150"}
-                        alt={instructorData?.name || "Instructor"}
+                        src={latestCourse?.instructor?.photo || "https://via.placeholder.com/150"}
+                        alt={latestCourse?.instructor?.name || "Instructor"}
                         className="w-10 h-10 rounded-full object-cover border-2 border-[#00baff] shadow-md"
                       />
                       <h3 className="mt-1 text-sm font-semibold text-[#00baff] dark:text-[#00baff] text-center">
-                         {instructorData?.name || "Unknown"}
+                         {latestCourse?.instructor?.name || "Unknown"}
                       </h3>
                     </div>
                   </div>
@@ -206,7 +159,7 @@ const Banner = () => {
                   {/* Price */}
                   <div className="text-right">
                     <div className="text-2xl font-bold text-[#00baff]">
-                      ৳{latestCourse.price || "Free"}
+                      ৳{latestCourse?.price || "Free"}
                     </div>
                   </div>
                 </div>

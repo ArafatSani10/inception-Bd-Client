@@ -1,43 +1,6 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import toast from "react-hot-toast";
 
-const PartnershipLogo = () => {
-  const [brands, setBrands] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const fetchBrands = async () => {
-    setLoading(true);
-    try {
-    
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/brands`);
-
-      if (res.data.success) {
-        setBrands(res.data.data);
-      } else {
-        toast.error(res.data.message || "Failed to fetch brands");
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("Error fetching brands");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchBrands();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="py-20 text-center text-gray-700 dark:text-gray-300">
-        Loading logos...
-      </div>
-    );
-  }
-
-  if (!brands.length) {
+const PartnershipLogo = ({ brands }) => {
+  if (!brands?.length) {
     return (
       <div className="py-20 text-center text-gray-700 dark:text-gray-300">
         No brands found.
@@ -53,22 +16,22 @@ const PartnershipLogo = () => {
 
       <div className="relative overflow-hidden">
         <div className="flex animate-scroll gap-10 w-max">
-          {[...brands, ...brands].map((brand, i) => (
+          {brands?.map((brand, i) => (
             <a
               key={i}
-              href={brand.website}
+              href={brand?.website}
               target="_blank"
               rel="noopener noreferrer"
               className="group transform transition duration-300 hover:scale-110"
             >
               <div className="flex flex-col items-center justify-center">
                 <img
-                  src={brand.logo}
-                  alt={brand.name}
+                  src={brand?.logo}
+                  alt={brand?.name}
                   className="h-20 max-sm:h-14 w-auto object-contain rounded-lg shadow-md bg-white p-2 transition duration-300 group-hover:shadow-xl"
                 />
                 <p className="mt-2 text-sm text-gray-700 dark:text-gray-200 font-medium text-center opacity-0 group-hover:opacity-100 transition duration-300">
-                  {brand.name}
+                  {brand?.name}
                 </p>
               </div>
             </a>
