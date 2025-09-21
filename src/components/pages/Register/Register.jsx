@@ -11,6 +11,7 @@ import { getBaseUrl } from "../../../utls/getBaseUrl";
 import RegistarData from "../../../../public/lottie/Register/Appointment booking with smartphone.json"
 import Lottie from "lottie-react";
 import Swal from "sweetalert2";
+import { signOut } from "firebase/auth";
 
 // Generate random 6-digit captcha
 const generateCaptcha = () =>
@@ -78,7 +79,7 @@ const CaptchaSVG = ({ captcha, width = 150, height = 50 }) => {
 
 const Register = () => {
   const navigate = useNavigate();
-  const { createUser } = useContext(AuthContext);
+  const { createUser,signOutUser } = useContext(AuthContext);
   const [captcha, setCaptcha] = useState(generateCaptcha());
   const [userCaptchaInput, setUserCaptchaInput] = useState("");
   const [captchaError, setCaptchaError] = useState("");
@@ -158,6 +159,8 @@ const Register = () => {
 
       // 🔹 Firebase Auth
       await createUser(email, passwordValue, name);
+
+      await signOutUser()
 
       // ✅ Stylish Swal for success
       Swal.fire({

@@ -90,11 +90,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/courses",
-        element: (
-        
-            <Courses />
-       
-        ),
+        element: <Courses />,
       },
 
       {
@@ -112,10 +108,9 @@ const router = createBrowserRouter([
         element: <InstructorPage></InstructorPage>,
       },
 
-
       {
-        path:"/founder-story",
-        element:<FounderStory></FounderStory>
+        path: "/founder-story",
+        element: <FounderStory></FounderStory>,
       },
 
       {
@@ -211,8 +206,8 @@ const router = createBrowserRouter([
         element: <UpdateCourseForm></UpdateCourseForm>,
       },
       {
-        path:"course-students/:courseId",
-        element:<CourseStudents></CourseStudents>
+        path: "course-students/:courseId",
+        element: <CourseStudents></CourseStudents>,
       },
       {
         path: "course-form",
@@ -224,8 +219,8 @@ const router = createBrowserRouter([
       },
 
       {
-        path:"outline",
-        element:<AddCourseOutline></AddCourseOutline>
+        path: "outline",
+        element: <AddCourseOutline></AddCourseOutline>,
       },
 
       // category
@@ -240,7 +235,7 @@ const router = createBrowserRouter([
 
       {
         path: "update-category/:id",
-        element:<UpdateCategoryForm></UpdateCategoryForm>,
+        element: <UpdateCategoryForm></UpdateCategoryForm>,
         // element: <Updatecategory></Updatecategory>,
       },
 

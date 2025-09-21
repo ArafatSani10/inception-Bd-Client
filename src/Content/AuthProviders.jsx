@@ -42,8 +42,9 @@ const AuthProviders = ({ children }) => {
           displayName: name,
           // photoURL optional; we will use email letters for fallback
         });
-        setUser({ ...userCredential.user, displayName: name });
+        // setUser({ ...userCredential.user, displayName: name });
         setLoading(false);
+        return userCredential.user;
       })
       .catch((err) => {
         console.log("google error", err);
