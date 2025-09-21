@@ -13,6 +13,7 @@ const CourseForm = () => {
 
   const { register, control, handleSubmit, watch, setValue, reset } = useForm({
     defaultValues: {
+      type: "paid",
       instructor: "",
       instructorTitle: "",
       title: "",
@@ -245,6 +246,21 @@ const CourseForm = () => {
             />
           </div>
 
+          <div>
+            <label>Course Type</label>
+            {/* <input
+              type="number"
+              {...register("price")}
+              className="w-full p-2 border rounded dark:bg-gray-900 dark:text-white"
+            /> */}
+            <select
+              {...register("type")}
+              className="w-full p-2 border rounded dark:bg-gray-900 dark:text-white"
+            >
+              <option value="paid">Paid</option>
+              <option value="free">Free</option>
+            </select>
+          </div>
           <div>
             <label>Price</label>
             <input
