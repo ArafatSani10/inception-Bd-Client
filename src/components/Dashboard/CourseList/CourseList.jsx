@@ -295,7 +295,7 @@ const handleDeleteCourse = async (courseId) => {
                 "Price",
                 "Students",
                 "Created",
-                "Updated",
+                "Course Type",
                 "Status",
                 "Approval",
                 "Actions",
@@ -324,7 +324,7 @@ const handleDeleteCourse = async (courseId) => {
                   </div>
                 </td>
                 <td className="px-4 py-3">{course.instructor?.name}</td>
-                <td className="px-4 py-3">{course.price}</td>
+                <td className="px-4 py-3">৳ {course.price}</td>
                 <td className="px-4 py-3">
                   <Link
                     to={`/dashboard/course-students/${course._id}`}
@@ -334,7 +334,7 @@ const handleDeleteCourse = async (courseId) => {
                   </Link>
                 </td>
                 <td className="px-4 py-3">{formatDate(course.createdAt)}</td>
-                <td className="px-4 py-3">{formatDate(course.updatedAt)}</td>
+                <td className="px-4 py-3">{course?.type}</td>
                 <td className="px-4 py-3">
                   <span
                     className={`px-3 py-1 text-xs rounded-full text-white ${

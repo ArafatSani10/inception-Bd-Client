@@ -1,10 +1,7 @@
-
-
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import AuthContext from "../../../../Content/Authcontext";
-
-
+import Swal from "sweetalert2";
 
 const StudentUpdateProfile = () => {
   const { user, updateUser } = useContext(AuthContext);
@@ -76,7 +73,32 @@ const StudentUpdateProfile = () => {
           withCredentials: true,
         }
       );
-      toast.success("profile updated successfully");
+      console.log("profile update response:", res);
+      Swal.fire({
+        icon: "success",
+        title: "Profile Updated!",
+        text: "Your profile has been updated successfully 🎉",
+        confirmButtonText: "Great!",
+        customClass: {
+          popup: "rounded-2xl shadow-xl p-5",
+          title: "text-xl font-semibold",
+          content: "text-gray-200",
+          confirmButton:
+            "px-6 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition",
+        },
+        background: "rgba(15, 23, 42, 0.85)", // subtle dark glass effect
+        color: "#f8fafc",
+        didOpen: () => {
+          const SwalContainer = Swal.getPopup();
+          if (SwalContainer) {
+            SwalContainer.style.border = "2px solid rgba(56, 189, 248, 0.7)";
+            SwalContainer.style.backdropFilter = "blur(6px)";
+          }
+        },
+        willClose: () => {
+          location.reload(); // Confirm click -> page reload
+        },
+      });
 
       const updatedUser = res.data.data || { ...dbUser, ...updatedData };
       updateUser(updatedUser);
