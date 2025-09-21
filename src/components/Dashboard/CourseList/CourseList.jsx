@@ -324,7 +324,7 @@ const handleDeleteCourse = async (courseId) => {
                   </div>
                 </td>
                 <td className="px-4 py-3">{course.instructor?.name}</td>
-                <td className="px-4 py-3">${course.price}</td>
+                <td className="px-4 py-3">{course.price}</td>
                 <td className="px-4 py-3">
                   <Link
                     to={`/dashboard/course-students/${course._id}`}

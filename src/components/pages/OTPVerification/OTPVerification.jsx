@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import Lottie from "lottie-react";
 import OTPLottie from "../../../../public/lottie/opt/Otp verification.json"; // আপনার Lottie path adjust করুন
 import axios from "axios";
-import { toast } from "react-toastify";
+
 import { useNavigate } from "react-router";
+import toast from "react-hot-toast";
 
 const OTPVerification = () => {
   const [otp, setOtp] = useState("");
@@ -15,7 +16,7 @@ const OTPVerification = () => {
     e.preventDefault();
     setIsSubmitting(true);
     // alert("verify hit")
-    console.log("otp", otp)
+    console.log("otp", otp);
     if (otp.length !== 6) {
       setError("OTP must be 6 digits");
       setIsSubmitting(false);
@@ -23,17 +24,19 @@ const OTPVerification = () => {
     }
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/verify-otp`, { otp })
-      console.log("otp response", response.data)
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/auth/verify-otp`,
+        { otp }
+      );
+      console.log("otp response", response.data);
 
       navigate("/login");
-    } catch (
-    error
-    ) {
-      console.log("otp verify error", error)
-      toast.error(error?.message || "something went wrong..")
+    } catch (error) {
+      console.log("otp verify error", error);
+      setError(error?.response?.data?.message || "Something went wrong");
+      toast.error(error?.message || "something went wrong..");
+      setIsSubmitting(false);
     }
-
   };
 
   // const handleResend = () => {
@@ -71,9 +74,7 @@ const OTPVerification = () => {
             required
           />
 
-          {error && (
-            <p className="text-red-500 text-sm font-medium">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-sm font-medium text-center">{error}</p>}
 
           <button
             type="submit"
