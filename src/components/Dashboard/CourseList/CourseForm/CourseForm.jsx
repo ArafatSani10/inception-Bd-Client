@@ -21,7 +21,7 @@ const CourseForm = () => {
       demoImage: null,
       coverPhoto: null,
       instructorImage: null,
-      price: "",
+      price: 0,
       description: "",
       startingDate: "",
       duration: "",

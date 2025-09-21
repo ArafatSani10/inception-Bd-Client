@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import AuthContext from "../../../../Content/Authcontext";
@@ -28,7 +26,6 @@ const Navbar = () => {
     { name: "Founder Story", href: "/founder-story" },
     { name: "Contact us", href: "/contact" },
     { name: "Blog", href: "/blog" },
-
   ];
 
   // Toggle Dark Mode
@@ -99,16 +96,16 @@ const Navbar = () => {
 
       // Stylish compact SweetAlert
       Swal.fire({
-        title: '👋 Logged out!',
-        icon: 'info',
+        title: "👋 Logged out!",
+        icon: "info",
         showConfirmButton: false,
         timer: 1500,
-        background: 'linear-gradient(135deg, #42275a, #734b6d)', // unique gradient
-        color: '#fff',
-        padding: '1.5rem',
-        iconColor: '#ff6b6b',
+        background: "linear-gradient(135deg, #42275a, #734b6d)", // unique gradient
+        color: "#fff",
+        padding: "1.5rem",
+        iconColor: "#ff6b6b",
         toast: true,
-        position: 'top-end'
+        position: "top-end",
       }).then(() => {
         navigate("/login"); // redirect to login page after Swal closes
       });
@@ -118,7 +115,6 @@ const Navbar = () => {
     }
   };
 
-
   return (
     <>
       <ToastContainer position="top-right" />
@@ -127,15 +123,19 @@ const Navbar = () => {
           {/* Logo */}
           <div className="text-2xl font-extrabold select-none cursor-default">
             <Link to="/">
-              <img
-                className="max-sm:w-[130px] w-[150px]"
-                src={
-                  isDarkMode
-                    ? "https://i.ibb.co/cKzQyBNk/534732164-2212940409145293-5451801233054972764-n.jpg"
-                    : "https://i.ibb.co/v6c6bv8w/2e8737d8-8837-4936-aaae-723c2fa0c1e0.jpg"
-                }
-                alt="Logo"
-              />
+              {isDarkMode ? (
+                <img
+                  className="max-sm:w-[130px] w-[150px]"
+                  src="/logo-dark.png"
+                  alt="Logo"
+                />
+              ) : (
+                <img
+                  className="max-sm:w-[130px] w-[150px] "
+                  src="/logo-light.png"
+                  alt="Logo"
+                />
+              )}
             </Link>
           </div>
 
@@ -157,9 +157,10 @@ const Navbar = () => {
                 key={name}
                 to={href}
                 className={({ isActive }) =>
-                  `relative group transition-colors duration-300 text-sm ${isActive
-                    ? "text-[#00baff]"
-                    : "hover:text-[#00baff] dark:hover:text-[#00baff]"
+                  `relative group transition-colors duration-300 text-sm ${
+                    isActive
+                      ? "text-[#00baff]"
+                      : "hover:text-[#00baff] dark:hover:text-[#00baff]"
                   }`
                 }
               >
@@ -167,7 +168,6 @@ const Navbar = () => {
                 <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-[#00baff] dark:bg-[#00baff] group-hover:w-full transition-all duration-300"></span>
               </NavLink>
             ))}
-
 
             {/* User Dropdown */}
             <div className="relative ml-6" ref={dropdownRef}>
@@ -215,7 +215,10 @@ const Navbar = () => {
                     <button
                       onClick={() => {
                         if (!dbUser) return;
-                        if (dbUser.role === "admin" || dbUser.role === "instructor") {
+                        if (
+                          dbUser.role === "admin" ||
+                          dbUser.role === "instructor"
+                        ) {
                           navigate("/dashboard/admin-home");
                         } else {
                           navigate("/student-dashboard/user-home");
@@ -404,8 +407,9 @@ const Navbar = () => {
         {/* Mobile Menu Panel */}
         <div
           ref={menuRef}
-          className={`fixed top-0 right-0 h-full w-72 bg-white dark:bg-gray-900 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${isMenuOpen ? "translate-x-0" : "translate-x-full"
-            }`}
+          className={`fixed top-0 right-0 h-full w-72 bg-white dark:bg-gray-900 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
+            isMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
         >
           <div className="flex flex-col p-6 pt-8 space-y-4 text-sm font-medium text-gray-700 dark:text-gray-300 h-full overflow-y-auto">
             {navItems.map(({ name, href }) => (
