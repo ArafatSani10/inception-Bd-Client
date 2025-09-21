@@ -1,12 +1,8 @@
-
-
 // import React, { useState, useEffect, useContext } from "react";
 // import axios from "axios";
 // import AuthContext from "../../../Content/Authcontext";
 // import { toast } from "react-toastify";
 // // import AuthContext from "../../../../Content/Authcontext";
-
-
 
 // const UpdateProfile = () => {
 //   const { user, updateUser } = useContext(AuthContext);
@@ -97,7 +93,6 @@
 //           withCredentials: true,
 //         }
 //       );
-
 
 //       const updatedUser = res.data.data || { ...dbUser, ...updatedData };
 //       updateUser(updatedUser);
@@ -243,7 +238,6 @@
 //             </div>
 //           )}
 
-
 //           {activeTab === "skills" && (
 //             <div className="space-y-4">
 //               <div>
@@ -289,7 +283,6 @@
 //             </div>
 //           )}
 
-
 //           {activeTab === "social Media" && (
 //             <div className="space-y-4">
 //               <div>
@@ -300,7 +293,7 @@
 //                   value={dbUser.facebook || ""}
 //                   onChange={handleChange}
 //                   placeholder="https://facebook.com/username"
-//                   className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg 
+//                   className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg
 //         bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
 //                 />
 //               </div>
@@ -312,7 +305,7 @@
 //                   value={dbUser.youtube || ""}
 //                   onChange={handleChange}
 //                   placeholder="https://youtube.com/username"
-//                   className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg 
+//                   className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg
 //         bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
 //                 />
 //               </div>
@@ -325,7 +318,7 @@
 //                   value={dbUser.linkedin || ""}
 //                   onChange={handleChange}
 //                   placeholder="https://linkedin.com/in/username"
-//                   className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg 
+//                   className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg
 //         bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
 //                 />
 //               </div>
@@ -338,7 +331,7 @@
 //                   value={dbUser.github || ""}
 //                   onChange={handleChange}
 //                   placeholder="https://github.com/username"
-//                   className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg 
+//                   className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg
 //         bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
 //                 />
 //               </div>
@@ -351,14 +344,12 @@
 //                   value={dbUser.twitter || ""}
 //                   onChange={handleChange}
 //                   placeholder="https://twitter.com/username"
-//                   className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg 
+//                   className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg
 //         bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
 //                 />
 //               </div>
 //             </div>
 //           )}
-
-
 
 //           <div>
 //             <button
@@ -375,9 +366,6 @@
 // };
 
 // export default UpdateProfile;
-
-
-
 
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
@@ -474,24 +462,6 @@ const UpdateProfile = () => {
         }
       );
 
-      const updatedUser = res.data.data || { ...dbUser, ...updatedData };
-      updateUser(updatedUser);
-
-      // Swal.fire({
-      //   icon: "success",
-      //   title: "Success!",
-      //   text: "Your profile has been updated successfully.",
-      //   confirmButtonText: "OK",
-      //   didOpen: () => {
-      //     const SwalContainer = Swal.getPopup();
-      //     if (SwalContainer) {
-      //       SwalContainer.style.backgroundColor = 'var(--bg-color-1)';
-      //       SwalContainer.style.color = 'var(--text-color-1)';
-      //     }
-      //   }
-      // });
-    } catch (err) {
-      console.error(err.response?.data || err.message);
       Swal.fire({
         icon: "success",
         title: "Profile Updated!",
@@ -501,7 +471,8 @@ const UpdateProfile = () => {
           popup: "rounded-2xl shadow-xl p-5",
           title: "text-xl font-semibold",
           content: "text-gray-200",
-          confirmButton: "px-6 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition"
+          confirmButton:
+            "px-6 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition",
         },
         background: "rgba(15, 23, 42, 0.85)", // subtle dark glass effect
         color: "#f8fafc",
@@ -514,10 +485,13 @@ const UpdateProfile = () => {
         },
         willClose: () => {
           location.reload(); // Confirm click -> page reload
-        }
+        },
       });
 
-
+      const updatedUser = res.data.data || { ...dbUser, ...updatedData };
+      updateUser(updatedUser);
+    } catch (err) {
+      console.error("profile updated error", err.response?.data || err.message);
     } finally {
       setIsUpdating(false); // Stop loading
     }
@@ -530,8 +504,7 @@ const UpdateProfile = () => {
       </div>
     );
 
-  if (error)
-    return <p className="text-center text-red-500 mt-20">{error}</p>;
+  if (error) return <p className="text-center text-red-500 mt-20">{error}</p>;
   if (!dbUser)
     return (
       <p className="text-center text-gray-500 dark:text-gray-400 mt-20">
@@ -566,10 +539,11 @@ const UpdateProfile = () => {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 -mb-px font-semibold border-b-2 transition-all ${activeTab === tab
-                ? "border-blue-500 text-blue-500"
-                : "border-transparent text-gray-500 dark:text-gray-400"
-                }`}
+              className={`px-4 py-2 -mb-px font-semibold border-b-2 transition-all ${
+                activeTab === tab
+                  ? "border-blue-500 text-blue-500"
+                  : "border-transparent text-gray-500 dark:text-gray-400"
+              }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>

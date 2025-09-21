@@ -146,21 +146,21 @@ const UserProfile = () => {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-4 bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+                    {/* <div className="flex items-center gap-4 bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
                         <div className="text-2xl"><FaKey className="text-yellow-500" /></div>
                         <div>
                             <p className="text-gray-500 dark:text-gray-400 text-sm">OTP Code</p>
                             <p className="font-semibold text-lg">{dbUser.otpCode}</p>
                         </div>
-                    </div>
+                    </div> */}
 
-                    <div className="flex items-center gap-4 bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+                    {/* <div className="flex items-center gap-4 bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
                         <div className="text-2xl"><FaCalendarAlt className="text-gray-500 dark:text-gray-400" /></div>
                         <div>
                             <p className="text-gray-500 dark:text-gray-400 text-sm">OTP Expiry</p>
                             <p className="font-semibold text-lg">{new Date(dbUser.otpExpiresAt).toLocaleString()}</p>
                         </div>
-                    </div>
+                    </div> */}
 
                     <Link to="/dashboard/update-profile">
                         <div className="flex items-center gap-4 bg-white dark:bg-gray-800 p-10 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
