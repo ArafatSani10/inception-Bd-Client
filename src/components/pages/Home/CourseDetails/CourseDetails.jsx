@@ -183,7 +183,7 @@ const CourseDetails = () => {
         <div className="w-full lg:w-2/3 mx-auto border-2 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900">
           {/* Tabs */}
           <div className="flex border-b border-gray-300 dark:border-gray-700">
-            {["information", "content", "review"].map((tab) => (
+            {["information", "Course Curriculum", "review"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -219,6 +219,7 @@ const CourseDetails = () => {
                         <span className="text-lg font-medium text-gray-900 dark:text-gray-100">
                           {point.subject || point}
                         </span>
+
                         <span className="text-blue-600 dark:text-blue-400">
                           {openLearning === index ? <FaMinus /> : <FaPlus />}
                         </span>
@@ -235,14 +236,11 @@ const CourseDetails = () => {
                           >
                             <div className="px-6 py-4 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-t dark:border-gray-700">
                               {/* Column Layout */}
-                              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                              <div className="grid grid-cols-1 gap-4">
                                 {point.subtitle?.map((sub, subIndex) => (
-                                  <div
-                                    key={subIndex}
-                                    className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3 text-sm"
-                                  >
-                                    {sub}
-                                  </div>
+                                  <span key={subIndex} className="flex items-center gap-2">
+                                    <MdOutlineDone /> {sub}
+                                  </span>
                                 ))}
                               </div>
                             </div>
@@ -358,7 +356,7 @@ const CourseDetails = () => {
                             </div>
                         )}  */}
 
-            {activeTab === "content" && (
+            {activeTab === "Course Curriculum" && (
               <>
                 <CourseOutlineTab course={course} />
               </>
@@ -417,16 +415,13 @@ const CourseDetails = () => {
                   </div>
                 </Link>
               ) : (
-                // <Link to="/checkout" state={{ course }}>
-                //     <div className="flex justify-center">
-                //         <button className="p-2 text-center bg-[#00baff] hover:bg-gray-800 transition-all duration-300 rounded-xl my-2 text-white w-full">
-                //             Enroll on course
-                //         </button>
-                //     </div>
-                // </Link>
-                <p className="p-2 text-center bg-[#00baff] hover:bg-gray-800 transition-all duration-300 rounded-xl my-2 text-white w-full">
-                  Coming soon: Secure your spot in this course!
-                </p>
+                <Link to="/checkout" state={{ course }}>
+                  <div className="flex justify-center">
+                    <button className="p-2 text-center bg-[#00baff] hover:bg-gray-800 transition-all duration-300 rounded-xl my-2 text-white w-full">
+                      Enroll on course
+                    </button>
+                  </div>
+                </Link>
               )}
 
               <div className="text-center text-sm opacity-60">
