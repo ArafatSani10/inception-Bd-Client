@@ -116,7 +116,7 @@ const AllCoursesGrid = () => {
                 {/* Price & Enroll */}
                 <div className="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
                   <span className="text-xl font-bold text-[#00baff]">
-                    ৳{course.price}
+                     {!course?.price ? "Free" : `৳ ${course?.price}`}
                   </span>
                   <button className="bg-[#00baff] hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">
                     Enroll Now

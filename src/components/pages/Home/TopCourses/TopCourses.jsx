@@ -9,13 +9,62 @@ import axios from "axios";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { motion } from "framer-motion";
 
-const TopCourses = ({ courses }) => {
+const TopCourses = () => {
   const prevRef = useRef(null);
-    const nextRef = useRef(null);
-  if (!courses?.length)
+  const nextRef = useRef(null);
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/courses`);
+        const data = res.data.data || [];
+
+        const formattedCourses = data.map((course) => {
+          const instructor = course.instructor || {};
+          return {
+            ...course,
+            instructorName: instructor.name || "Unknown",
+            instructorImage:
+              instructor.photo ||
+              instructor.image ||
+              "https://randomuser.me/api/portraits/lego/1.jpg",
+            category: course.category || { name: "General" },
+            thumbnail:
+              course.thumbnail ||
+              "https://via.placeholder.com/400x200?text=Course+Image",
+            rating: course.rating || 4.5,
+            duration: course.duration || "N/A",
+            price: course.price || 0,
+          };
+        });
+
+        setCourses(formattedCourses);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to fetch courses.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  if (loading)
     return (
-      <div className="p-6 text-center text-gray-500">No courses available.</div>
+      <div className="flex items-center justify-center h-screen bg-white dark:bg-gray-900">
+        <motion.div
+          className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full"
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+        />
+      </div>
     );
+
 
   return (
     <div className="py-24 w-full relative">
@@ -80,14 +129,14 @@ const TopCourses = ({ courses }) => {
                       {/* Instructor */}
                       <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                         <img
-                          src={course?.instructor?.instructorImage}
+                          src={course?.instructor?.photo}
                           alt={course?.instructor?.instructorName}
                           className="w-8 h-8 rounded-full object-cover border-2 border-[#00baff]"
                         />
                         <span>
                           Instructor:{" "}
                           <span className="font-medium">
-                            {course?.instructor?.instructorName}
+                            {course?.instructor?.name}
                           </span>
                         </span>
                       </div>
@@ -102,11 +151,10 @@ const TopCourses = ({ courses }) => {
                           {course?.duration} Hours
                         </span>
                       </div>
-
                       {/* Price & Enroll */}
                       <div className="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
                         <span className="text-xl font-bold text-[#00baff]">
-                          ৳{course?.price}
+                          {!course?.price ? "Free" : `৳ ${course?.price}`}
                         </span>
                         <button className="bg-[#00baff] hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">
                           Enroll Now
