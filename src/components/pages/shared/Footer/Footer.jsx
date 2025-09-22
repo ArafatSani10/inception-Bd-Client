@@ -7,7 +7,7 @@ import {
 import { FaGithub, FaGithubAlt, FaTwitter } from 'react-icons/fa6';
 
 const navItems = [
-    { name: "Verify Certificate", path: "/verify-certificate" },
+    // { name: "Verify Certificate", path: "/verify-certificate" },
     { name: "Terms & Conditions", path: "/terms-and-conditions" },
     { name: "Privacy & Policy", path: "/privacy-and-policy" },
     { name: "Refund Policy", path: "/refund-and-policy" },

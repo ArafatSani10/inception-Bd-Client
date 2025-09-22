@@ -9,7 +9,6 @@ import { useGetMyDataQuery } from "../../../redux/api/userApi";
 const Courses = () => {
   const { data: myDateRes, isLoading } = useGetMyDataQuery();
   const myData = myDateRes?.data;
-  console.log("my data", myData);
   return (
     <div className="min-h-screen w-full relative pt-20 text-gray-900 dark:text-gray-100 transition-colors duration-500 overflow-hidden">
       {/* Light mode background */}

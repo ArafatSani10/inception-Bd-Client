@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { toast } from "react-toastify";
-
-import { motion } from "framer-motion";
-
 // Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
@@ -34,9 +29,9 @@ const CourseCategory = ({ categories: categoriesData, courses: coursesData }) =>
     const fetchData = async () => {
       try {
        
-        const data = courses?.map((cat, index) => {
+        const data = categories?.map((cat, index) => {
           // count calculation
-          const count = courses.filter((course) => {
+          const count = courses?.filter((course) => {
             if (typeof course.category === "string") {
               return course.category.toLowerCase() === cat.name.toLowerCase();
             }
