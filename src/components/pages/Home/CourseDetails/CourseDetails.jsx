@@ -20,6 +20,7 @@ import { useMyOrdersQuery } from "../../../../redux/api/orderApi";
 import AuthContext from "../../../../Content/Authcontext";
 import CourseContent from "./CourseContent";
 import CourseOutlineTab from "../../../CourseOutlineTab";
+import { Loader } from "lucide-react";
 
 const CourseDetails = () => {
   const [openIndex, setOpenIndex] = useState(null);
@@ -86,8 +87,13 @@ const CourseDetails = () => {
     fetchInstructor();
   }, [course]);
 
-  if (loading) return <p className="text-center py-10">Loading...</p>;
-  if (!course) return <p className="text-center py-10">Course not found.</p>;
+  if (loading || !course) {
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <Loader className="size-10 animate-spin " />
+      </div>
+    );
+  }
 
   // Calculate price display
   const isPaid = course.type === "paid";
@@ -238,7 +244,10 @@ const CourseDetails = () => {
                               {/* Column Layout */}
                               <div className="grid grid-cols-1 gap-4">
                                 {point.subtitle?.map((sub, subIndex) => (
-                                  <span key={subIndex} className="flex items-center gap-2">
+                                  <span
+                                    key={subIndex}
+                                    className="flex items-center gap-2"
+                                  >
                                     <MdOutlineDone /> {sub}
                                   </span>
                                 ))}
