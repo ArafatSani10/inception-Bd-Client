@@ -19,6 +19,7 @@ export default function CheckoutPage() {
   const [discountedPrice, setDiscountedPrice] = useState(course?.price || 0);
   const [couponMessage, setCouponMessage] = useState("");
 
+
   const API_URL = import.meta.env.VITE_API_URL;
 
   // fetch logged-in user info
@@ -43,6 +44,7 @@ export default function CheckoutPage() {
         }
       } catch (err) {
         console.error("Coupons fetch error:", err);
+        
       }
     };
     fetchCoupons();
