@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { motion } from "framer-motion";
+import { Loader } from "lucide-react";
 
 const TopCourses = () => {
   const prevRef = useRef(null);
@@ -50,21 +51,16 @@ const TopCourses = () => {
         setLoading(false);
       }
     };
-
+    window.scrollTo(0, 0);
     fetchCourses();
   }, []);
 
   if (loading)
     return (
-      <div className="flex items-center justify-center h-screen bg-white dark:bg-gray-900">
-        <motion.div
-          className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full"
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-        />
+      <div className="min-h-[50vh] flex justify-center items-center">
+        <Loader className="size-10 animate-spin " />
       </div>
     );
-
 
   return (
     <div className="py-24 w-full relative">

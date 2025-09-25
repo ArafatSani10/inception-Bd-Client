@@ -2,14 +2,17 @@ import React, { useEffect, useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import AuthContext from "../../../Content/Authcontext";
+import { toast, ToastContainer } from "react-toastify";
+import { Loader } from "lucide-react";
 
 export default function CheckoutPage() {
   const { register, handleSubmit } = useForm();
   const location = useLocation();
   const { course } = location.state || {};
   const { user } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
 
   // console.log("course data",course?.price)
 
@@ -18,7 +21,6 @@ export default function CheckoutPage() {
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [discountedPrice, setDiscountedPrice] = useState(course?.price || 0);
   const [couponMessage, setCouponMessage] = useState("");
-
 
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -44,7 +46,6 @@ export default function CheckoutPage() {
         }
       } catch (err) {
         console.error("Coupons fetch error:", err);
-        
       }
     };
     fetchCoupons();
@@ -64,7 +65,7 @@ export default function CheckoutPage() {
 
       console.log("courpon res", res?.data?.data);
 
-      const couponData =  res?.data?.data;
+      const couponData = res?.data?.data;
 
       if (couponData) {
         const originalPrice = Number(course.price || 0);
@@ -73,10 +74,11 @@ export default function CheckoutPage() {
         if (couponData.discountType === "fixed")
           discountAmount = Number(couponData.discountValue);
         if (couponData.discountType === "percentage")
-          discountAmount = (originalPrice * Number(couponData.discountValue)) / 100;
+          discountAmount =
+            (originalPrice * Number(couponData.discountValue)) / 100;
 
         let finalPrice = originalPrice - discountAmount;
-        console.log("final price",finalPrice)
+        console.log("final price", finalPrice);
         if (finalPrice < 0) finalPrice = 0;
 
         setDiscountedPrice(finalPrice);
@@ -92,29 +94,36 @@ export default function CheckoutPage() {
       setAppliedCoupon(null);
       setDiscountedPrice(course.price);
       setCouponMessage("❌ Failed to apply coupon!");
+      if (err instanceof AxiosError) {
+        toast.error(err.response?.data?.message);
+      }
     }
   };
 
   // Checkout
   const onCheckout = async () => {
+    setLoading(true);
     try {
       const payload = {
         user: userInfo?._id,
         course: course._id,
-        price: discountedPrice
+        price: discountedPrice,
       };
       const res = await axios.post(`${API_URL}/orders`, payload);
       window.location.href = res?.data?.data?.url;
     } catch (err) {
       console.error("Order failed:", err);
+      setLoading(false);
       alert("Failed to place order!");
     }
   };
 
   if (!course) {
     return (
-      <div className="text-center mt-20 text-lg font-semibold text-red-500">
-        No course selected!
+      <div className="min-h-screen flex items-center justify-center">
+        <span>
+          <Loader className="animate-spin w-5 h-5" />
+        </span>
       </div>
     );
   }
@@ -212,9 +221,17 @@ export default function CheckoutPage() {
             <button
               type="button"
               onClick={onCheckout}
-              className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold hover:opacity-90 shadow-lg transition-all duration-300 cursor-pointer"
+              disabled={loading}
+              className="disabled:bg-blend-multiply disabled:cursor-not-allowed w-full px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold hover:opacity-90 shadow-lg transition-all duration-300 cursor-pointer"
             >
-              Checkout
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <Loader className="animate-spin w-5 h-5" />
+                  Loading....
+                </span>
+              ) : (
+                "Checkout"
+              )}
             </button>
           </form>
 
@@ -241,6 +258,7 @@ export default function CheckoutPage() {
           )} */}
         </motion.div>
       </div>
+      <ToastContainer position="top-right" theme="colored" />
     </div>
   );
 }

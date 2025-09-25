@@ -12,6 +12,7 @@ import BlogSection from "./Blogsection/BlogSection";
 import VideoSection from "./VideoSection/VideoSection";
 import PartnershipLogo from "./PartnershipLogo/PartnershipLogo";
 import { useGetInitialLandingPageDataQuery } from "../../../redux/api/userApi";
+import { Loader } from "lucide-react";
 
 const Home = () => {
   const {
@@ -24,10 +25,14 @@ const Home = () => {
 
   // Handle loading and error states
   if (isLoading) {
-    return <div>Loading...</div>; // You can replace this with a spinner or a skeleton loader
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <Loader className="size-10 animate-spin " />
+      </div>
+    );
   }
   return (
-    <div className=" w-full relative pt-20 px-2 text-gray-900 dark:text-gray-100 transition-colors duration-500 overflow-hidden">
+    <div className="min-h-screen w-full relative pt-20 px-2 text-gray-900 dark:text-gray-100 transition-colors duration-500 overflow-hidden">
       {/* Light mode background */}
       <div
         className="absolute inset-0 z-0 dark:hidden"
@@ -96,10 +101,14 @@ const Home = () => {
         <Podcast></Podcast>
 
         {/* blog */}
-        <BlogSection blogPosts={initialData?.blogs} />
+        {initialData?.blogs?.length > 0 && (
+          <BlogSection blogPosts={initialData?.blogs} />
+        )}
 
         {/* partnershiplogo */}
-        <PartnershipLogo brands={initialData?.brands} />
+        {initialData?.brands?.length > 0 && (
+          <PartnershipLogo brands={initialData?.brands} />
+        )}
       </div>
     </div>
   );
