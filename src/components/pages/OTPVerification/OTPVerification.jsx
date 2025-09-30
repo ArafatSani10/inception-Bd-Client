@@ -3,7 +3,7 @@ import Lottie from "lottie-react";
 import OTPLottie from "../../../../public/lottie/opt/Otp verification.json"; // আপনার Lottie path adjust করুন
 import axios from "axios";
 
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import toast from "react-hot-toast";
 
 const OTPVerification = () => {
@@ -11,6 +11,8 @@ const OTPVerification = () => {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { isForgotPassword, email } = location.state || {};
 
   const handleVerify = async (e) => {
     e.preventDefault();
@@ -28,9 +30,12 @@ const OTPVerification = () => {
         `${import.meta.env.VITE_API_URL}/auth/verify-otp`,
         { otp }
       );
-      console.log("otp response", response.data);
 
-      navigate("/login");
+      if (response.status === 200 && isForgotPassword) {
+        navigate("/reset-password", { state: { email } });
+      } else {
+        navigate("/login");
+      }
     } catch (error) {
       console.log("otp verify error", error);
       setError(error?.response?.data?.message || "Something went wrong");
@@ -74,7 +79,11 @@ const OTPVerification = () => {
             required
           />
 
-          {error && <p className="text-red-500 text-sm font-medium text-center">{error}</p>}
+          {error && (
+            <p className="text-red-500 text-sm font-medium text-center">
+              {error}
+            </p>
+          )}
 
           <button
             type="submit"
