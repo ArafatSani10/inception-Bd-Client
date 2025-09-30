@@ -51,13 +51,19 @@ const founders = [
       { icon: <FaGoogle />, url: "https://scholar.google.com/citations?hl=en&user=Z64la9EAAAAJ" },
     ],
     companies: [
-      "Inception BD",
-      "Quantum Human",
-      "Euron",
-      "Physics Wallah",
-      "iNeuron.ai",
       "Japan-Bangladesh Robotics & Advanced Research Center (JBRATRC)",
       "Pangaea X",
+      "iNeuron.ai",
+      "Physics Wallah",
+      "Euron",
+      "Quantum Human",
+
+
+
+      "Inception BD",
+
+
+
     ],
   },
   {
@@ -75,7 +81,7 @@ const founders = [
         url: "https://www.linkedin.com/in/dabasish-kumar-biswas/",
       },
 
-       { icon: <FaGithub />, url: "https://github.com/EntDabasishkb" },
+      { icon: <FaGithub />, url: "https://github.com/EntDabasishkb" },
       {
         icon: <FaInstagram />,
         url: "https://www.instagram.com/dabasish_kumar_biswas/",
@@ -85,7 +91,7 @@ const founders = [
   },
   {
     name: "MD. MAMUN OR RASHID",
-    role: "Co-Founder & Operating Officer",
+    role: "Co-Founder & Marketing Officer ",
     bio: "Marketing Operations Specialist with over 4 years of industry experience in Marketing Automation, Campaign Analytics, Lead Management, Martech Stack Optimization, Data-Driven Strategy, and Cross-Channel Execution.",
     image: "https://i.ibb.co.com/dJxhW1Vh/481925168-2330025807396861-1487864547235476687-n.jpg",
     socials: [
@@ -128,9 +134,8 @@ const FounderStory = () => {
             >
               {/* Image */}
               <div
-                className={`${
-                  isEven ? "md:order-1" : "md:order-2"
-                } order-1 relative flex items-center justify-center`}
+                className={`${isEven ? "md:order-1" : "md:order-2"
+                  } order-1 relative flex items-center justify-center`}
               >
                 <img
                   src={person.image}
@@ -141,9 +146,8 @@ const FounderStory = () => {
 
               {/* Info */}
               <div
-                className={`${
-                  isEven ? "md:order-2" : "md:order-1"
-                } order-2 space-y-6`}
+                className={`${isEven ? "md:order-2" : "md:order-1"
+                  } order-2 space-y-6`}
               >
                 <h3 className="text-2xl sm:text-3xl font-bold text-[#00baff]">
                   {person.name}
