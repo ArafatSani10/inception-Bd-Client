@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronDown, FaChevronUp, FaBars, FaTimes } from "react-icons/fa";
@@ -19,11 +17,11 @@ const ModulePage = () => {
   const [resoursceUrl, setResourceUrl] = useState(null);
 
   useEffect(() => {
-    if (classUrl) window.location.href = classUrl;
+    if (classUrl) window.open(classUrl, "_blank");
   }, [classUrl]);
 
   useEffect(() => {
-    if (resoursceUrl) window.location.href = resoursceUrl;
+    if (resoursceUrl) window.open(resoursceUrl, "_blank");
   }, [resoursceUrl]);
 
   if (isLoading) return <p className="text-center py-10">Loading...</p>;
@@ -155,27 +153,28 @@ const ModulePage = () => {
                           className="mt-3 pl-3 border-l-2 border-green-500 space-y-2"
                         >
                           {module?.data?.map((mod, i) => (
-  <React.Fragment key={i}>
-    {mod?.contents?.map((content, ci) => (
-      <li
-        key={`${i}-${ci}`}
-        className="p-2 rounded-md cursor-pointer text-sm hover:bg-gray-100 dark:hover:bg-gray-600"
-        onClick={() => {
-          if (module.title === "Recorded Class") {
-            setVideoUrl(content.content);
-          } else if (module.title === "Class Materials") {
-            setResourceUrl(content.content);
-          } else {
-            setClassUrl(content.content);
-          }
-        }}
-      >
-        {content?.title}
-      </li>
-    ))}
-  </React.Fragment>
-))}
-
+                            <React.Fragment key={i}>
+                              {mod?.contents?.map((content, ci) => (
+                                <li
+                                  key={`${i}-${ci}`}
+                                  className="p-2 rounded-md cursor-pointer text-sm hover:bg-gray-100 dark:hover:bg-gray-600"
+                                  onClick={() => {
+                                    if (module.title === "Recorded Class") {
+                                      setVideoUrl(content.content);
+                                    } else if (
+                                      module.title === "Class Materials"
+                                    ) {
+                                      setResourceUrl(content.content);
+                                    } else {
+                                      setClassUrl(content.content);
+                                    }
+                                  }}
+                                >
+                                  {content?.title}
+                                </li>
+                              ))}
+                            </React.Fragment>
+                          ))}
                         </motion.div>
                       )}
                     </AnimatePresence>

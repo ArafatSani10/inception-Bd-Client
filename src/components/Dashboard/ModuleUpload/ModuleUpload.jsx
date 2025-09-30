@@ -296,7 +296,6 @@
 //   );
 // }
 
-
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useGetAllCourseQuery } from "../../../redux/api/courseApi";
@@ -307,14 +306,21 @@ export default function ModuleUpload() {
   const [moduleType, setModuleType] = useState("exist"); // default: exist module
   const [moduleMode, setModuleMode] = useState("live"); // default: live
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
   const contentType = watch("contentType");
 
   const [createModule] = useCreateModuleMutation();
   const { data: courseRes, isLoading } = useGetAllCourseQuery({});
   const courseData = courseRes?.data;
+  console.log("courseData", courseData);
 
-  if (isLoading) return <p className="text-center mt-10 text-gray-500">Loading....</p>;
+  if (isLoading)
+    return <p className="text-center mt-10 text-gray-500">Loading....</p>;
 
   const onSubmit = async (data) => {
     data.mode = moduleMode;
@@ -337,7 +343,10 @@ export default function ModuleUpload() {
           {/* Module Mode */}
           <div className="flex gap-6 justify-center mb-4">
             {["live", "recorded", "resource"].map((mode) => (
-              <label key={mode} className="flex items-center gap-2 cursor-pointer">
+              <label
+                key={mode}
+                className="flex items-center gap-2 cursor-pointer"
+              >
                 <input
                   type="radio"
                   value={mode}
@@ -345,7 +354,9 @@ export default function ModuleUpload() {
                   onChange={() => setModuleMode(mode)}
                   className="accent-blue-500"
                 />
-                <span className="text-gray-700 dark:text-gray-200 capitalize">{mode.replace(/([A-Z])/g, ' $1')}</span>
+                <span className="text-gray-700 dark:text-gray-200 capitalize">
+                  {mode.replace(/([A-Z])/g, " $1")}
+                </span>
               </label>
             ))}
           </div>
@@ -366,16 +377,25 @@ export default function ModuleUpload() {
             >
               <option value="">-- Choose Course --</option>
               {courseData?.map((value) => (
-                <option key={value.id} value={value.id}>{value.title}</option>
+                <option key={value.id} value={value.id}>
+                  {value.title}
+                </option>
               ))}
             </select>
-            {errors.courseId && <p className="text-red-500 text-sm mt-1">{errors.courseId.message}</p>}
+            {errors.courseId && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.courseId.message}
+              </p>
+            )}
           </div>
 
           {/* Module Type */}
           <div className="flex gap-6 mb-4 justify-center">
             {["exist", "new"].map((type) => (
-              <label key={type} className="flex items-center gap-2 cursor-pointer">
+              <label
+                key={type}
+                className="flex items-center gap-2 cursor-pointer"
+              >
                 <input
                   type="radio"
                   value={type}
@@ -383,7 +403,9 @@ export default function ModuleUpload() {
                   onChange={() => setModuleType(type)}
                   className="accent-blue-500"
                 />
-                <span className="text-gray-700 dark:text-gray-200">{type === "exist" ? "Exist Module" : "Create New Module"}</span>
+                <span className="text-gray-700 dark:text-gray-200">
+                  {type === "exist" ? "Exist Module" : "Create New Module"}
+                </span>
               </label>
             ))}
           </div>
@@ -399,11 +421,17 @@ export default function ModuleUpload() {
                 className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 transition"
               >
                 <option value="">-- Choose Topic --</option>
-                {selectedCourse?.modules?.map((module) => (
-                  <option key={module.id} value={module.id}>{module.topic}</option>
+                {selectedCourse?.modules?.filter(m => m.mode === moduleMode)?.map((module) => (
+                  <option key={module.id} value={module.id}>
+                    {module.topic}
+                  </option>
                 ))}
               </select>
-              {errors.moduleId && <p className="text-red-500 text-sm mt-1">{errors.moduleId.message}</p>}
+              {errors.moduleId && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.moduleId.message}
+                </p>
+              )}
             </div>
           )}
 
@@ -418,7 +446,11 @@ export default function ModuleUpload() {
                 {...register("topic", { required: "Title is required" })}
                 className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 transition"
               />
-              {errors.topic && <p className="text-red-500 text-sm mt-1">{errors.topic.message}</p>}
+              {errors.topic && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.topic.message}
+                </p>
+              )}
             </div>
           )}
 
@@ -433,7 +465,11 @@ export default function ModuleUpload() {
               {...register("title", { required: "Title is required" })}
               className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 transition"
             />
-            {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
+            {errors.title && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.title.message}
+              </p>
+            )}
           </div>
 
           {/* Content Type */}
@@ -450,14 +486,22 @@ export default function ModuleUpload() {
               <option value="link">Youtube Link</option>
               <option value="pdf">PDF (Drive Link)</option>
             </select>
-            {errors.contentType && <p className="text-red-500 text-sm mt-1">{errors.contentType.message}</p>}
+            {errors.contentType && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.contentType.message}
+              </p>
+            )}
           </div>
 
           {/* Dynamic Content Input */}
           {["classLink", "link", "pdf"].includes(contentType) && (
             <div>
               <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">
-                {contentType === "classLink" ? "Class Link URL" : contentType === "link" ? "YouTube Link URL" : "PDF Link (Drive)"}
+                {contentType === "classLink"
+                  ? "Class Link URL"
+                  : contentType === "link"
+                  ? "YouTube Link URL"
+                  : "PDF Link (Drive)"}
               </label>
               <input
                 type="url"
@@ -465,7 +509,11 @@ export default function ModuleUpload() {
                 {...register("content", { required: "URL is required" })}
                 className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 transition"
               />
-              {errors.content && <p className="text-red-500 text-sm mt-1">{errors.content.message}</p>}
+              {errors.content && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.content.message}
+                </p>
+              )}
             </div>
           )}
 
