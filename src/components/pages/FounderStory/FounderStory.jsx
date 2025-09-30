@@ -15,17 +15,24 @@ const founders = [
   {
     name: "MD. RIDOY HOSSAIN",
     role: "Founder & CEO",
-    bio: "Robotics Engineer and Mentor with more than 7 years of industry experience in Robotics Systems, Embedded Systems, Control Engineering, Autonomous Navigation, Python, ROS, and Mechatronic Integration.",
-    image: "https://i.ibb.co/MkWTVbXP/353055540-3382191028762726-6439950272090551511-n.jpg",
+    bio: "Robotics Engineer and Mentor with over 7 years of industry expertise in Robotics Systems, Embedded Systems, Control Engineering, Autonomous Navigation, Python, and Mechatronic Integration. Recognized with 32+ prestigious awards, including the APICTA Award, BASIS National ICT Award, and as one of the Top 3 Innovators in Bangladesh.",
+    image:
+      "https://i.ibb.co/MkWTVbXP/353055540-3382191028762726-6439950272090551511-n.jpg",
     socials: [
-      { icon: <FaLinkedin />, url: "https://www.linkedin.com/in/boktiarahmed73/" },
-      { icon: <FaYoutube />, url: "https://www.youtube.com/dswithbappy" },
-      { icon: <FaFacebook />, url: "https://web.facebook.com/profile.php?id=100005254877425" },
-      { icon: <FaInstagram />, url: "https://www.instagram.com/entbappy/" },
-      { icon: <FaXTwitter />, url: "https://twitter.com/bappy913873" },
-      { icon: <FaGithub />, url: "https://github.com/entbappy" },
-      { icon: <FaResearchgate />, url: "https://www.researchgate.net/profile/Boktiar-Bappy" },
-      { icon: <FaGoogle />, url: "https://scholar.google.com/citations?hl=en&user=Z64la9EAAAAJ" },
+      { icon: <FaLinkedin />, url: "https://www.linkedin.com/in/ridoyhossain/" },
+      { icon: <FaYoutube />, url: "https://www.youtube.com/@problemsolvewithridoy" },
+      { icon: <FaFacebook />, url: "https://www.facebook.com/roboticsridoy/" },
+      { icon: <FaGithub />, url: "https://github.com/problemsolvewithridoy" },
+    ],
+    companies: [
+      "Itle",
+      "VIVO",
+      "Samsung",
+      "Xiaomi",
+      "Inone Group",
+      "Robolife Technologies",
+      "AffGods R&D",
+      "Inception BD",
     ],
   },
   {
@@ -43,38 +50,59 @@ const founders = [
       { icon: <FaResearchgate />, url: "https://www.researchgate.net/profile/Boktiar-Bappy" },
       { icon: <FaGoogle />, url: "https://scholar.google.com/citations?hl=en&user=Z64la9EAAAAJ" },
     ],
+    companies: [
+      "Inception BD",
+      "Quantum Human",
+      "Euron",
+      "Physics Wallah",
+      "iNeuron.ai",
+      "Japan-Bangladesh Robotics & Advanced Research Center (JBRATRC)",
+      "Pangaea X",
+    ],
   },
   {
     name: "DABASISH KUMAR BISWAS",
     role: "Co-Founder & COO",
     bio: "Embedded Systems Engineer and Mentor with over 5 years of industry experience in Embedded Microcontroller Programming, RTOS, Hardware-Software Integration, IoT Systems, PLC, PCB Design, and ARM-based Architectures.",
-    image: "https://i.ibb.co/qF1yg8GM/IMG-8206.jpg",
+    image: "https://i.ibb.co.com/fz6G8kjQ/448765170-3340362229598402-5634876335468866581-n.jpg",
     socials: [
-      { icon: <FaLinkedin />, url: "https://www.linkedin.com/in/boktiarahmed73/" },
-      { icon: <FaYoutube />, url: "https://www.youtube.com/dswithbappy" },
-      { icon: <FaFacebook />, url: "https://web.facebook.com/profile.php?id=100005254877425" },
-      { icon: <FaInstagram />, url: "https://www.instagram.com/entbappy/" },
-      { icon: <FaXTwitter />, url: "https://twitter.com/bappy913873" },
-      { icon: <FaGithub />, url: "https://github.com/entbappy" },
-      { icon: <FaResearchgate />, url: "https://www.researchgate.net/profile/Boktiar-Bappy" },
-      { icon: <FaGoogle />, url: "https://scholar.google.com/citations?hl=en&user=Z64la9EAAAAJ" },
+      {
+        icon: <FaFacebook />,
+        url: "https://www.facebook.com/dabasish.kumar.biswas.2024",
+      },
+      {
+        icon: <FaLinkedin />,
+        url: "https://www.linkedin.com/in/dabasish-kumar-biswas/",
+      },
+
+       { icon: <FaGithub />, url: "https://github.com/EntDabasishkb" },
+      {
+        icon: <FaInstagram />,
+        url: "https://www.instagram.com/dabasish_kumar_biswas/",
+      },
     ],
+    companies: ["SPI", "JhPI", "Inception BD"],
   },
   {
-    name: "MAMUN OR RASHID",
-    role: "Co-founder & Operating Officer",
+    name: "MD. MAMUN OR RASHID",
+    role: "Co-Founder & Operating Officer",
     bio: "Marketing Operations Specialist with over 4 years of industry experience in Marketing Automation, Campaign Analytics, Lead Management, Martech Stack Optimization, Data-Driven Strategy, and Cross-Channel Execution.",
-    image: "https://i.ibb.co/qF1yg8GM/IMG-8206.jpg", // replace with actual image from your Drive
+    image: "https://i.ibb.co.com/dJxhW1Vh/481925168-2330025807396861-1487864547235476687-n.jpg",
     socials: [
-      { icon: <FaLinkedin />, url: "#" },
-      { icon: <FaYoutube />, url: "#" },
-      { icon: <FaFacebook />, url: "#" },
-      { icon: <FaInstagram />, url: "#" },
-      { icon: <FaXTwitter />, url: "#" },
-      { icon: <FaGithub />, url: "#" },
-      { icon: <FaResearchgate />, url: "#" },
-      { icon: <FaGoogle />, url: "#" },
+      {
+        icon: <FaFacebook />,
+        url: "https://www.facebook.com/share/1CbjV6W3k4/",
+      },
+      {
+        icon: <FaLinkedin />,
+        url: "https://www.linkedin.com/in/md-mamun-or-rashid-498a84218",
+      },
+      {
+        icon: <FaInstagram />,
+        url: "https://www.instagram.com/malithamamun",
+      },
     ],
+    companies: ["Inception BD"],
   },
 ];
 
@@ -85,7 +113,7 @@ const FounderStory = () => {
         Meet Our Founders
       </h2>
 
-      <div className="max-w-full mx-auto space-y-24 px-6 flex flex-col items-center">
+      <div className="max-w-7xl mx-auto space-y-24 px-6 flex flex-col items-center">
         {founders.map((person, index) => {
           const isEven = index % 2 === 0;
 
@@ -107,7 +135,7 @@ const FounderStory = () => {
                 <img
                   src={person.image}
                   alt={person.name}
-                  className="relative rounded-2xl shadow-lg w-full md:w-[70%] h-[400px] md:h-[450px] lg:h-[450px] object-cover object-center"
+                  className="relative rounded-2xl shadow-lg w-full md:w-[70%] h-[400px] md:h-[450px] object-cover object-center border-4 border-[#00baff]/40"
                 />
               </div>
 
@@ -127,6 +155,25 @@ const FounderStory = () => {
                   {person.bio}
                 </p>
 
+                {/* Companies */}
+                {person.companies && person.companies.length > 0 && (
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+                      Companies I have worked with:
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {person.companies.map((company, i) => (
+                        <span
+                          key={i}
+                          className="px-3 py-1 text-sm rounded-full bg-[#00baff]/10 text-[#00baff] border border-[#00baff]/30 hover:bg-[#00baff]/20 transition"
+                        >
+                          {company}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {/* Socials */}
                 {person.socials.length > 0 && (
                   <div className="flex flex-wrap gap-4 pt-4">
@@ -136,7 +183,7 @@ const FounderStory = () => {
                         href={s.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-yellow-400 text-xl transition-colors duration-300"
+                        className="text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-yellow-400 text-2xl transition-colors duration-300"
                       >
                         {s.icon}
                       </a>
