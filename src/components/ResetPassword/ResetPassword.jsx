@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 const ResetPasswordPage = () => {
   const {
@@ -26,7 +27,17 @@ const ResetPasswordPage = () => {
         newPassword: data.password,
       });
 
-      toast.success("Password reset successful!");
+      await Swal.fire({
+        icon: "success",
+        title: "Password Changed Successfully!",
+        text: "Your password has been updated. You can now login with your new password.",
+        confirmButtonText: "Go to Login",
+        confirmButtonColor: "#00baff",
+        background: "#111827",
+        color: "#fff",
+        iconColor: "#00baff",
+        allowOutsideClick: false,
+      });
       navigate("/login");
     } catch (error) {
       toast.error(error?.response?.data?.message || "Failed to reset password");
@@ -51,7 +62,9 @@ const ResetPasswordPage = () => {
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-gray-900 dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
             />
             {errors.password && (
-              <p className="text-sm text-red-500 mt-1">{errors.password.message}</p>
+              <p className="text-sm text-red-500 mt-1">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
