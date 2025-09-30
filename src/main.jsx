@@ -73,6 +73,8 @@ import FounderStory from "./components/pages/FounderStory/FounderStory";
 import AddCourseOutline from "./components/AddCourseOutline";
 import UpdateCourseForm from "./components/UpdateCourseForm";
 import UpdateCategoryForm from "./components/UpdateCategoryForm";
+import ForgotPasswordPage from "./components/ForgotPassword/ForgotPassword";
+import ResetPasswordPage from "./components/ResetPassword/ResetPassword";
 
 const router = createBrowserRouter([
   {
@@ -126,6 +128,10 @@ const router = createBrowserRouter([
         path: "/login",
         element: <Login></Login>,
       },
+      {
+        path: "/forgot-password",
+        element: <ForgotPasswordPage></ForgotPasswordPage>,
+      },
 
       {
         path: "/register",
@@ -136,7 +142,10 @@ const router = createBrowserRouter([
         path: "/verify-OTP",
         element: <OTPVerification></OTPVerification>,
       },
-
+      {
+        path: "/reset-password",
+        element: <ResetPasswordPage />,
+      },
       {
         path: "/coursedetails/:idOrSlug",
         element: <CourseDetails></CourseDetails>,
