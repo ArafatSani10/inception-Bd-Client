@@ -9,6 +9,7 @@ const ModulePage = () => {
   const { id } = useParams();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [expandedIndex, setExpandedIndex] = useState(null);
+  const [expandedGroup, setExpandedGroup] = useState(null);
   const { data: courseRes, isLoading } = useGetSingleCourseQuery(id, {
     skip: !id,
   });
@@ -45,8 +46,6 @@ const ModulePage = () => {
       data: modulesData?.filter((m) => m.mode === "resource"),
     },
   ];
-
-  console.log("formatModulesArray", formatModulesArray);
 
   return (
     <div className="font-montserrat bg-gray-50 dark:bg-[#00091a] flex flex-col min-h-screen transition-colors duration-300">
@@ -92,7 +91,9 @@ const ModulePage = () => {
             {videoUrl ? (
               <iframe
                 className="w-full h-full"
-                src={`https://www.youtube.com/embed/${getYouTubeVideoId(videoUrl)}?autoplay=1`}
+                src={`https://www.youtube.com/embed/${getYouTubeVideoId(
+                  videoUrl
+                )}?autoplay=1`}
                 title="Course Video"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -126,67 +127,96 @@ const ModulePage = () => {
               <div className="p-4 space-y-4 overflow-y-auto flex-1">
                 {formatModulesArray.map((group, groupIdx) => (
                   <div key={groupIdx}>
-                    <h3 className="text-md font-semibold text-gray-600 dark:text-gray-300 mb-2">
-                      {group.title}({group.data?.length || 0} Topics)
-                    </h3>
+                    <div
+                      className="flex justify-between items-center cursor-pointer mb-2"
+                      onClick={() =>
+                        setExpandedGroup(
+                          expandedGroup === groupIdx ? null : groupIdx
+                        )
+                      }
+                    >
+                      <h3 className="text-md font-semibold text-gray-600 dark:text-gray-300">
+                        {group.title} ({group.data?.length || 0} Topics)
+                      </h3>
+                      {expandedGroup === groupIdx ? (
+                        <FaChevronUp className="text-gray-500" />
+                      ) : (
+                        <FaChevronDown className="text-gray-500" />
+                      )}
+                    </div>
 
-                    {group.data?.map((module, idx) => (
-                      <div
-                        key={module.id}
-                        className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg mb-2"
-                      >
-                        {/* Module Header */}
-                        <div
-                          className="flex justify-between items-center cursor-pointer"
-                          onClick={() =>
-                            setExpandedIndex(
-                              expandedIndex === module.id ? null : module.id
-                            )
-                          }
+                    <AnimatePresence>
+                      {expandedGroup === groupIdx && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="pl-2 space-y-2"
                         >
-                          <h4 className="font-semibold text-gray-800 dark:text-gray-200">
-                            {module.topic}
-                          </h4>
-                          {expandedIndex === module.id ? (
-                            <FaChevronUp className="text-gray-500" />
-                          ) : (
-                            <FaChevronDown className="text-gray-500" />
-                          )}
-                        </div>
-
-                        {/* Module Contents */}
-                        <AnimatePresence>
-                          {expandedIndex === module.id && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: "auto" }}
-                              exit={{ opacity: 0, height: 0 }}
-                              className="mt-3 pl-3 border-l-2 border-green-500 space-y-2"
+                          {group.data?.map((module, idx) => (
+                            <div
+                              key={module.id}
+                              className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg mb-2"
                             >
-                              {module.contents?.map((content) => (
-                                <li
-                                  key={content.id}
-                                  className="p-2 rounded-md cursor-pointer text-sm hover:bg-gray-100 dark:hover:bg-gray-600"
-                                  onClick={() => {
-                                    if (group.title === "Recorded Class") {
-                                      setVideoUrl(content.content);
-                                    } else if (
-                                      group.title === "Class Materials"
-                                    ) {
-                                      setResourceUrl(content.content);
-                                    } else {
-                                      setClassUrl(content.content);
-                                    }
-                                  }}
-                                >
-                                  {content.title}
-                                </li>
-                              ))}
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    ))}
+                              {/* Module Header */}
+                              <div
+                                className="flex justify-between items-center cursor-pointer"
+                                onClick={() =>
+                                  setExpandedIndex(
+                                    expandedIndex === module.id
+                                      ? null
+                                      : module.id
+                                  )
+                                }
+                              >
+                                <h4 className="font-semibold text-gray-800 dark:text-gray-200">
+                                  {module.topic}
+                                </h4>
+                                {expandedIndex === module.id ? (
+                                  <FaChevronUp className="text-gray-500" />
+                                ) : (
+                                  <FaChevronDown className="text-gray-500" />
+                                )}
+                              </div>
+
+                              {/* Module Contents */}
+                              <AnimatePresence>
+                                {expandedIndex === module.id && (
+                                  <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: "auto" }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="mt-3 pl-3 border-l-2 border-green-500 space-y-2"
+                                  >
+                                    {module.contents?.map((content) => (
+                                      <li
+                                        key={content.id}
+                                        className="p-2 rounded-md cursor-pointer text-sm hover:bg-gray-100 dark:hover:bg-gray-600"
+                                        onClick={() => {
+                                          if (
+                                            group.title === "Recorded Class"
+                                          ) {
+                                            setVideoUrl(content.content);
+                                          } else if (
+                                            group.title === "Class Materials"
+                                          ) {
+                                            setResourceUrl(content.content);
+                                          } else {
+                                            setClassUrl(content.content);
+                                          }
+                                        }}
+                                      >
+                                        {content.title}
+                                      </li>
+                                    ))}
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </div>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 ))}
               </div>
@@ -199,7 +229,6 @@ const ModulePage = () => {
 };
 
 export default ModulePage;
-
 
 // import React, { useEffect, useState } from "react";
 // import { motion, AnimatePresence } from "framer-motion";
