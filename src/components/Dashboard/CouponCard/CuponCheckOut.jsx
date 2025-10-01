@@ -194,24 +194,27 @@ export default function CheckoutPage() {
 
           <form onSubmit={handleSubmit(onApplyCoupon)} className="grid gap-6">
             {/* Coupon Field */}
-            <label className="block">
-              <div className="mb-1 text-sm text-gray-600 dark:text-gray-300">
-                Coupon Code
-              </div>
-              <div className="flex gap-2">
-                <input
-                  {...register("couponCode")}
-                  placeholder="Enter coupon code"
-                  className="flex-1 rounded-xl border border-gray-300 dark:border-gray-700 px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-300"
-                />
-                <button
-                  type="submit"
-                  className="px-4 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold shadow-lg hover:opacity-90 transition-all duration-300"
-                >
-                  Apply
-                </button>
-              </div>
-            </label>
+
+            {course?.type === "paid" && (
+              <label className="block">
+                <div className="mb-1 text-sm text-gray-600 dark:text-gray-300">
+                  Coupon Code
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    {...register("couponCode")}
+                    placeholder="Enter coupon code"
+                    className="flex-1 rounded-xl border border-gray-300 dark:border-gray-700 px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-300"
+                  />
+                  <button
+                    type="submit"
+                    className="px-4 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold shadow-lg hover:opacity-90 transition-all duration-300"
+                  >
+                    Apply
+                  </button>
+                </div>
+              </label>
+            )}
 
             {/* Coupon Message */}
             <p className="text-sm mt-2">Price: {discountedPrice}</p>
