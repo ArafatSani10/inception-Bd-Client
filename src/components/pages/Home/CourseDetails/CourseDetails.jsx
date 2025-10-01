@@ -38,7 +38,10 @@ const CourseDetails = () => {
   const { data: orderRes } = useMyOrdersQuery(user?.email, {
     skip: !user?.email,
   });
-  const myOrders = orderRes?.data || [];
+  const myOrders = orderRes?.data?.filter(
+    (order) => order.status === "complete"
+  ) || [];
+
 
   // চেক করব user এই course কিনেছে কিনা
   const isEnrolled = myOrders.some(

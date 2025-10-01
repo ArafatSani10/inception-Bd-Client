@@ -19,7 +19,11 @@ const PurchaseCourse = ({ orders: propOrders }) => {
     skip: !dbUser?.email || !!propOrders,
   });
 
-  const myOrders = propOrders || orderRes?.data || [];
+  const myOrders = (propOrders || orderRes?.data)?.filter(
+    (order) => order.status === "complete"
+  ) || [];
+
+  console.log("my orders", myOrders);
 
   useEffect(() => {
     // শুধু তখনই fetch করব যদি propOrders না থাকে

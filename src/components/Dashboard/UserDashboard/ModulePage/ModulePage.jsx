@@ -30,6 +30,7 @@ const ModulePage = () => {
 
   const course = courseRes?.data;
   const modulesData = course?.modules;
+  console.log("modulesData", modulesData);
 
   // formatModulesArray ব্যবহার করে group করা
   const formatModulesArray = [
@@ -189,25 +190,51 @@ const ModulePage = () => {
                                     className="mt-3 pl-3 border-l-2 border-green-500 space-y-2"
                                   >
                                     {module.contents?.map((content) => (
-                                      <li
-                                        key={content.id}
-                                        className="p-2 rounded-md cursor-pointer text-sm hover:bg-gray-100 dark:hover:bg-gray-600"
-                                        onClick={() => {
-                                          if (
-                                            group.title === "Recorded Class"
-                                          ) {
-                                            setVideoUrl(content.content);
-                                          } else if (
-                                            group.title === "Class Materials"
-                                          ) {
-                                            setResourceUrl(content.content);
-                                          } else {
-                                            setClassUrl(content.content);
-                                          }
-                                        }}
-                                      >
-                                        {content.title}
-                                      </li>
+                                      <>
+                                        <li
+                                          key={content.id}
+                                          className="p-2 rounded-md cursor-pointer  hover:bg-gray-100 dark:hover:bg-gray-600 font-medium text-gray-700"
+                                          onClick={() => {
+                                            if (
+                                              group.title === "Recorded Class"
+                                            ) {
+                                              setVideoUrl(content.content);
+                                            } else if (
+                                              group.title === "Class Materials"
+                                            ) {
+                                              setResourceUrl(content.content);
+                                            } else {
+                                              setClassUrl(content.content);
+                                            }
+                                          }}
+                                        >
+                                          {content.title}
+                                        </li>
+                                        {content?.startDate &&
+                                          content?.startTime && (
+                                            <p className="text-sm text-gray-700 flex gap-4 px-2">
+                                              <span>
+                                                {new Date(
+                                                  content.startDate
+                                                ).toLocaleDateString("en-US", {
+                                                  day: "numeric", // 1, 2, 3...
+                                                  month: "long", // January, February...
+                                                  year: "numeric", // 2025
+                                                })}
+                                              </span>
+
+                                              <span>
+                                                {new Date(
+                                                  `${content.startDate} ${content.startTime}`
+                                                ).toLocaleTimeString("en-US", {
+                                                  hour: "numeric",
+                                                  minute: "numeric",
+                                                  hour12: true, // enables AM/PM
+                                                })}
+                                              </span>
+                                            </p>
+                                          )}
+                                      </>
                                     ))}
                                   </motion.div>
                                 )}
