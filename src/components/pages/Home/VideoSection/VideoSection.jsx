@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 
 const VideoSection = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const videoId = '778mo5m0r4o';
-    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+    // Updated Video ID from the user's request
+    const videoId = '7m_eUv1woDo';
+    // Updated Thumbnail URL to a proper YouTube thumbnail image link (maxresdefault is high quality)
+    const thumbnailUrl = "https://img.youtube.com/vi/7m_eUv1woDo/maxresdefault.jpg";
 
     const closeModal = () => {
         setIsOpen(false);
@@ -39,7 +41,7 @@ const VideoSection = () => {
                             className="w-10 h-10 text-black dark:text-white"
                             fill="currentColor"
                             viewBox="0 0 20 20"
-                        >
+                            >
                             <path d="M6 4l10 6-10 6V4z" />
                         </svg>
                     </div>

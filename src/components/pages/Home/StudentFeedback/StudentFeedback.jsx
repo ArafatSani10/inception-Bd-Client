@@ -4,54 +4,103 @@ import { FaStar, FaQuoteRight } from 'react-icons/fa';
 
 const testimonials = [
     {
-        name: 'Mahim Muntasir',
-        text: 'Best digital marketing course.',
-        avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-        role: 'Marketing Specialist'
+        name: '@iTcarePath',
+        text: 'Excellent tutorial,the method of your teaching is very effective and useful for learners,Mashaallah.Thank You for your greate efforts for us.I want to continue all your courses including python basics to advance and advance in machine learning.My plan to become an ai engineer.You can suggest me if you have any suggestions if im on right truck or not?',
+        avatar: 'https://i.ibb.co.com/nqJN5nSQ/r1-1.jpg',
+        role: 'From YouTube'
+    },
+
+    {
+        name: '@ayshataiba5624',
+        text: 'অসাধারন। এতো ডিটেইলস, কোয়ালিটিফুল কমপ্লিট টিউটোরিয়াল আর কথাও নেই। অনেক ধন্যবাদ।',
+        avatar: 'https://i.ibb.co.com/93ChBtzy/360-F-1408824601-Y1f5y-VDcoq-Y1n-N52z-LI2-Pfk-XUu-Nbf-XSA.jpg',
+        role: 'From YouTube'
+    },
+
+
+
+    {
+        name: '@alliswell9994',
+        text: 'Chat gpt এ কাছে পাইথন শিখার রোডম্যাপ চেয়েছিলাম, এবং শিখার জন্য ভিডিও লিংক চেয়েছিলাম, আমাকে আপনার ভিডিও লিংক সাজেস্ট করলো যেন বেসিক থেকে শুরু করি।ক্লাস করা শুরু করলাম,আশা রাখি ভালো কিছুই শিখতে পারবো ইনশাআল্লাহ্‌।',
+        avatar: 'https://i.ibb.co.com/PGLxXrBc/r3-1.jpg',
+        role: 'From YouTube'
+    },
+
+
+    {
+        name: 'PIAL PAUL',
+        text: 'I don’t know how I can explain, this is one of the best courses & especially in Bangla. So everyone can relate and understand everything from the core. Thanks Bappy Bhai/Sir for conducting and arranging this kind of course.',
+        avatar: 'https://ui-avatars.com/api/?name=PP&background=4F46E5&color=ffffff&size=128',
+        role: 'From Course'
+    },
+
+
+    {
+        name: '@shortWM',
+        text: 'আপনি বাংলাদেশর এমএল কমিউনিটিতে অনেক বড় কন্ট্রিবিউট রাখছেন। আমাদের জন্য এটা অনুপ্রেরনা। ধন্যবাদ ভাই আপনাকে অনেক। ',
+        avatar: 'https://i.ibb.co.com/H8z0QC7/r6-1.jpg',
+        role: 'From YouTube'
+    },
+
+    {
+        name: 'Md. Saad',
+        text: 'কয়েকদিন হলো আপনাদেরকে পেলাম। ৫ টি ক্লাস শেষ করেছি আলহামদুলিল্লাহ। সবগুলা ক্লাস করব ইনশাআল্লাহ। আপনারা জাতির কল্যাণের জন্য যে উদ্যোগ নিয়েছেন তাতে আপনাদের সফলতা কামনা করছি। আল্লাহ আপনাদেরকে উত্তম প্রতিদান দান করুক।',
+        avatar: 'https://ui-avatars.com/api/?name=MS&background=4F46E5&color=ffffff&size=128',
+        role: 'From Course'
+    },
+
+
+    // from courses
+
+    {
+        name: '@allaboutsemicolons',
+        text: 'Huge thanks to the team for providing this amazing GenAI course for free! Really appreciate the opportunity to learn such valuable skills.Starting from today - excited for the journey ahead!',
+        avatar: 'https://i.ibb.co.com/Mk0kxTqZ/r4-1.jpg',
+        role: 'From YouTube'
     },
     {
-        name: 'Suria Akter Ratre',
-        text: 'Teachers are professional.',
-        avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-        role: 'UI/UX Designer'
+        name: 'Rasel Sarker',
+        text: 'Alhamdulillah! such courses in Bangali are still very rare in our country. Bangladesh I am very happy to be a member of this platform. Thanks to Inception BD and especially thanks to Bappy Bhaiya for taking this wonderful initiative.',
+        avatar: 'https://ui-avatars.com/api/?name=RS&background=4F46E5&color=ffffff&size=128',
+        role: 'From Course'
+    },
+
+
+    
+
+    {
+        name: '@saymaislam3242',
+        text: 'Chat gpt k foundamental course caisilam apner link dlo cls kore Alhamdulillah onk benefit peyesi via apni onk valo vabe bujate paren',
+        avatar: 'https://i.ibb.co.com/2Y7WZNDt/r2-1.jpg',
+        role: 'From YouTube'
     },
     {
-        name: 'Bilash Das',
-        text: 'Career support helped me start freelancing immediately.',
-        avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
-        role: 'Frontend Developer'
-    },
-    {
-        name: 'Nahid Hasan',
-        text: 'Best trainer with industry experience and practical tips.',
-        avatar: 'https://randomuser.me/api/portraits/men/28.jpg',
-        role: 'Data Analyst'
-    },
-    {
-        name: 'Eshita Khan',
-        text: 'Great platform with comprehensive learning .',
-        avatar: 'https://randomuser.me/api/portraits/women/27.jpg',
-        role: 'Content Creator'
-    },
-    {
-        name: 'Tarek Islam',
-        text: 'Helped me transition to freelancing in just 3 months.',
-        avatar: 'https://randomuser.me/api/portraits/men/21.jpg',
-        role: 'Fullstack Developer'
-    },
+        name: 'Tanjin Adnan Abir',
+        text: 'This is an awesome course on LLM that I found in Bangla. I appreciate the Inception team’s dedication for making the course.',
+        avatar: 'https://ui-avatars.com/api/?name=TA&background=d1d5db&color=ffffff&size=128',
+        role: 'From Course'
+    }
+
+
+
 ];
 
+// **********************************************
+// **** TestimonialCard কম্পোনেন্ট (অপরিবর্তিত) ****
+// **********************************************
 const TestimonialCard = ({ item }) => (
     <motion.div
-        className=" shadow-xl rounded-3xl p-6 min-w-[320px] max-w-[420px]  flex-shrink-0 relative border border-gray-100 dark:border-gray-700 overflow-hidden"
+        // w-96 বা w-80 ব্যবহার করে নির্দিষ্ট প্রস্থ সেট করা হয়েছে
+        className="shadow-xl rounded-3xl p-8 w-96 flex-shrink-0 relative border border-gray-100 dark:border-gray-700"
         whileHover={{ y: -10, boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.15)' }}
         transition={{ duration: 0.3 }}
     >
+        {/* Decorative elements */}
         <div className="absolute -top-8 -right-8 w-24 h-24 bg-teal-400/5 dark:bg-teal-400/10 rounded-full" />
         <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-teal-400/5 dark:bg-teal-400/10 rounded-full" />
+        <FaQuoteRight className="text-teal-400 text-3xl absolute top-8 right-8 opacity-10" />
 
-        <FaQuoteRight className="text-teal-400 text-3xl absolute top-6 right-6 opacity-10" />
-
+        {/* User Info */}
         <div className="flex items-center mb-4 z-10 relative">
             <div className="relative">
                 <img
@@ -64,15 +113,17 @@ const TestimonialCard = ({ item }) => (
                 </div>
             </div>
             <div>
-                <h4 className="font-bold text-gray-900 dark:text-white text-base">{item.name}</h4>
+                <h4 className="font-semibold text-gray-900 dark:text-white text-base">{item.name}</h4>
                 <p className="text-gray-500 dark:text-gray-400 text-xs">{item.role}</p>
             </div>
         </div>
 
-        <p className="text-gray-700 dark:text-gray-300 text-xs mb-5 leading-relaxed relative z-10">
+        {/* রিভিউ টেক্সট - স্বাভাবিক Word Wrap হবে */}
+        <p className="text-gray-700 dark:text-gray-300 **text-sm** mb-5 leading-relaxed relative z-10">
             "{item.text}"
         </p>
 
+        {/* Rating Stars */}
         <div className="flex text-amber-400 relative z-10">
             {[...Array(5)].map((_, j) => (
                 <motion.div
@@ -87,6 +138,9 @@ const TestimonialCard = ({ item }) => (
     </motion.div>
 );
 
+// **********************************************
+// **** StudentFeedback কম্পোনেন্ট (Whitespace-nowrap Removed) ****
+// **********************************************
 const StudentFeedback = () => {
     const topRef = useRef(null);
     const bottomRef = useRef(null);
@@ -94,6 +148,7 @@ const StudentFeedback = () => {
     const [bottomWidth, setBottomWidth] = useState(0);
 
     useEffect(() => {
+        // স্ক্রল উইডথ গণনা
         if (topRef.current) setTopWidth(topRef.current.scrollWidth / 2);
         if (bottomRef.current) setBottomWidth(bottomRef.current.scrollWidth / 2);
 
@@ -117,9 +172,8 @@ const StudentFeedback = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.5 }}
                     >
-                       👨‍🎓Our Students FeedBacks
+                        👨‍🎓Our Students FeedBacks
                     </motion.h2>
-
                     <motion.p
                         className="mt-4 text-sm md:text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
                         initial={{ opacity: 0, y: 20 }}
@@ -127,22 +181,13 @@ const StudentFeedback = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.1 }}
                     >
-                        Real voices. Real experiences. Discover how our courses have empowered learners to grow their skills  their goals.
+                        Real voices. Real experiences. Discover how our courses have empowered learners to grow their skills  their goals.
                     </motion.p>
-
-                    {/* <div className="mt-8 flex justify-center">
-                        <div className="flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                                <FaStar key={i} className="text-amber-400 mx-0.5" />
-                            ))}
-                            <span className="ml-2 text-gray-700 dark:text-gray-300 font-medium">4.9/5 from 200+ reviews</span>
-                        </div>
-                    </div> */}
                 </div>
 
                 {/* Top Row - Scroll Left */}
                 <motion.div
-                    className="overflow-hidden relative mb-12 py-4"
+                    className="overflow-hidden relative mb-12 py-5"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
@@ -150,7 +195,10 @@ const StudentFeedback = () => {
                 >
                     <motion.div
                         ref={topRef}
-                        className="flex gap-8  whitespace-nowrap"
+                        // *****************************************
+                        // **পরিবর্তন:** whitespace-nowrap ক্লাসটি সরানো হয়েছে
+                        className="flex gap-8 items-start"
+                        // *****************************************
                         animate={{ x: [0, -topWidth] }}
                         transition={{ repeat: Infinity, ease: 'linear', duration: 60 }}
                     >
@@ -158,9 +206,8 @@ const StudentFeedback = () => {
                             <TestimonialCard key={`top-${i}`} item={item} />
                         ))}
                     </motion.div>
-
-                    <div className="pointer-events-none absolute left-0 top-0 h-full w-28 bg-gradient-to-r from-white dark:from-gray-950 to-transparent z-20" />
-                    <div className="pointer-events-none absolute right-0 top-0 h-full w-28 bg-gradient-to-l from-white dark:from-gray-950 to-transparent z-20" />
+                    <div className="pointer-events-none absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-white dark:from-gray-950 to-transparent z-20" />
+                    <div className="pointer-events-none absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-white dark:from-gray-950 to-transparent z-20" />
                 </motion.div>
 
                 {/* Bottom Row - Scroll Right */}
@@ -173,7 +220,10 @@ const StudentFeedback = () => {
                 >
                     <motion.div
                         ref={bottomRef}
-                        className="flex gap-8 w-max whitespace-nowrap"
+                        // *****************************************
+                        // **পরিবর্তন:** whitespace-nowrap ক্লাসটি সরানো হয়েছে
+                        className="flex gap-8 w-max items-start"
+                        // *****************************************
                         animate={{ x: [-bottomWidth, 0] }}
                         transition={{ repeat: Infinity, ease: 'linear', duration: 60 }}
                     >
@@ -181,9 +231,8 @@ const StudentFeedback = () => {
                             <TestimonialCard key={`bottom-${i}`} item={item} />
                         ))}
                     </motion.div>
-
-                    <div className="pointer-events-none absolute left-0 top-0 h-full w-28 bg-gradient-to-r from-white dark:from-gray-950 to-transparent z-20" />
-                    <div className="pointer-events-none absolute right-0 top-0 h-full w-28 bg-gradient-to-l from-white dark:from-gray-950 to-transparent z-20" />
+                    <div className="pointer-events-none absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-white dark:from-gray-950 to-transparent z-20" />
+                    <div className="pointer-events-none absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-white dark:from-gray-950 to-transparent z-20" />
                 </motion.div>
             </div>
 

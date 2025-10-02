@@ -17,6 +17,7 @@ const Navbar = () => {
   const menuRef = useRef(null);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  // const closeSidebar = () => setIsOpen(false);
 
   const navItems = [
     { name: "Home", href: "/" },
@@ -157,10 +158,9 @@ const Navbar = () => {
                 key={name}
                 to={href}
                 className={({ isActive }) =>
-                  `relative group transition-colors duration-300 text-sm ${
-                    isActive
-                      ? "text-[#00baff]"
-                      : "hover:text-[#00baff] dark:hover:text-[#00baff]"
+                  `relative group transition-colors duration-300 text-sm ${isActive
+                    ? "text-[#00baff]"
+                    : "hover:text-[#00baff] dark:hover:text-[#00baff]"
                   }`
                 }
               >
@@ -407,9 +407,8 @@ const Navbar = () => {
         {/* Mobile Menu Panel */}
         <div
           ref={menuRef}
-          className={`fixed top-0 right-0 h-full w-72 bg-white dark:bg-gray-900 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
-            isMenuOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+          className={`fixed top-0 right-0 h-full w-72 bg-white dark:bg-gray-900 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${isMenuOpen ? "translate-x-0" : "translate-x-full"
+            }`}
         >
           <div className="flex flex-col p-6 pt-8 space-y-4 text-sm font-medium text-gray-700 dark:text-gray-300 h-full overflow-y-auto">
             {navItems.map(({ name, href }) => (
@@ -423,7 +422,9 @@ const Navbar = () => {
               </Link>
             ))}
             {!dbUser && (
-              <Link to="/login">
+              <Link to="/login"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 <button className="px-5 py-2 text-sm bg-gradient-to-r from-purple-600 to-blue-500 text-white rounded-md font-semibold hover:from-purple-700 hover:to-blue-600 transition transform hover:-translate-y-0.5 shadow-lg w-full mt-4">
                   Login
                 </button>
