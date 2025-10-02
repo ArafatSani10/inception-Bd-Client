@@ -95,7 +95,7 @@ const Home = () => {
         <StudentFeedback></StudentFeedback>
 
         {/* video feedback */}
-        <SuccessStory></SuccessStory>
+        {/* <SuccessStory></SuccessStory> */}
 
         {/* podcast */}
         <Podcast></Podcast>

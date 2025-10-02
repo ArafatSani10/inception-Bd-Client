@@ -26,29 +26,29 @@ const Podcast = () => {
     const podcasts = [
         {
             id: 1,
-            title: 'The Future of Web3',
-            host: 'John Doe',
+            title: 'TGenerative AI 101 in Bangla: What You Need to Know | Inception BD Podcast Ep 01',
+            host: 'Inception BD',
             videoUrl: 'https://www.youtube.com/watch?v=TmMRaGykbUQ',
             description: 'A deep dive into Web3 technology and its impact.',
         },
         {
             id: 2,
-            title: 'AI in Everyday Life',
-            host: 'Jane Smith',
+            title: 'Generative AI 101 in Bangla: What You Need to Know | Inception BD Podcast Ep 01',
+            host: 'Inception BD',
             videoUrl: 'https://www.youtube.com/watch?v=TmMRaGykbUQ',
             description: 'How AI is shaping the future of work and play.',
         },
         {
             id: 3,
-            title: 'Design Trends 2025',
-            host: 'Emily Johnson',
+            title: 'Generative AI 101 in Bangla: What You Need to Know | Inception BD Podcast Ep 01',
+            host: 'Inception BD',
             videoUrl: 'https://www.youtube.com/watch?v=TmMRaGykbUQ',
             description: 'Exploring upcoming design trends and tips.',
         },
         {
             id: 4,
-            title: 'Digital Marketing Secrets',
-            host: 'Michael Lee',
+            title: 'Generative AI 101 in Bangla: What You Need to Know | Inception BD Podcast Ep 01',
+            host: 'Inception BD',
             videoUrl: 'https://www.youtube.com/watch?v=TmMRaGykbUQ',
             description: 'Unlocking strategies for modern marketing.',
         },
@@ -140,8 +140,8 @@ const Podcast = () => {
                                     </div>
 
                                     {/* Info */}
-                                    <div className="p-5 flex flex-col flex-grow">
-                                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{title}</h3>
+                                    <div className="p-5 flex space-y-4 flex-col flex-grow">
+                                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h3>
                                         <p className="text-purple-600 dark:text-purple-400 font-medium mb-2">{host}</p>
                                         <p className="text-gray-700 dark:text-gray-300 flex-grow line-clamp-3">{description}</p>
                                     </div>
