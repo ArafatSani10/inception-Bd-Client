@@ -178,7 +178,7 @@ const AboutUs = () => {
                   "Career support and mentorship",
                   "Flexible learning schedules",
                   "Hands-on real-world projects",
-                  "Hands-on real-world projects",
+                  // "Hands-on real-world projects",
                 ].map((item, index) => (
                   <div key={index} className="flex items-center">
                     <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center mr-3">
