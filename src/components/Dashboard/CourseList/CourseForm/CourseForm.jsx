@@ -198,14 +198,14 @@ const CourseForm = () => {
             </select>
           </div>
 
-          <div>
+          {/* <div>
             <label className="block font-semibold mb-1">Instructor Title</label>
             <input
               type="text"
               {...register("instructorTitle")}
               className="w-full p-2 border rounded dark:bg-gray-900 dark:text-white"
             />
-          </div>
+          </div> */}
 
           <div>
             <label className="block font-semibold mb-1">Course Title</label>
@@ -237,14 +237,14 @@ const CourseForm = () => {
               className="w-full"
             />
           </div>
-          <div>
+          {/* <div>
             <label className="font-bold">Instructor Image</label>
             <input
               type="file"
               {...register("instructorImage", { valueAsFile: true })}
               className="w-full"
             />
-          </div>
+          </div> */}
 
           <div>
             <label>Course Type</label>
