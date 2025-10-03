@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Autoplay } from 'swiper/modules';
+import { Pagination, Autoplay, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
-import { FaPlay } from 'react-icons/fa';
+import 'swiper/css/navigation';
+import { FaPlay, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
-// Extract YouTube video ID from URL
 const getYouTubeId = (url) => {
     try {
         const regExp =
@@ -21,37 +21,38 @@ const getYouTubeId = (url) => {
 
 const Podcast = () => {
     const [activeVideo, setActiveVideo] = useState(null);
+    const swiperRef = useRef(null);
 
-    // Example podcast data with YouTube URLs
-    const podcasts = [
+      const podcasts = [
         {
             id: 1,
-            title: 'TGenerative AI 101 in Bangla: What You Need to Know | Inception BD Podcast Ep 01',
+            title: 'Generative AI 101 in Bangla: What You Need to Know | Inception BD Podcast Ep 01',
             host: 'Inception BD',
             videoUrl: 'https://www.youtube.com/watch?v=TmMRaGykbUQ',
-            description: 'A deep dive into Web3 technology and its impact.',
+            // description: 'A deep dive into Web3 technology and its impact.',
         },
         {
             id: 2,
-            title: 'Generative AI 101 in Bangla: What You Need to Know | Inception BD Podcast Ep 01',
+            title: 'The Rise of AI: How Its Transforming Healthcare and Personal Development',
             host: 'Inception BD',
-            videoUrl: 'https://www.youtube.com/watch?v=TmMRaGykbUQ',
-            description: 'How AI is shaping the future of work and play.',
+            videoUrl: 'https://www.youtube.com/watch?v=Rz-A_CQn2gU&t=1682s',
+            // description: 'How AI is shaping the future of work and play.',
         },
         {
             id: 3,
-            title: 'Generative AI 101 in Bangla: What You Need to Know | Inception BD Podcast Ep 01',
+            title: ' AI Reshaping Data Teams: Prepare for the 2030 Job Market',
             host: 'Inception BD',
-            videoUrl: 'https://www.youtube.com/watch?v=TmMRaGykbUQ',
-            description: 'Exploring upcoming design trends and tips.',
+            videoUrl: 'https://www.youtube.com/watch?v=tvmm5GegYZQ&list=PLkz_y24mlSJaxfbAROjlkExKJIxSlI61L&index=7&t=47s',
+            // description: 'How AI is shaping the future of work and play.',
         },
         {
             id: 4,
-            title: 'Generative AI 101 in Bangla: What You Need to Know | Inception BD Podcast Ep 01',
+            title: ' Crack the Amazon Interview: Tips & Tricks for Success',
             host: 'Inception BD',
-            videoUrl: 'https://www.youtube.com/watch?v=TmMRaGykbUQ',
-            description: 'Unlocking strategies for modern marketing.',
+            videoUrl: 'https://www.youtube.com/watch?v=i9lyE2t7OyY&list=PLkz_y24mlSJaxfbAROjlkExKJIxSlI61L&index=7',
+            // description: 'How AI is shaping the future of work and play.',
         },
+
     ];
 
     const openVideo = (videoUrl) => {
@@ -61,25 +62,24 @@ const Podcast = () => {
     const closeVideo = () => setActiveVideo(null);
 
     return (
-        <div className="relative py-16  bg-gradient-to-br from-gray-50 to-white dark:from-gray-950 dark:to-gray-950 overflow-hidden">
+        <div className="relative py-16 bg-gradient-to-br from-gray-50 to-white dark:from-gray-950 dark:to-gray-950 overflow-hidden">
             {/* Background Blurs */}
             <div className="absolute top-16 left-12 w-32 h-32 rounded-full bg-purple-400/10 blur-3xl pointer-events-none"></div>
             <div className="absolute bottom-16 right-12 w-40 h-40 rounded-full bg-indigo-400/10 blur-3xl pointer-events-none"></div>
 
             <div className="max-w-full mx-auto relative z-10">
-                {/* Header */}
                 <motion.h2
-                    className="text-xl md:text-5xl font-semibold text-center bg-clip-text text-[#00baff] bg-gradient-to-r from-purple-600 to-indigo-500  mb-5"
+                    className="text-xl md:text-5xl font-semibold text-center bg-clip-text text-[#00baff] bg-gradient-to-r from-purple-600 to-indigo-500 mb-5"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.7 }}
                 >
-                    🎙️Learn Smarter  Our Podcasts
+                    🎙️Learn Smarter Our Podcasts
                 </motion.h2>
 
                 <motion.p
-                    className="text-sm md:text-lg   text-center bg-clip-text text-gray-800 dark:text-white bg-gradient-to-r from-purple-600 to-indigo-500 dark:from-purple-400 dark:bg-[#00091a] mb-5"
+                    className="text-sm md:text-lg text-center bg-clip-text text-gray-800 dark:text-white bg-gradient-to-r from-purple-600 to-indigo-500 dark:from-purple-400 dark:bg-[#00091a] mb-5"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -89,67 +89,76 @@ const Podcast = () => {
                 </motion.p>
 
                 {/* Swiper Slider */}
-                <Swiper
-                    modules={[Pagination, Autoplay]}
-                    spaceBetween={30}
-                    slidesPerView={1}
-                    breakpoints={{
-                        640: { slidesPerView: 1 },
-                        768: { slidesPerView: 2 },
-                        1024: { slidesPerView: 3 },
-                    }}
-                    pagination={{ clickable: true }}
-                    autoplay={{ delay: 7000, disableOnInteraction: false }}
-                    loop
-                    className="podcast-swiper pb-16"
-                    navigation={false}
-                >
-                    {podcasts.map(({ id, title, host, videoUrl, description }) => {
-                        const videoId = getYouTubeId(videoUrl);
-                        if (!videoId) return null;
-                        return (
-                            <SwiperSlide key={id}>
-                                <motion.div
-                                    className="bg-white dark:bg-[#00091a] rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 cursor-pointer flex flex-col h-full"
-                                    whileHover={{ y: -8, boxShadow: '0 15px 30px rgba(0,0,0,0.15)' }}
-                                    transition={{ duration: 0.3 }}
-                                    onClick={() => openVideo(videoUrl)}
-                                    role="button"
-                                    tabIndex={0}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter' || e.key === ' ') openVideo(videoUrl);
-                                    }}
-                                >
-                                    {/* Thumbnail */}
-                                    <div className="relative aspect-video overflow-hidden rounded-t-2xl">
-                                        <img
-                                            src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
-                                            alt={`${title} podcast thumbnail`}
-                                            className="w-full h-full object-cover filter brightness-90 transition-transform duration-300 hover:scale-105"
-                                            loading="lazy"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            <button
-                                                aria-label={`Play podcast video: ${title}`}
-                                                className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center shadow-lg hover:bg-purple-700 transition-colors"
-                                            >
-                                                <FaPlay className="text-white ml-1" size={22} />
-                                            </button>
-                                        </div>
-                                    </div>
+                <div className="relative">
+                    {/* Left Button */}
+                    <button
+                        onClick={() => swiperRef.current?.slidePrev()}
+                        className="absolute top-1/2 left-2 -translate-y-1/2 z-20 p-3 bg-purple-600 rounded-full text-white shadow-lg hover:bg-purple-700 transition"
+                    >
+                        <FaArrowLeft />
+                    </button>
 
-                                    {/* Info */}
-                                    <div className="p-5 flex space-y-4 flex-col flex-grow">
-                                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h3>
-                                        <p className="text-purple-600 dark:text-purple-400 font-medium mb-2">{host}</p>
-                                        <p className="text-gray-700 dark:text-gray-300 flex-grow line-clamp-3">{description}</p>
-                                    </div>
-                                </motion.div>
-                            </SwiperSlide>
-                        );
-                    })}
-                </Swiper>
+                    {/* Right Button */}
+                    <button
+                        onClick={() => swiperRef.current?.slideNext()}
+                        className="absolute top-1/2 right-2 -translate-y-1/2 z-20 p-3 bg-purple-600 rounded-full text-white shadow-lg hover:bg-purple-700 transition"
+                    >
+                        <FaArrowRight />
+                    </button>
+
+                    <Swiper
+                        modules={[Pagination, Autoplay, Navigation]}
+                        spaceBetween={30}
+                        slidesPerView={1}
+                        breakpoints={{
+                            640: { slidesPerView: 1 },
+                            768: { slidesPerView: 2 },
+                            1024: { slidesPerView: 3 },
+                        }}
+                        pagination={{ clickable: true }}
+                        autoplay={{ delay: 7000, disableOnInteraction: false }}
+                        loop
+                        onSwiper={(swiper) => (swiperRef.current = swiper)}
+                        className="podcast-swiper pb-16"
+                    >
+                        {podcasts.map(({ id, title, host, videoUrl }) => {
+                            const videoId = getYouTubeId(videoUrl);
+                            if (!videoId) return null;
+                            return (
+                                <SwiperSlide key={id}>
+                                    <motion.div
+                                        className="bg-white mt-10  dark:bg-[#00091a] rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 cursor-pointer flex flex-col h-full"
+                                        whileHover={{ y: -8, boxShadow: '0 15px 30px rgba(0,0,0,0.15)' }}
+                                        transition={{ duration: 0.3 }}
+                                        onClick={() => openVideo(videoUrl)}
+                                    >
+                                        <div className="relative aspect-video overflow-hidden rounded-t-2xl">
+                                            <img
+                                                src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
+                                                alt={`${title} podcast thumbnail`}
+                                                className="w-full h-full object-cover filter brightness-90 transition-transform duration-300 hover:scale-105"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                            <div className="absolute inset-0 flex items-center justify-center">
+                                                <button
+                                                    aria-label={`Play podcast video: ${title}`}
+                                                    className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center shadow-lg hover:bg-purple-700 transition-colors"
+                                                >
+                                                    <FaPlay className="text-white ml-1" size={22} />
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div className="p-5 flex space-y-4 flex-col flex-grow">
+                                            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{title}</h3>
+                                            <p className="text-purple-600 text-xs dark:text-purple-400 font-medium">{host}</p>
+                                        </div>
+                                    </motion.div>
+                                </SwiperSlide>
+                            );
+                        })}
+                    </Swiper>
+                </div>
             </div>
 
             {/* Video Modal */}
@@ -157,12 +166,9 @@ const Podcast = () => {
                 <div
                     onClick={closeVideo}
                     className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
-                    role="dialog"
-                    aria-modal="true"
                 >
                     <button
                         onClick={closeVideo}
-                        aria-label="Close video"
                         className="absolute top-6 right-6 text-white text-4xl hover:text-gray-300 transition"
                     >
                         &times;

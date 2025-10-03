@@ -143,7 +143,7 @@ export default function TermsAndCondition() {
         <p>
           We reserve the right to suspend or terminate accounts that violate
           these Terms. Users may request account deletion at any time by
-          contacting <strong>hello@inceptionbd.com
+          contacting <strong>learn.inception@gmail.com
 
           </strong>.
         </p>
@@ -177,12 +177,12 @@ export default function TermsAndCondition() {
           <li>
             <strong>Email:</strong>{" "}
             <a
-              href="mailto:hello@inceptionbd.com
+              href="mailto:learn.inception@gmail.com
 
 "
               className="text-blue-600 dark:text-blue-400"
             >
-              hello@inceptionbd.com
+              learn.inception@gmail.com
 
 
             </a>
@@ -214,7 +214,7 @@ export default function TermsAndCondition() {
           viewport={{ once: true }}
           className="mb-12 text-center"
         >
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#00baff]">
+          <h1 className="text-4xl mt-6 sm:text-5xl font-extrabold tracking-tight text-[#00baff]">
             Terms & Conditions
           </h1>
           <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
@@ -242,7 +242,7 @@ export default function TermsAndCondition() {
             </motion.section>
           ))}
 
-          
+
         </article>
 
         {/* Buttons */}
@@ -254,7 +254,7 @@ export default function TermsAndCondition() {
             🖨 Print
           </button>
 
-         
+
         </div>
       </div>
     </main>

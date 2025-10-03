@@ -27,7 +27,7 @@ export default function RefundPolicy() {
           variants={fadeInUp}
           className="mb-12 text-center"
         >
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#00baff]">
+          <h1 className="text-4xl  mt-6 sm:text-5xl font-extrabold tracking-tight text-[#00baff]">
             Refund Policy
           </h1>
           <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">InceptionBD</p>
@@ -118,7 +118,7 @@ export default function RefundPolicy() {
               To request a refund:
             </p>
             <ul className="list-disc list-inside mt-2 space-y-2 text-gray-700 dark:text-gray-300">
-              <li>Email us at <strong>hello@inceptionbd.com
+              <li>Email us at <strong>learn.inception@gmail.com
 
               </strong> with the subject line "Refund Request".</li>
               <li>Include your name, registered email, course name, purchase receipt, and reason for the refund request.</li>
@@ -152,9 +152,9 @@ export default function RefundPolicy() {
               <FaEnvelope className="text-teal-500" /> 7. Contact Us
             </h2>
             <ul className="mt-2 space-y-2 text-gray-700 dark:text-gray-300">
-              <li><strong>Email:</strong> <a href="mailto:hello@inceptionbd.com
+              <li><strong>Email:</strong> <a href="mailto:learn.inception@gmail.com
 
-" className="text-blue-600 dark:text-blue-400">hello@inceptionbd.com
+" className="text-blue-600 dark:text-blue-400">learn.inception@gmail.com
 
               </a></li>
               <li className="flex items-center gap-2"><FaGlobe /> <strong>Website:</strong> <a href="https://www.inceptionbd.com" target="_blank" rel="noreferrer" className="text-blue-600 dark:text-blue-400">www.inceptionbd.com</a></li>

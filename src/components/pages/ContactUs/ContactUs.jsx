@@ -163,7 +163,7 @@ const ContactUs = () => {
                                 </div>
                                 <div>
                                     <h3 className="font-semibold text-lg">Email Address</h3>
-                                    <p className="text-gray-600 dark:text-gray-300">hello@inceptionbd.com</p>
+                                    <p className="text-gray-600 dark:text-gray-300">learn.inception@gmail.com</p>
                                 </div>
                             </div>
                         </div>
