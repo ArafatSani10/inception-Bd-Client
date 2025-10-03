@@ -5,7 +5,7 @@ import {
   MdOutlineDone,
   MdOutlineLightbulb,
 } from "react-icons/md";
-import { FaAddressCard, FaHeadphones, FaMinus, FaPlus } from "react-icons/fa";
+import { FaAddressCard, FaHeadphones, FaMinus, FaPlus, FaWhatsapp } from "react-icons/fa";
 import { CiCalendar, CiShare2, CiTimer } from "react-icons/ci";
 import { GrGift } from "react-icons/gr";
 import { GoPersonAdd } from "react-icons/go";
@@ -134,7 +134,7 @@ const CourseDetails = () => {
             alt="Course Background"
             className="w-full h-full object-cover"
           />
-          <div className="hidden lg:block max-sm:block absolute inset-0 bg-black/60 dark:bg-black/70 "></div>
+          <div className="hidden lg:block max-sm:block absolute inset-0  "></div>
         </div>
 
         <div className="mx-auto w-full px-2 py-8 rounded-xl bg-white dark:bg-transparent relative z-10">
@@ -416,20 +416,38 @@ const CourseDetails = () => {
               </div>
 
               <div>
-                <h1 className="font-bold mt-6 text-[#00baff]">
+                <h1 className="font-bold mx-5 mt-6 text-[#00baff]">
                   This course includes:
                 </h1>
-                <div className="space-y-2 text-sm opacity-70 p-3">
-                  <h1 className="flex items-center gap-2">
-                    <MdOutlineLightbulb /> Official certificate
-                  </h1>
-                  <h1 className="flex items-center gap-2">
-                    <FaHeadphones /> Instructor support
-                  </h1>
-                  <h1 className="flex items-center gap-2">
-                    <CiTimer /> {course.duration} hours of content
-                  </h1>
+                <div className=" text-sm text-gray-200 p-3">
+                  {/* Instructor support */}
+                  <div className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-800 transition-colors">
+                    <FaHeadphones className="text-[#00baff]" />
+                    <span>Instructor support</span>
+                  </div>
+
+                 
+                  {/* Course duration */}
+                  <div className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-800 transition-colors">
+                    <CiTimer className="text-[#00baff]" />
+                    <span>{course.duration} hours of content</span>
+                  </div>
+
+                   {/* WhatsApp Community */}
+                  <a
+                    href="https://chat.whatsapp.com/CbHbKxRNeygCNxLYXy9iW2"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
+                    <div className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-800 transition-colors ">
+                      <FaWhatsapp className="text-[#25D366]" />
+                      <span>WhatsApp Community</span>
+                    </div>
+                  </a>
+
                 </div>
+
               </div>
 
               <div className="border-2 mt-5 shadow-xl rounded-lg p-3 flex items-center justify-between dark:border-gray-700">
@@ -481,7 +499,7 @@ const CourseDetails = () => {
                     </span>
                     <h1>10</h1>
                   </div>
-                 
+
 
 
                   <div className="flex justify-between">
@@ -496,7 +514,7 @@ const CourseDetails = () => {
                       <CiTimer />
                       Duration:
                     </span>
-                    <h1>{course.duration || "unlimited"} </h1>
+                    <h1>{course.duration || "unlimited"} Hours </h1>
                   </div>
 
                   <div className="flex justify-between">
