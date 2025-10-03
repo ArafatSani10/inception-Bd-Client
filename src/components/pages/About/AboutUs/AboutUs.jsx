@@ -7,45 +7,52 @@ import {
   FaArrowRight,
   FaCogs,
   FaMicrochip,
+  FaPersonBooth,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useGetMyDataQuery } from "../../../../redux/api/userApi";
+import { FaLaptopCode, FaBrain, FaChartLine,  } from 'react-icons/fa';
+import { LiaRobotSolid } from "react-icons/lia";
 
 const AboutUs = () => {
   const { data: myDateRes, isLoading } = useGetMyDataQuery();
   const myData = myDateRes?.data;
   console.log("my data", myData);
-  const courses = [
+const courses = [
     {
       id: 1,
-      icon: <FaPython className="text-4xl" />,
-      title: "Python Programming",
-      description: "Learn Python basics to advanced OOP concepts.",
+      // Icon changed from FaPython to a more general programming icon
+      icon: <FaLaptopCode className="text-4xl" />, 
+      title: "Programming",
+      description: "Building Strong Foundations in Programming",
       colorClass: "bg-[#00baff]", // single solid color applied here
     },
     {
       id: 2,
-      icon: <FaRobot className="text-4xl" />,
+      // Icon changed from FaRobot to a more symbolic AI/Brain icon
+      icon: <FaBrain className="text-4xl" />, 
       title: "Generative AI",
-      description: "Master Generative AI, LLMs, and GANs.",
+      description: "From Ideas to Intelligence: Generative AI in Action",
       colorClass: "bg-[#00baff]",
     },
     {
       id: 3,
-      icon: <FaMicrochip className="text-4xl" />,
-      title: "Automation",
-      description: "Circuit design, Proteus, PCB layout, and IoT.",
+      // Icon changed from FaMicrochip to a Data Science/Analytics icon
+      icon: <FaChartLine className="text-4xl" />, 
+      title: "Data Science", // Corrected title casing
+      description: "Discover Insights, Drive Innovation with Data Science", // Updated description to be relevant to Data Science
       colorClass: "bg-[#00baff]",
     },
     {
       id: 4,
-      icon: <FaCogs className="text-4xl" />,
-      title: "Robotics",
-      description: "Learn the process of electric motor rewinding.",
+      // Icon changed from FaCogs to a more comprehensive Full Stack/Branching icon
+      icon: <FaRobot className="text-4xl" />, 
+      title: "Robotics with AI",
+      description: "Robotics and AI: Powering the Future of Automation", // Updated description to be relevant to Full Stack
       colorClass: "bg-[#00baff]",
     },
-  ];
+];
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-gray-950 text-gray-900 dark:text-gray-100 overflow-hidden">

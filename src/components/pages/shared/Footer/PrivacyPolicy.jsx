@@ -132,7 +132,7 @@ export default function PrivacyPolicy() {
               href="mailto:learn.inception@gamil.com"
               className="text-blue-600 dark:text-blue-400"
             >
-             hello@inceptionbd.com
+          learn.inception@gmail.com
 
 
             </a>
@@ -164,7 +164,7 @@ export default function PrivacyPolicy() {
           viewport={{ once: true }}
           className="mb-12 text-center"
         >
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#00baff]">
+          <h1 className="text-4xl mt-6 sm:text-5xl font-extrabold tracking-tight text-[#00baff]">
             Privacy & Policy
           </h1>
           <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">

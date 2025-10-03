@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FaUserGraduate, FaChalkboardTeacher, FaBookOpen, FaAward } from 'react-icons/fa';
 
 // Example icon
 const StatIcon = () => (
@@ -31,28 +32,32 @@ const EstimatedCount = ({ totalEnrolled, totalCourse, totalInstructor }) => {
       value: totalEnrolled || 0,
       suffix: "+",
       label: "Students Enrolled",
-      icon: <StatIcon />,
+     
+      icon: <FaUserGraduate className="text-4xl" />,
     },
     {
       id: 2,
       value: totalInstructor || 0,
       suffix: "+",
       label: "Expert Instructors",
-      icon: <StatIcon />,
+      
+      icon: <FaChalkboardTeacher className="text-4xl" />,
     },
     {
       id: 3,
       value: totalCourse || 0,
       suffix: "+",
       label: "Active Courses",
-      icon: <StatIcon />,
+      
+      icon: <FaBookOpen className="text-4xl" />,
     },
     {
       id: 4,
       value: 95,
       suffix: "%",
       label: "Success Rate",
-      icon: <StatIcon />,
+      
+      icon: <FaAward className="text-4xl" />,
     },
   ];
 
