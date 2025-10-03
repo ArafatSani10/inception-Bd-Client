@@ -9,7 +9,7 @@ import { FaAddressCard, FaHeadphones, FaMinus, FaPlus } from "react-icons/fa";
 import { CiCalendar, CiShare2, CiTimer } from "react-icons/ci";
 import { GrGift } from "react-icons/gr";
 import { GoPersonAdd } from "react-icons/go";
-import { PiStudent } from "react-icons/pi";
+import { PiStudent, PiStudentBold } from "react-icons/pi";
 import { useEffect, useState, useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import ReviewsSection from "./ReviewsSection";
@@ -28,6 +28,11 @@ const CourseDetails = () => {
   const [activeTab, setActiveTab] = useState("information");
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // new add
+
+
+
 
   const [instructorData, setInstructorData] = useState(null);
 
@@ -123,7 +128,7 @@ const CourseDetails = () => {
 
       {/* Background Image Section */}
       <div className="relative w-full h-auto">
-        <div className="relative w-full h-[200px] mt-10 lg:h-[400px] overflow-hidden">
+        <div className="relative w-full h-[200px] max-sm:mt-20 mt-10 lg:h-[400px] overflow-hidden">
           <img
             src={course.coverPhoto}
             alt="Course Background"
@@ -193,11 +198,10 @@ const CourseDetails = () => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 py-3 text-center font-semibold uppercase tracking-wide ${
-                  activeTab === tab
-                    ? "border-b-4 border-[#00baff] text-[#00baff]"
-                    : "text-gray-500 hover:text-[#00baff]"
-                }`}
+                className={`flex-1 py-3 text-center font-semibold uppercase tracking-wide ${activeTab === tab
+                  ? "border-b-4 border-[#00baff] text-[#00baff]"
+                  : "text-gray-500 hover:text-[#00baff]"
+                  }`}
               >
                 {tab}
               </button>
@@ -336,34 +340,7 @@ const CourseDetails = () => {
               </>
             )}
 
-            {/* {activeTab === "content" && (
-                            <div>
-                                <h2 className="text-2xl font-bold text-[#00baff] mb-4">
-                                    Course Content
-                                </h2>
-                                {course.modules && course.modules.length > 0 ? (
-                                    <div className="space-y-4">
-                                        {course.modules.map((module, index) => (
-                                            <div
-                                                key={module._id || index}
-                                                className="border rounded-lg p-4 dark:border-gray-700"
-                                            >
-                                                <h3 className="font-semibold text-lg">
-                                                    {module.title}
-                                                </h3>
-                                                <p className="text-gray-600 dark:text-gray-400">
-                                                    {module.description}
-                                                </p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <p className="text-gray-700 dark:text-gray-300">
-                                        No content available yet. Check back soon!
-                                    </p>
-                                )}
-                            </div>
-                        )}  */}
+
 
             {activeTab === "Course Curriculum" && (
               <>
@@ -381,11 +358,11 @@ const CourseDetails = () => {
         </div>
 
         {/* Right Side */}
-        <div className="w-full lg:w-1/3 bg-base-200 dark:bg-gray-800 p-3 rounded-lg">
-          <div className="card bg-base-100 dark:bg-gray-900 w-full shadow-xl">
+        <div className="w-full lg:w-1/3 relative bg-base-100  rounded-lg">
+          <div className="card md:-mt-52 p-1 bg-base-100 dark:bg-gray-900 w-full shadow-xl relative z-10 overflow-visible">
             <figure>
               <img
-                className="rounded-xl w-full h-48 object-cover"
+                className="rounded-xl w-full h-80 object-cover"
                 src={course.thumbnail}
                 alt={course.title}
               />
@@ -393,11 +370,10 @@ const CourseDetails = () => {
             <div className="card-body">
               <div className="flex items-center justify-center">
                 <h1
-                  className={`text-4xl text-center font-bold my-3 ${
-                    isPaid
-                      ? "text-green-500 dark:text-green-300"
-                      : "text-blue-500"
-                  }`}
+                  className={`text-4xl text-center font-bold my-3 ${isPaid
+                    ? "text-green-500 dark:text-green-300"
+                    : "text-blue-500"
+                    }`}
                 >
                   {isPaid ? (
                     <>
@@ -500,6 +476,16 @@ const CourseDetails = () => {
                   </div>
                   <div className="flex justify-between">
                     <span className="flex items-center gap-2">
+                      <PiStudentBold />
+                      Total enroll :
+                    </span>
+                    <h1>10</h1>
+                  </div>
+                 
+
+
+                  <div className="flex justify-between">
+                    <span className="flex items-center gap-2">
                       <GoPersonAdd />
                       Capacity:
                     </span>
@@ -530,36 +516,10 @@ const CourseDetails = () => {
                 </div>
               </div>
 
-              {/* Instructor */}
-              {/* <div className="mt-5 border-2 shadow-xl rounded-lg p-4 dark:border-gray-700">
-                                <h2 className="font-bold text-[#00baff] mb-3">
-                                    Instructor
-                                </h2>
-                                <div className="flex flex-col items-center">
-                                    <img
-                                        className="w-32 h-32 rounded-full object-cover mb-3"
-                                        src={course.instructorImage}
-                                        alt={course.instructorTitle}
-                                    />
-                                    <h3 className="text-lg font-bold text-[#00baff]">
-                                        {course.instructor?.name}
-                                    </h3>
-                                    <p className="text-sm mt-2 text-center opacity-70">
-                                        {course.instructorTitle}
-                                    </p>
-                                    <div className="mt-2 text-yellow-400 text-xl">
-                                        ★★★★★
-                                    </div>
-                                    <Link to={`/instructor/${course.instructor?.email}`}>
-                                        <button className="inline-block mt-6 px-5 py-2 rounded-full bg-[#00baff] hover:bg-indigo-600 text-white font-semibold shadow-md transition-all">
-                                            View Profile
-                                        </button>
-                                    </Link>
-                                </div>
-                            </div> */}
+
 
               {instructorData && (
-                <div className="bg-white/30 dark:bg-transparent border border-black/50 dark:border-white/10 rounded-3xl p-5 hover:shadow-xl max-w-full mx-auto">
+                <div className="bg-white/30 dark:bg-transparent border border-black/50 dark:border-white/10 rounded-xl mt-4 p-5 hover:shadow-xl max-w-full mx-auto">
                   <img
                     src={
                       instructorData?.photo || "https://via.placeholder.com/150"

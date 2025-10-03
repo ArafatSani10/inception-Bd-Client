@@ -139,7 +139,7 @@ export default function CheckoutPage() {
           whileHover={{ scale: 1.02 }}
           className="rounded-2xl overflow-hidden shadow-lg bg-white dark:bg-gray-800 hover:shadow-2xl transition-all duration-300 flex flex-col"
         >
-          <div className="relative h-56 w-full overflow-hidden">
+          <div className="relative h-full w-full overflow-hidden">
             <img
               src={course.thumbnail}
               alt={course.title}

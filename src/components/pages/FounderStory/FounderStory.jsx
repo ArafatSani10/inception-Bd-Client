@@ -38,7 +38,7 @@ const founders = [
   {
     name: "BOKTIAR AHMED BAPPY",
     role: "Co-Founder & CTO",
-    bio: "Chief AI Engineer and Mentor with more than 6 years of industry working experience in Python, Machine Learning, Deep Learning, MLOps, Cloud, Generative AI, AI Agents, and Robotics systems.",
+    bio: "Chief AI Engineer and Mentor with 6+ years of experience in Generative AI, MLOps/LLMOps, and Autonomous AI Systems. Experience in designing, deploying, and scaling enterprise-grade AI solutions across healthcare, self-development, and automation. Experienced in multi-agent architectures, RAG pipelines, Computer Vision, NLP, and model optimization, delivering measurable impact on scalability, accuracy, and adoption. Recognized contributor at Omdena for global AI collaborations. Winner of the APICTA Merit Award 2021 and ICT Award 2020.",
     image: "https://i.ibb.co/qF1yg8GM/IMG-8206.jpg",
     socials: [
       { icon: <FaLinkedin />, url: "https://www.linkedin.com/in/boktiarahmed73/" },
