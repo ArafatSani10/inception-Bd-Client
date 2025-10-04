@@ -10,7 +10,7 @@ import video from "../../../../public/demovideo/snapsave-app_1793955564433189_hd
 import { AnimatePresence, motion } from "framer-motion";
 import LoadingModal from "../../hooks/LoadingModal";
 
-const Banner = ({latestCourse}) => {
+const Banner = ({ latestCourse }) => {
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -20,7 +20,7 @@ const Banner = ({latestCourse}) => {
         <div className="flex flex-col lg:flex-row items-center">
           {/* Left content */}
           <div className="lg:w-1/2 space-y-10">
-            <div className="inline-block bg-[#b4bdef] dark:bg-[#00baff] px-4 py-2 rounded-full">
+            <div className="inline-block bg-[#00baff] dark:bg-[#00baff] px-4 py-2 rounded-full">
               <span className="text-white font-medium">
                 Unlock Your Potential
               </span>
@@ -151,7 +151,7 @@ const Banner = ({latestCourse}) => {
                         className="w-10 h-10 rounded-full object-cover border-2 border-[#00baff] shadow-md"
                       />
                       <h3 className="mt-1 text-sm font-semibold text-[#00baff] dark:text-[#00baff] text-center">
-                         {latestCourse?.instructor?.name || "Unknown"}
+                        {latestCourse?.instructor?.name || "Unknown"}
                       </h3>
                     </div>
                   </div>
