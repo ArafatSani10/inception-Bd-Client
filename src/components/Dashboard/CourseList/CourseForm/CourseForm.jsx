@@ -15,12 +15,10 @@ const CourseForm = () => {
     defaultValues: {
       type: "paid",
       instructor: "",
-      instructorTitle: "",
       title: "",
       thumbnail: null,
       demoImage: null,
       coverPhoto: null,
-      instructorImage: null,
       price: 0,
       description: "",
       startingDate: "",
@@ -94,16 +92,13 @@ const CourseForm = () => {
 
       data.category = "68a21bbad929bc483f4a7a66";
 
-      const { demoImage, thumbnail, coverPhoto, instructorImage, ...rest } =
+      const { demoImage, thumbnail, coverPhoto, ...rest } =
         data;
       const form_data = new FormData();
 
       if (thumbnail?.[0]) form_data.append("thumbnail", thumbnail[0]);
       if (coverPhoto?.[0]) form_data.append("coverPhoto", coverPhoto[0]);
       if (demoImage?.[0]) form_data.append("demoImage", demoImage[0]);
-      if (instructorImage?.[0])
-        form_data.append("instructorImage", instructorImage[0]);
-
       const payload = {
         ...rest,
         learningPoints: data.learningPoints.map((lp) => ({
