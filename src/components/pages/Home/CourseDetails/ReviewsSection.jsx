@@ -1,297 +1,395 @@
-import React, { useEffect, useState, useContext } from "react";
-import AuthContext from "../../../../Content/Authcontext";
-import axios from "axios";
+import React, { useState } from "react";
+import { FaStar, FaEllipsisH, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 
-// Emoji reactions allowed
-const EMOJIS = ["👍", "❤️", "😂", "😮", "😢"];
+const ReviewsSection = () => {
+  const [reviews, setReviews] = useState([]); // Array is now empty
 
-const ReviewsSection = ({ courseId }) => {
-  const { user } = useContext(AuthContext);
-  const [dbUser, setDbUser] = useState(null);
-  const [reviews, setReviews] = useState([]);
-  const [newComment, setNewComment] = useState("");
+  const [reviewText, setReviewText] = useState("");
+  const [rating, setRating] = useState(5);
+  const [hoverRating, setHoverRating] = useState(0);
 
-  // Fetch full user info from backend
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        if (!user?.email) return;
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
-        const singleUser = res.data.data.find((u) => u.email === user.email);
-        setDbUser(singleUser);
-      } catch (err) {
-        console.error(err);
-      }
+  // Calculate summary statistics
+  const totalReviews = reviews.length;
+  const averageRating = totalReviews > 0
+    ? (reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews).toFixed(1)
+    : "0.0";
+
+  const starSummary = [5, 4, 3, 2, 1].map((star) => {
+    const count = reviews.filter((r) => r.rating === star).length;
+    const percentage = totalReviews > 0 ? (count / totalReviews) * 100 : 0;
+
+    return {
+      star,
+      count,
+      percentage,
     };
-    fetchUser();
-  }, [user]);
+  });
 
-  // Load reviews from localStorage
- // Save reviews to localStorage whenever they change
-useEffect(() => {
-    if(courseId && reviews) {
-        localStorage.setItem(`courseReviews_${courseId}`, JSON.stringify(reviews));
-    }
-}, [reviews, courseId]);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!reviewText.trim()) return;
 
-  // Save reviews to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem(`courseReviews_${courseId}`, JSON.stringify(reviews));
-  }, [reviews, courseId]);
-
-  // Post a new comment
-  const postComment = () => {
-    if (!newComment.trim() || !dbUser) return;
-    const comment = {
+    const newReview = {
       id: Date.now(),
-      user: {
-        id: dbUser.id || dbUser.email,
-        name: dbUser.name,
-        avatar:
-          dbUser.photo || dbUser.image || `https://ui-avatars.com/api/?name=${dbUser.name}`,
-      },
-      text: newComment,
-      createdAt: new Date().toISOString(),
-      reactions: {},
-      replies: [],
-    };
-    setReviews([comment, ...reviews]);
-    setNewComment("");
-  };
-
-  // Post a reply to a comment
-  const postReply = (commentId, replyText) => {
-    if (!replyText.trim() || !dbUser) return;
-
-    const reply = {
-      id: Date.now(),
-      user: {
-        id: dbUser.id || dbUser.email,
-        name: dbUser.name,
-        avatar:
-          dbUser.photo || dbUser.image || `https://ui-avatars.com/api/?name=${dbUser.name}`,
-      },
-      text: replyText,
-      createdAt: new Date().toISOString(),
-      reactions: {},
+      userName: "You",
+      role: "Student",
+      rating,
+      text: reviewText,
+      date: new Date().toLocaleDateString(),
+      reply: null,
     };
 
-    setReviews((prev) =>
-      prev.map((c) => (c.id === commentId ? { ...c, replies: [...c.replies, reply] } : c))
-    );
+    setReviews([newReview, ...reviews]);
+    setReviewText("");
+    setRating(5);
   };
 
-  // Add reaction to comment or reply
-  const addReaction = (commentId, emoji, isReply = false, replyId = null) => {
-    if (!dbUser) return;
+  const StarRating = ({ rating, size = 16 }) => {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
 
-    setReviews((prev) =>
-      prev.map((c) => {
-        if (c.id !== commentId) return c;
-
-        if (!isReply) {
-          const userReacted = c.reactions[emoji]?.includes(dbUser.id);
-          if (userReacted) return c; // Only one reaction per user per emoji
-          const newReactions = { ...c.reactions };
-          newReactions[emoji] = [...(newReactions[emoji] || []), dbUser.id];
-          return { ...c, reactions: newReactions };
-        } else {
-          const newReplies = c.replies.map((r) => {
-            if (r.id !== replyId) return r;
-            const userReacted = r.reactions[emoji]?.includes(dbUser.id);
-            if (userReacted) return r;
-            const newReactions = { ...r.reactions };
-            newReactions[emoji] = [...(newReactions[emoji] || []), dbUser.id];
-            return { ...r, reactions: newReactions };
-          });
-          return { ...c, replies: newReplies };
-        }
-      })
-    );
-  };
-
-  // Delete comment or reply
-  const deleteCommentOrReply = (commentId, isReply = false, replyId = null) => {
-    if (!dbUser) return;
-
-    if (!isReply) {
-      setReviews((prev) => prev.filter((c) => c.id !== commentId || c.user.id !== dbUser.id));
-    } else {
-      setReviews((prev) =>
-        prev.map((c) => {
-          if (c.id !== commentId) return c;
-          const newReplies = c.replies.filter((r) => r.id !== replyId || r.user.id !== dbUser.id);
-          return { ...c, replies: newReplies };
-        })
-      );
-    }
-  };
-
-  if (!dbUser)
     return (
-      <p className="text-center text-gray-500 dark:text-gray-400 mt-10">Loading user...</p>
+      <div className="flex items-center space-x-1">
+        {[...Array(5)].map((_, index) => {
+          if (index < fullStars) {
+            return <FaStar key={index} className="text-yellow-400" size={size} />;
+          } else if (index === fullStars && hasHalfStar) {
+            return <FaStarHalfAlt key={index} className="text-yellow-400" size={size} />;
+          } else {
+            return <FaRegStar key={index} className="text-yellow-400" size={size} />;
+          }
+        })}
+      </div>
     );
+  };
 
   return (
-    <div className="max-w-full mx-auto p-4 space-y-6">
-      {/* New Comment */}
-      <div className="flex flex-col space-y-2">
-        <textarea
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          className="border p-2 rounded-md w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
-          placeholder="Write a comment..."
-        />
-        <button
-          onClick={postComment}
-          className="self-end px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition"
-        >
-          Post Comment
-        </button>
+    <div className="max-w-full mx-auto p-2 space-y-8">
+      {/* Header */}
+      <div className="text-center">
+        <h1 className="text-4xl font-bold text-[#00baff] mb-4">
+          Course Reviews
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400 text-lg">
+          See what other students think about this course
+        </p>
       </div>
 
-      {/* Reviews */}
-      {reviews.map((c) => (
-        <Comment
-          key={c.id}
-          comment={c}
-          postReply={postReply}
-          addReaction={addReaction}
-          deleteCommentOrReply={deleteCommentOrReply}
-          currentUser={dbUser}
-        />
-      ))}
+      {/* Summary Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Overall Rating Card */}
+        <div className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 text-start">
+          <div className="flex justify-center mb-4">
+            <div className="relative">
+              <div className="w-24 h-24 mt-5 ml-10   rounded-full flex items-center justify-center">
+                <span className="text-6xl font-bold text-white">{averageRating}</span>
+                
+              </div>
+
+              <div className="">
+                <StarRating  rating={parseFloat(averageRating)} size={30} />
+              </div>
+            </div>
+          </div>
+          
+          
+        </div>
+
+        {/* Star Breakdown */}
+        <div className="lg:col-span-2 bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+            Rating Breakdown
+          </h3>
+          <div className="space-y-4">
+            {starSummary.map(({ star, count, percentage }) => (
+              <div key={star} className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2 w-20">
+                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    {star}
+                  </span>
+                  <FaStar className="text-yellow-400" />
+                </div>
+                <div className="flex-1">
+                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                    <div
+                      className="bg-gradient-to-r from-yellow-400 to-yellow-500 h-3 rounded-full transition-all duration-500"
+                      style={{ width: `${percentage}%` }}
+                    ></div>
+                  </div>
+                </div>
+                <span className="text-sm text-gray-600 dark:text-gray-400 w-12 text-right">
+                  {count}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Add Review Form */}
+      <div className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          Share Your Experience
+        </h2>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Star Rating */}
+          <div className="space-y-3">
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              How would you rate this course?
+            </label>
+            <div className="flex items-center space-x-2">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  type="button"
+                  key={star}
+                  onClick={() => setRating(star)}
+                  onMouseEnter={() => setHoverRating(star)}
+                  onMouseLeave={() => setHoverRating(0)}
+                  className="transition-transform hover:scale-110 focus:outline-none"
+                >
+                  <FaStar
+                    size={32}
+                    className={`transition-colors ${(hoverRating || rating) >= star
+                        ? "text-yellow-400 drop-shadow-lg"
+                        : "text-gray-300 dark:text-gray-600"
+                      }`}
+                  />
+                </button>
+              ))}
+              <span className="ml-4 text-lg font-semibold text-gray-700 dark:text-gray-300">
+                {rating}
+              </span>
+            </div>
+          </div>
+
+          {/* Review Text */}
+          <div className="space-y-3">
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Your Review
+            </label>
+            <textarea
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
+              placeholder="Share your thoughts about the course... What did you like? What could be improved?"
+              rows={5}
+              className="w-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-xl p-4 text-gray-900 dark:text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all duration-200"
+            />
+          </div>
+
+          {/* Submit Button */}
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              disabled={!reviewText.trim()}
+              className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
+            >
+              Post Review
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {/* Reviews List */}
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            Student Reviews ({totalReviews})
+          </h2>
+          <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+            <span>Sort by: Latest</span>
+          </div>
+        </div>
+
+        {reviews.length === 0 ? (
+          <div className="text-center py-12">
+            <div className="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+              <FaStar className="w-8 h-8 text-gray-400" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-400 mb-2">
+              No reviews yet
+            </h3>
+            <p className="text-gray-500 dark:text-gray-500">
+              Be the first to share your experience with this course!
+            </p>
+          </div>
+        ) : (
+          reviews.map((review) => (
+            <ReviewCard key={review.id} review={review} StarRating={StarRating} />
+          ))
+        )}
+      </div>
     </div>
   );
 };
 
-// Single Comment Component
-const Comment = ({
-  comment,
-  postReply,
-  addReaction,
-  deleteCommentOrReply,
-  currentUser,
-}) => {
-  const [showReplyInput, setShowReplyInput] = useState(false);
+const ReviewCard = ({ review, StarRating }) => {
+  const [showReplyBox, setShowReplyBox] = useState(false);
   const [replyText, setReplyText] = useState("");
+  const [reply, setReply] = useState(review.reply || null);
+  const [optionsOpen, setOptionsOpen] = useState(false);
+
+  const handleReplySubmit = () => {
+    if (!replyText.trim()) return;
+
+    const newReply = {
+      userName: "Instructor Mike",
+      role: "Instructor",
+      text: replyText,
+      date: new Date().toLocaleDateString(),
+    };
+
+    setReply(newReply);
+    setReplyText("");
+    setShowReplyBox(false);
+    setOptionsOpen(false);
+  };
 
   return (
-    <div className="border p-4 rounded-md bg-gray-50 dark:bg-gray-900 shadow-sm">
-      {/* Comment header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <img
-            src={comment.user.avatar}
-            alt={comment.user.name}
-            className="w-10 h-10 rounded-full"
-          />
+    <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-all duration-300">
+      {/* Header */}
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex items-center space-x-4">
+          <div className="relative">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
+              {review.userName[0]}
+            </div>
+            {review.role === "Instructor" && (
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white dark:border-gray-900"></div>
+            )}
+          </div>
           <div>
-            <p className="font-semibold text-gray-800 dark:text-gray-200">
-              {comment.user.name}
-            </p>
-            <p className="text-gray-500 dark:text-gray-400 text-sm">
-              {new Date(comment.createdAt).toLocaleString()}
+            <div className="flex items-center space-x-3">
+              <h3 className="font-semibold text-gray-900 dark:text-white">
+                {review.userName}
+              </h3>
+              {review.role === "Instructor" && (
+                <span className="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xs font-medium rounded-full shadow-sm">
+                  Instructor
+                </span>
+              )}
+            </div>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              {review.date}
             </p>
           </div>
         </div>
 
-        {/* Delete button */}
-        {comment.user.id === currentUser.id && (
+        {/* Options Menu */}
+        <div className="relative">
           <button
-            onClick={() => deleteCommentOrReply(comment.id)}
-            className="text-red-500 hover:underline"
+            onClick={() => setOptionsOpen(!optionsOpen)}
+            className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
           >
-            Delete
+            <FaEllipsisH />
           </button>
-        )}
-      </div>
 
-      <p className="mt-2 text-gray-700 dark:text-gray-300">{comment.text}</p>
-
-      {/* Reactions */}
-      <div className="flex space-x-2 mt-2">
-        {EMOJIS.map((emoji) => (
-          <button
-            key={emoji}
-            onClick={() => addReaction(comment.id, emoji)}
-            className="px-2 py-1 border rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition"
-          >
-            {emoji} {comment.reactions[emoji]?.length || ""}
-          </button>
-        ))}
-      </div>
-
-      {/* Replies */}
-      <div className="pl-6 mt-2 space-y-2">
-        {comment.replies.map((r) => (
-          <div key={r.id} className="flex items-start justify-between">
-            <div className="flex items-start space-x-2">
-              <img src={r.user.avatar} alt={r.user.name} className="w-8 h-8 rounded-full" />
-              <div>
-                <p className="font-semibold text-gray-800 dark:text-gray-200">{r.user.name}</p>
-                <p className="text-gray-500 dark:text-gray-400 text-sm">
-                  {new Date(r.createdAt).toLocaleString()}
-                </p>
-                <p className="text-gray-700 dark:text-gray-300">{r.text}</p>
-
-                {/* Reactions on reply */}
-                <div className="flex space-x-2 mt-1">
-                  {EMOJIS.map((emoji) => (
-                    <button
-                      key={emoji}
-                      onClick={() => addReaction(comment.id, emoji, true, r.id)}
-                      className="px-2 py-1 border rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition"
-                    >
-                      {emoji} {r.reactions[emoji]?.length || ""}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Delete reply */}
-            {r.user.id === currentUser.id && (
-              <button
-                onClick={() => deleteCommentOrReply(comment.id, true, r.id)}
-                className="text-red-500 hover:underline"
-              >
-                Delete
+          {optionsOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-xl rounded-xl z-10 overflow-hidden">
+              <button className="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border-b border-gray-100 dark:border-gray-700">
+                Edit Review
               </button>
-            )}
-          </div>
-        ))}
+              <button className="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border-b border-gray-100 dark:border-gray-700">
+                Share Review
+              </button>
+              <button className="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                Delete Review
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
 
-        {/* Reply Input */}
-        {showReplyInput ? (
-          <div className="flex space-x-2">
-            <input
-              type="text"
-              value={replyText}
-              onChange={(e) => setReplyText(e.target.value)}
-              className="border p-1 rounded-md flex-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
-              placeholder="Write a reply..."
-            />
+      {/* Rating */}
+      <div className="flex items-center space-x-3 mb-4">
+        <StarRating rating={review.rating} size={18} />
+        <span className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+          {review.rating}
+        </span>
+      </div>
+
+      {/* Review Text */}
+      <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+        {review.text}
+      </p>
+
+      {/* Actions */}
+      <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-800">
+        <div className="flex items-center space-x-4">
+          
+
+          {!reply && (
             <button
-              className="bg-green-600 dark:bg-green-500 text-white px-3 rounded-md hover:bg-green-700 dark:hover:bg-green-600 transition"
-              onClick={() => {
-                postReply(comment.id, replyText);
-                setReplyText("");
-                setShowReplyInput(false);
-              }}
+              onClick={() => setShowReplyBox(!showReplyBox)}
+              className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
             >
-              Reply
+              <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                Reply
+              </span>
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Reply Box */}
+      {showReplyBox && (
+        <div className="mt-6 p-6 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-800 dark:to-blue-900/10 rounded-xl border border-blue-200 dark:border-blue-800">
+          <h4 className="font-semibold text-gray-900 dark:text-white mb-4">
+            Write a Reply
+          </h4>
+          <textarea
+            value={replyText}
+            onChange={(e) => setReplyText(e.target.value)}
+            placeholder="Write your reply as an instructor..."
+            rows={3}
+            className="w-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg p-3 text-sm text-gray-900 dark:text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+          />
+          <div className="flex justify-end space-x-3 mt-4">
+            <button
+              onClick={() => setShowReplyBox(false)}
+              className="px-6 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleReplySubmit}
+              disabled={!replyText.trim()}
+              className="px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm font-medium rounded-lg shadow-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Post Reply
             </button>
           </div>
-        ) : (
-          <button
-            className="text-blue-600 dark:text-blue-400 mt-1"
-            onClick={() => setShowReplyInput(true)}
-          >
-            Reply
-          </button>
-        )}
-      </div>
+        </div>
+      )}
+
+      {/* Display Reply */}
+      {reply && (
+        <div className="mt-6 ml-6 pl-6 border-l-2 border-blue-300 dark:border-blue-700">
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-5 rounded-xl shadow-sm">
+            <div className="flex items-start space-x-4">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                {reply.userName[0]}
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center space-x-3 mb-2">
+                  <h4 className="font-semibold text-blue-700 dark:text-blue-400 text-sm">
+                    {reply.userName}
+                  </h4>
+                  <span className="px-2 py-1 bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 text-xs font-medium rounded-full">
+                    {reply.role}
+                  </span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {reply.date}
+                  </span>
+                </div>
+                <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                  {reply.text}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -21,6 +21,7 @@ import AuthContext from "../../../../Content/Authcontext";
 import CourseContent from "./CourseContent";
 import CourseOutlineTab from "../../../CourseOutlineTab";
 import { Loader } from "lucide-react";
+import CommentSection from "./CommentSection";
 
 const CourseDetails = () => {
   const [openIndex, setOpenIndex] = useState(null);
@@ -30,6 +31,23 @@ const CourseDetails = () => {
   const [loading, setLoading] = useState(true);
 
   // new add
+
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
+
+  // ✅ নতুন কমেন্ট যোগ করার ফাংশন
+  const handlePostComment = () => {
+    if (!newComment.trim()) return;
+    const commentObj = {
+      id: Date.now(),
+      userName: user?.displayName || "Anonymous",
+      userImage: user?.photoURL || "https://i.pravatar.cc/50",
+      commentText: newComment,
+      date: new Date().toLocaleString(),
+    };
+    setComments([...comments, commentObj]);
+    setNewComment(""); // textarea খালি করো
+  };
 
 
 
@@ -327,18 +345,35 @@ const CourseDetails = () => {
                 </div>
 
                 {/* Comments */}
+                {/* Comments */}
                 <div className="mt-6">
-                  <h1 className="text-2xl text-[#00baff] font-semibold">
-                    Comments
-                  </h1>
+                  <h1 className="text-2xl text-[#00baff] font-semibold">Comments</h1>
+
                   <textarea
                     className="w-full p-2 mt-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:border-gray-600"
                     rows="4"
                     placeholder="Write your comment..."
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
                   ></textarea>
-                  <button className="mt-3 px-4 py-2 bg-[#00baff] text-white rounded-lg font-bold">
+
+                  <button
+                    onClick={handlePostComment}
+                    className="mt-3 px-4 py-2 bg-[#00baff] text-white rounded-lg font-bold"
+                  >
                     Post Comment
                   </button>
+                </div>
+
+                {/* Comment গুলো দেখাবে নিচে */}
+                <div className="mt-5 p-4 ">
+                  <CommentSection comments={comments} />
+                </div>
+
+
+                {/* aikhane comment gulo show hobe..!!! */}
+                <div className="mt-5  ">
+                  <CommentSection></CommentSection>
                 </div>
               </>
             )}
@@ -429,14 +464,14 @@ const CourseDetails = () => {
                     <span>Instructor support</span>
                   </div>
 
-                 
+
                   {/* Course duration */}
                   <div className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-800 transition-colors">
                     <CiTimer className="text-[#00baff]" />
                     <span>{course.duration} hours of content</span>
                   </div>
 
-                   {/* WhatsApp Community */}
+                  {/* WhatsApp Community */}
                   <a
                     href="https://chat.whatsapp.com/CbHbKxRNeygCNxLYXy9iW2"
                     target="_blank"
