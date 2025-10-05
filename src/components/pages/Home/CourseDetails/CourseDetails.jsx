@@ -18,35 +18,38 @@ import axios from "axios";
 // import AuthContext from "../../../Content/Authcontext";
 import { useMyOrdersQuery } from "../../../../redux/api/orderApi";
 import AuthContext from "../../../../Content/Authcontext";
-import CourseContent from "./CourseContent";
 import CourseOutlineTab from "../../../CourseOutlineTab";
 import { Loader } from "lucide-react";
 import CommentSection from "./CommentSection";
+import { useCreateCommentMutation } from "../../../../redux/api/commentApi";
 
 const CourseDetails = () => {
+  const { user } = useContext(AuthContext);
   const [openIndex, setOpenIndex] = useState(null);
   const [openLearning, setOpenLearning] = useState(null);
   const [activeTab, setActiveTab] = useState("information");
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [createComment] = useCreateCommentMutation();
 
   // new add
 
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState(course?.comments || []);
   const [newComment, setNewComment] = useState("");
 
   // ✅ নতুন কমেন্ট যোগ করার ফাংশন
-  const handlePostComment = () => {
-    if (!newComment.trim()) return;
-    const commentObj = {
-      id: Date.now(),
-      userName: user?.displayName || "Anonymous",
-      userImage: user?.photoURL || "https://i.pravatar.cc/50",
-      commentText: newComment,
-      date: new Date().toLocaleString(),
-    };
-    setComments([...comments, commentObj]);
-    setNewComment(""); // textarea খালি করো
+  const handlePostComment = async () => {
+    const commentData = { courseId: course._id, comment: newComment,email:user?.email};
+    console.log("commentData to be sent:", commentData);
+    if (!newComment.trim()) return; // Prevent empty comments
+   try {
+     const res = await createComment(commentData).unwrap();
+     console.log("response from createComment:", res);
+     setComments((prev) => [...prev, res]);
+     setNewComment("");
+   } catch (error) {
+     console.error("Failed to create comment:", error);
+   }
   };
 
 
@@ -56,7 +59,6 @@ const CourseDetails = () => {
 
   const { idOrSlug } = useParams();
 
-  const { user } = useContext(AuthContext);
 
   const { data: orderRes } = useMyOrdersQuery(user?.email, {
     skip: !user?.email,
@@ -100,7 +102,6 @@ const CourseDetails = () => {
       try {
         const email = course?.instructor?.email; // or ID
         if (!email) return;
-
         const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
         const allUsers = res?.data?.data || [];
         const instructor = allUsers.find((u) => u.email === email);
@@ -366,9 +367,9 @@ const CourseDetails = () => {
                 </div>
 
                 {/* Comment গুলো দেখাবে নিচে */}
-                <div className="mt-5 p-4 ">
-                  <CommentSection comments={comments} />
-                </div>
+                { course?.comments?.length > 0 && <div className="mt-5 p-4 ">
+                  <CommentSection comments={course?.comments} />
+                </div>}
 
 
                 {/* aikhane comment gulo show hobe..!!! */}
