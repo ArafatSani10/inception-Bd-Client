@@ -132,7 +132,7 @@ export default function PrivacyPolicy() {
               href="mailto:learn.inception@gamil.com"
               className="text-blue-600 dark:text-blue-400"
             >
-          learn.inception@gmail.com
+              learn.inception@gmail.com
 
 
             </a>
@@ -192,20 +192,20 @@ export default function PrivacyPolicy() {
             </motion.section>
           ))}
 
-          
-        {/* Buttons */}
-        <div className="mt-10 flex flex-wrap gap-4 justify-start">
-          <button
-            onClick={() => window.print()}
-            className="inline-flex items-center gap-2 px-6 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm transition"
-          >
-            🖨 Print
-          </button>
 
-        
-        </div>
+          {/* Buttons */}
+          <div className="mt-10 flex flex-wrap gap-4 justify-start">
+            <button
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-2 px-6 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm transition"
+            >
+              🖨 Print
+            </button>
 
-          
+
+          </div>
+
+
         </article>
       </div>
     </main>
