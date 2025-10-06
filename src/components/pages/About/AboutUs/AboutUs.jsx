@@ -12,18 +12,18 @@ import {
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useGetMyDataQuery } from "../../../../redux/api/userApi";
-import { FaLaptopCode, FaBrain, FaChartLine,  } from 'react-icons/fa';
+import { FaLaptopCode, FaBrain, FaChartLine, } from 'react-icons/fa';
 import { LiaRobotSolid } from "react-icons/lia";
 
 const AboutUs = () => {
   const { data: myDateRes, isLoading } = useGetMyDataQuery();
   const myData = myDateRes?.data;
   console.log("my data", myData);
-const courses = [
+  const courses = [
     {
       id: 1,
       // Icon changed from FaPython to a more general programming icon
-      icon: <FaLaptopCode className="text-4xl" />, 
+      icon: <FaLaptopCode className="text-4xl" />,
       title: "Programming",
       description: "Building Strong Foundations in Programming",
       colorClass: "bg-[#00baff]", // single solid color applied here
@@ -31,7 +31,7 @@ const courses = [
     {
       id: 2,
       // Icon changed from FaRobot to a more symbolic AI/Brain icon
-      icon: <FaBrain className="text-4xl" />, 
+      icon: <FaBrain className="text-4xl" />,
       title: "Generative AI",
       description: "From Ideas to Intelligence: Generative AI in Action",
       colorClass: "bg-[#00baff]",
@@ -39,7 +39,7 @@ const courses = [
     {
       id: 3,
       // Icon changed from FaMicrochip to a Data Science/Analytics icon
-      icon: <FaChartLine className="text-4xl" />, 
+      icon: <FaChartLine className="text-4xl" />,
       title: "Data Science", // Corrected title casing
       description: "Discover Insights, Drive Innovation with Data Science", // Updated description to be relevant to Data Science
       colorClass: "bg-[#00baff]",
@@ -47,15 +47,15 @@ const courses = [
     {
       id: 4,
       // Icon changed from FaCogs to a more comprehensive Full Stack/Branching icon
-      icon: <FaRobot className="text-4xl" />, 
+      icon: <FaRobot className="text-4xl" />,
       title: "Robotics with AI",
       description: "Robotics and AI: Powering the Future of Automation", // Updated description to be relevant to Full Stack
       colorClass: "bg-[#00baff]",
     },
-];
+  ];
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-gray-950 text-gray-900 dark:text-gray-100 overflow-hidden">
+    <div className="min-h-screen w-full bg-white dark:bg-[#00091a] text-gray-900 dark:text-gray-100 overflow-hidden">
       {/* Hero Banner */}
       <div className="relative h-[400px] w-full overflow-hidden">
         <div className="absolute inset-0 bg-black/30 z-10" />
@@ -115,7 +115,7 @@ const courses = [
               transition={{ duration: 0.5, delay: id * 0.1 }}
               className="group"
             >
-              <div className="h-full bg-white dark:bg-transparent rounded-xl p-4 flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 group-hover:-translate-y-2">
+              <div className="h-full bg-white border-gray-300 dark:bg-transparent rounded-xl p-4 flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 border  dark:border-gray-700 group-hover:-translate-y-2">
                 <div
                   className={`w-16 h-16 rounded-xl mb-6 flex items-center justify-center ${colorClass} text-white`}
                 >
@@ -127,7 +127,7 @@ const courses = [
                 <p className="text-gray-600 dark:text-gray-300 mb-1 mt-4 flex-grow">
                   {description}
                 </p>
-               
+
               </div>
             </motion.div>
           ))}
@@ -135,7 +135,7 @@ const courses = [
       </div>
 
       {/* Mission Section */}
-      <div className="py-20 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-950 dark:to-gray-950">
+      <div className="py-20 bg-base-200 dark:bg-[#00091a]">
         <div className="max-w-full mx-auto px-4">
           <div className="flex flex-col md:flex-row gap-12 items-stretch">
             <motion.div

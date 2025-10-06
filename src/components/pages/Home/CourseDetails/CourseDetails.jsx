@@ -150,22 +150,24 @@ const CourseDetails = () => {
 
       {/* Background Image Section */}
       <div className="relative w-full h-auto">
-        <div className="relative w-full h-[200px] max-sm:mt-20 mt-10 lg:h-[400px] overflow-hidden">
+        <div className="relative w-full mt-10 max-sm:mt-20 overflow-hidden 
+  h-[400px] lg:h-[400px] md:h-[300px] sm:h-[250px] max-sm:h-auto">
           <img
             src={course.coverPhoto}
             alt="Course Background"
-            className="w-full h-full object-cover"
+            className="w-full h-full max-sm:h-auto object-cover max-sm:object-contain"
           />
-          <div className="hidden lg:block max-sm:block absolute inset-0  "></div>
+          <div className="hidden lg:block max-sm:block absolute inset-0"></div>
         </div>
 
-        <div className="mx-auto w-full px-2 py-8 rounded-xl bg-white dark:bg-transparent relative z-10">
-          <h1 className="text-[#00baff] dark:text-[#38bdf8] text-xl lg:text-3xl font-bold mb-3 leading-tight text-start lg:text-left">
+
+        <div className="w-full mx-auto    px-2 py-8 rounded-xl  dark:bg-transparent relative z-10">
+          <h1 className="text-[#00baff]  text-sm lg:text-3xl font-bold mb-3 leading-tight text-start lg:text-left">
             {course.title}
           </h1>
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 gap-2 mb-3 justify-center lg:justify-start">
-            <h2 className="font-semibold text-base text-gray-900 dark:text-gray-200 underline">
+            <h2 className="font-semibold text-xs md:text-xl text-gray-900 dark:text-gray-200 underline">
               <span className="text-black dark:text-white">
                 {course.category?.name || "Uncategorized"}
               </span>
@@ -192,21 +194,7 @@ const CourseDetails = () => {
             </span>
           </p>
 
-          {/* <div className="w-full flex justify-start lg:justify-start">
-                        {isEnrolled ? (
-                            <Link to={`/student-dashboard/module-page/${course._id}`}>
-                                <button className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-full shadow-md transition-all duration-300">
-                                    Go to Learning Page
-                                </button>
-                            </Link>
-                        ) : (
-                            <Link to="/checkout" state={{ course }}>
-                                <button className="px-6 py-2 bg-[#00baff] hover:bg-[#009edb] dark:bg-[#38bdf8] dark:hover:bg-[#1ba7e1] text-white font-semibold rounded-full shadow-md transition-all duration-300">
-                                    Enroll on Course
-                                </button>
-                            </Link>
-                        )}
-                    </div> */}
+
         </div>
       </div>
 
@@ -234,81 +222,51 @@ const CourseDetails = () => {
           <div className="w-full p-3">
             {activeTab === "information" && (
               <>
-                {/* Learning Points Accordion */}
-                <div className="space-y-4">
-                  <h1 className="text-lg font-bold mb-2 text-[#00baff]">
+                {/* Learning Points */}
+                <div className="space-y-6 mt-5">
+                  <h1 className="text-xl  max-sm:text-sm font-bold text-[#00baff]">
                     What You Will Learn?
                   </h1>
-                  {course.learningPoints?.map((point, index) => (
-                    <div
-                      key={point._id || index}
-                      className="border border-gray-300 dark:border-gray-600 rounded-2xl overflow-hidden"
-                    >
-                      <button
-                        onClick={() => toggleLearning(index)}
-                        className="w-full flex justify-between items-center px-6 py-4 bg-gray-100 dark:bg-gray-800 text-left"
+
+                  <ul className="space-y-5 max-sm:space-y-7 text-gray-800 dark:text-gray-300 text-base leading-relaxed">
+                    {course.learningPoints?.map((point, index) => (
+                      <li
+                        key={point._id || index}
+                        className="flex items-start gap-2 "
                       >
-                        <span className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                        <MdOutlineDone className="text-green-500 text-lg mt-[2px]" />
+                        <span className="font-medium max-sm:text-sm">
                           {point.subject || point}
                         </span>
-
-                        <span className="text-blue-600 dark:text-blue-400">
-                          {openLearning === index ? <FaMinus /> : <FaPlus />}
-                        </span>
-                      </button>
-
-                      <AnimatePresence initial={false}>
-                        {openLearning === index && (
-                          <motion.div
-                            key="content"
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            <div className="px-6 py-4 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-t dark:border-gray-700">
-                              {/* Column Layout */}
-                              <div className="grid grid-cols-1 gap-4">
-                                {point.subtitle?.map((sub, subIndex) => (
-                                  <span
-                                    key={subIndex}
-                                    className="flex items-center gap-2"
-                                  >
-                                    <MdOutlineDone /> {sub}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  ))}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
+
                 {/* About */}
-                <h1 className="font-bold text-xl mt-6 text-[#00baff]">
+                <h1 className="font-bold max-sm:text-sm text-xl mt-6 text-[#00baff]">
                   About This Course
                 </h1>
-                <p className="opacity-70 border p-3 md:text-lg text-sm mt-3 dark:border-gray-700 dark:bg-gray-800">
+                <p className="opacity-70 border p-3 md:text-lg text-sm mt-3 dark:border-gray-700 dark:bg-gray-900">
                   {course.description}
                 </p>
 
                 {/* Requirements */}
-                <h1 className="text-lg font-bold mt-6 text-[#00baff]">
+                <h1 className="text-lg max-sm:text-sm mb-4 font-bold mt-6 text-[#00baff]">
                   Requirements
                 </h1>
-                <div className="p-2 bg-base-200 dark:bg-gray-800 space-y-4 rounded-md">
+                <div className=" bg-base-200  space-y-4 rounded-md">
                   {course.requirements?.map((req, i) => (
-                    <p key={i} className="flex items-center gap-2">
-                      <MdOutlineDone /> {req}
+                    <p key={i} className="flex items-center max-sm:text-sm  gap-2">
+                      <MdOutlineDone className="text-green-500 text-lg  mt-[2px]" /> {req}
                     </p>
                   ))}
                 </div>
 
                 {/* FAQ Accordion */}
                 <div className="space-y-4 mt-10">
-                  <h1 className="md:text-2xl text-[#00baff] font-bold ">FAQ</h1>
+                  <h1 className="md:text-lg text-sm text-[#00baff] font-bold ">FAQ</h1>
                   {course.faqs?.map((faq, index) => (
                     <div
                       key={faq._id || index}
@@ -318,7 +276,7 @@ const CourseDetails = () => {
                         onClick={() => toggleFAQ(index)}
                         className="w-full flex justify-between items-center px-6 py-4 bg-gray-100 dark:bg-gray-800 text-left"
                       >
-                        <span className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                        <span className="text-lg max-sm:text-xs  font-medium text-gray-900 dark:text-gray-100">
                           {faq.question}
                         </span>
                         <span className="text-blue-600 dark:text-blue-400">
@@ -335,7 +293,7 @@ const CourseDetails = () => {
                             exit={{ height: 0, opacity: 0 }}
                             transition={{ duration: 0.3 }}
                           >
-                            <div className="px-6 py-4 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-t dark:border-gray-700">
+                            <div className="px-6 py-4 max-sm:text-xs bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-t dark:border-gray-700">
                               {faq.answer}
                             </div>
                           </motion.div>
@@ -348,7 +306,7 @@ const CourseDetails = () => {
                 {/* Comments */}
                 {/* Comments */}
                 <div className="mt-6">
-                  <h1 className="text-2xl text-[#00baff] font-semibold">Comments</h1>
+                  <h1 className="text-lg max-sm:text-sm text-[#00baff] font-semibold">Comments</h1>
 
                   <textarea
                     className="w-full p-2 mt-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:border-gray-600"
@@ -399,13 +357,14 @@ const CourseDetails = () => {
         {/* Right Side */}
         <div className="w-full lg:w-1/3 relative bg-base-100  rounded-lg">
           <div className="card md:-mt-52 p-1 bg-base-100 dark:bg-gray-900 w-full shadow-xl relative z-10 overflow-visible">
-            <figure>
+            <figure className="w-full max-w-3xl mx-auto overflow-hidden rounded-2xl shadow-lg">
               <img
-                className="rounded-xl w-full h-80 object-cover"
+                className="w-full aspect-[16/9] object-cover"
                 src={course.thumbnail}
                 alt={course.title}
               />
             </figure>
+
             <div className="card-body">
               <div className="flex items-center justify-center">
                 <h1
