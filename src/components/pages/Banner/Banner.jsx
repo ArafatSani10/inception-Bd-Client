@@ -91,7 +91,7 @@ const Banner = ({ latestCourse }) => {
                         {/* Video */}
                         <div className="aspect-video w-full h-full">
                           <iframe className="w-full h-full md:w-[900px] md:h-[500px]"
-                            src="https://www.youtube.com/embed/PrBMuQxyUEc"
+                            src="https://www.youtube.com/embed/HA3HXzYdIX4?si=GCMZt4LARDLFqtG_"
                             title="YouTube video player" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media;
   gyroscope; picture-in-picture" allowfullscreen>
