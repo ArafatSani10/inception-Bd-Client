@@ -114,7 +114,7 @@ const founders = [
 
 const FounderStory = () => {
   return (
-    <section className="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 py-20 transition-colors duration-500">
+    <section className="bg-white dark:bg-[#00091a] py-20 transition-colors duration-500">
       <h2 className="text-center text-5xl max-sm:mt-10 max-sm:text-3xl font-bold text-[#00baff] mb-16">
         Meet Our Founders
       </h2>

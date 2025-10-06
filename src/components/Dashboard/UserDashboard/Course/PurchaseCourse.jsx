@@ -61,7 +61,7 @@ const PurchaseCourse = ({ orders: propOrders }) => {
                 className="w-full h-full  md:h-full"
               />
               <div className="p-4">
-                <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm md:text-lg">
+                <h3 className="font-semibold text-[#00baff] text-sm md:text-lg">
                   {order?.course?.title}
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -73,7 +73,7 @@ const PurchaseCourse = ({ orders: propOrders }) => {
                 <Link
                   to={`/student-dashboard/module-page/${order?.course?.id}`}
                 >
-                  <button className="mt-4 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-lg font-medium shadow-lg hover:opacity-90 transition-all duration-300">
+                  <button className="mt-4 px-4 py-2 bg-[#00baff] text-white rounded-lg font-medium shadow-lg hover:opacity-90 transition-all duration-300">
                     View Course
                   </button>
                 </Link>
