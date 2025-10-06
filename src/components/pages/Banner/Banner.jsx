@@ -128,7 +128,7 @@ const Banner = ({ latestCourse }) => {
 
                     </div>
                   </div>
-                  <div className="bg-indigo-500 dark:bg-[#00baff] text-white md:px-3 px-6 max-sm:text-xs  py-1 rounded-full text-sm font-medium">
+                  <div className="bg-[#00baff] text-white md:px-3 px-6 max-sm:text-xs  py-1 rounded-full text-sm font-medium">
                     TrendingCourse
                   </div>
                 </div>

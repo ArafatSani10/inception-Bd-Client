@@ -458,16 +458,15 @@ const CourseDetails = () => {
                 <h1 className="font-bold mx-5 mt-6 text-[#00baff]">
                   This course includes:
                 </h1>
-                <div className=" text-sm text-gray-200 p-3">
+                <div className="text-sm text-gray-700 dark:text-gray-200 p-3 space-y-2 transition-colors duration-300">
                   {/* Instructor support */}
-                  <div className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-800 transition-colors">
+                  <div className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-200 dark:hover:bg-slate-800 transition-colors cursor-default">
                     <FaHeadphones className="text-[#00baff]" />
                     <span>Instructor support</span>
                   </div>
 
-
                   {/* Course duration */}
-                  <div className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-800 transition-colors">
+                  <div className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-200 dark:hover:bg-slate-800 transition-colors cursor-default">
                     <CiTimer className="text-[#00baff]" />
                     <span>{course.duration} hours of content</span>
                   </div>
@@ -479,13 +478,13 @@ const CourseDetails = () => {
                     rel="noopener noreferrer"
                     className="block"
                   >
-                    <div className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-800 transition-colors ">
+                    <div className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-200 dark:hover:bg-slate-800 transition-colors cursor-pointer">
                       <FaWhatsapp className="text-[#25D366]" />
-                      <span>WhatsApp Community</span>
+                      <span className="font-medium">WhatsApp Community</span>
                     </div>
                   </a>
-
                 </div>
+
 
               </div>
 
