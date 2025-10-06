@@ -82,17 +82,17 @@ const ReviewsSection = () => {
           <div className="flex justify-center mb-4">
             <div className="relative">
               <div className="w-24 h-24 mt-5 ml-10   rounded-full flex items-center justify-center">
-                <span className="text-6xl font-bold text-white">{averageRating}</span>
-                
+                <span className="text-6xl font-bold dark:text-white text-black">{averageRating}</span>
+
               </div>
 
               <div className="">
-                <StarRating  rating={parseFloat(averageRating)} size={30} />
+                <StarRating rating={parseFloat(averageRating)} size={30} />
               </div>
             </div>
           </div>
-          
-          
+
+
         </div>
 
         {/* Star Breakdown */}
@@ -151,8 +151,8 @@ const ReviewsSection = () => {
                   <FaStar
                     size={32}
                     className={`transition-colors ${(hoverRating || rating) >= star
-                        ? "text-yellow-400 drop-shadow-lg"
-                        : "text-gray-300 dark:text-gray-600"
+                      ? "text-yellow-400 drop-shadow-lg"
+                      : "text-gray-300 dark:text-gray-600"
                       }`}
                   />
                 </button>
@@ -316,7 +316,7 @@ const ReviewCard = ({ review, StarRating }) => {
       {/* Actions */}
       <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-800">
         <div className="flex items-center space-x-4">
-          
+
 
           {!reply && (
             <button

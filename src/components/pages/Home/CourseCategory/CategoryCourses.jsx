@@ -122,7 +122,7 @@ const CategoryCourses = () => {
                 ></div>
             ))}
 
-            <div className="max-w-full mx-auto relative z-10">
+            <div className="max-w-full mt-12 mx-auto relative z-10">
                 <div className="text-center mb-16">
                     <div className="inline-flex items-center justify-center p-4 rounded-full bg-gradient-to-r from-[#00baff] to-[#3EC6F0] mb-6 shadow-lg">
                         <IconComponent className="text-white text-4xl" />
@@ -148,59 +148,79 @@ const CategoryCourses = () => {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {courses.map(course => (
-                            <div key={course._id} className="group bg-gray-100 dark:bg-gray-900 backdrop-blur-md rounded-2xl overflow-hidden border border-gray-300 dark:border-gray-800 hover:border-[#00baff]/30 transition-all duration-500 hover:-translate-y-2">
-                                <div className="relative overflow-hidden">
-                                    <img
-                                        src={course.thumbnail}
-                                        alt={course.title}
-                                        className="w-full h-48 object-cover transform transition duration-700 group-hover:scale-110"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
-                                        <span className="text-white text-sm font-medium bg-[#00baff] px-3 py-1 rounded-full">
-                                            {course.level || 'All Levels'}
-                                        </span>
-                                    </div>
-                                    <div className="absolute top-4 right-4">
-                                        <div className="bg-[#00baff] text-white p-2 rounded-lg">
-                                            <IconComponent className="text-lg" />
+                            <Link to={`/coursedetails/${course.slug}`}>
+
+                                <div key={course._id} className="group bg-gray-100 dark:bg-gray-900 backdrop-blur-md rounded-2xl overflow-hidden border border-gray-300 dark:border-gray-800 hover:border-[#00baff]/30 transition-all duration-500 hover:-translate-y-2">
+                                    <div className="relative overflow-hidden">
+                                        <img
+                                            src={course.thumbnail}
+                                            alt={course.title}
+                                            className="w-full h-full  transform transition duration-700 group-hover:scale-110"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
+
+                                        </div>
+                                        <div className="absolute top-4 right-4">
+                                            <div className="bg-[#00baff] text-white p-2 rounded-lg">
+                                                <IconComponent className="text-lg" />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="p-6">
-                                    <div className="flex justify-between items-start mb-4">
-                                        <span className="text-[#00baff] text-sm font-medium bg-[#00baff]/10 px-3 py-1 rounded-full">
-                                            {course.category?.name}
-                                        </span>
-                                        <span className="font-bold text-gray-900 dark:text-gray-200 text-xl">৳{course.price}</span>
-                                    </div>
-                                    <h3 className="text-xl font-bold text-[#00baff] dark:text-[#00baff] mb-3 line-clamp-2">{course.title}</h3>
-                                    <p className="text-gray-700 dark:text-gray-400 text-sm mb-5 line-clamp-2">{course.description?.slice(0, 100)}...</p>
-                                    <div className="flex items-center justify-between text-sm text-gray-700 dark:text-gray-400">
-                                        <div className="flex items-center"><FaClock className="mr-1" /> <span>{course.duration || '10h'} Hours</span> </div>
-                                
-                                        <div className="flex justify-between items-center text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-lg shadow-sm">
-                                            {/* Stars */}
-                                            <div className="flex items-center">
-                                                <FaStar className="text-yellow-400 mr-1" />
-                                                <FaStar className="text-yellow-400 mr-1" />
-                                                <FaStar className="text-yellow-400 mr-1" />
-                                                <FaStar className="text-yellow-400 mr-1" />
-                                                <FaStar className="text-yellow-400" />
+                                    <div className="p-6">
+                                        <div className="flex justify-between items-start mb-4">
+                                            <span className="text-[#00baff] text-sm font-medium bg-[#00baff]/10 px-3 py-1 rounded-full">
+                                                {course.category?.name}
+                                            </span>
+                                            <span className="font-bold text-gray-900 dark:text-gray-200 text-xl">
+                                                {course.price === 0 ? "Free" : `৳${course.price}`}
+                                            </span>
+
+                                        </div>
+                                        <h3 className="text-lg font-bold text-[#00baff] dark:text-[#00baff] mb-3 line-clamp-2">{course.title}</h3>
+                                        <p className="text-gray-700 dark:text-gray-400 text-sm mb-5 line-clamp-2">{course.description?.slice(0, 100)}...</p>
+
+                                        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                            <img
+                                                src={course?.instructor?.photo}
+                                                alt={course?.instructor?.instructorName}
+                                                className="w-8 h-8 rounded-full object-cover border-2 border-[#00baff]"
+                                            />
+                                            <span>
+                                                Instructor:{" "}
+                                                <span className="font-medium">
+                                                    {course?.instructor?.name}
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div className="flex mt-3 items-center justify-between text-sm text-gray-700 dark:text-gray-400">
+                                          
+
+                                            <div className="flex justify-between items-center text-sm text-gray-700 dark:text-gray-300   px-4 py-2 rounded-lg shadow-sm">
+                                                {/* Stars */}
+                                                <div className="flex items-center">
+                                                    <FaStar className="text-yellow-400 mr-1" />
+                                                    <FaStar className="text-yellow-400 mr-1" />
+                                                    <FaStar className="text-yellow-400 mr-1" />
+                                                    <FaStar className="text-yellow-400 mr-1" />
+                                                    <FaStar className="text-yellow-400" />
+                                                </div>
+
+
                                             </div>
 
+                                              <div className="flex items-center"><FaClock className="mr-1" /> <span>{course.duration || '10h'} Hours</span> </div>
 
                                         </div>
-
+                                    </div>
+                                    <div className="px-6 pb-6">
+                                        <Link to={`/coursedetails/${course.slug}`}>
+                                            <button className="w-full py-3 bg-gradient-to-r from-[#00baff] to-[#3EC6F0] text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-[#00baff]/30">
+                                                See Details
+                                            </button>
+                                        </Link>
                                     </div>
                                 </div>
-                                <div className="px-6 pb-6">
-                                    <Link to={`/coursedetails/${course.slug}`}>
-                                        <button className="w-full py-3 bg-gradient-to-r from-[#00baff] to-[#3EC6F0] text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-[#00baff]/30">
-                                            See Details
-                                        </button>
-                                    </Link>
-                                </div>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                 )}

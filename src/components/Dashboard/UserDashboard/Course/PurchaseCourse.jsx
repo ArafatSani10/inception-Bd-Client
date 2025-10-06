@@ -49,7 +49,7 @@ const PurchaseCourse = ({ orders: propOrders }) => {
           You haven’t purchased any course yet.
         </p>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-3">
           {myOrders.map((order, index) => (
             <motion.div
               key={order._id}
@@ -62,10 +62,10 @@ const PurchaseCourse = ({ orders: propOrders }) => {
               <img
                 src={order?.course?.thumbnail}
                 alt={order?.course?.title}
-                className="w-full h-48 object-cover md:h-56"
+                className="w-full h-full  md:h-full"
               />
               <div className="p-4">
-                <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-lg md:text-xl">
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm md:text-lg">
                   {order?.course?.title}
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">

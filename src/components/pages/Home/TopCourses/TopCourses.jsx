@@ -13,6 +13,8 @@ import { Loader } from "lucide-react";
 const TopCourses = () => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
+  const [swiperInstance, setSwiperInstance] = useState(null);
+
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -58,7 +60,7 @@ const TopCourses = () => {
   if (loading)
     return (
       <div className="min-h-[50vh] flex justify-center items-center">
-        <Loader className="size-10 animate-spin " />
+        <Loader className="size-10 animate-spin" />
       </div>
     );
 
@@ -82,10 +84,8 @@ const TopCourses = () => {
             loop
             autoplay={{ delay: 4000 }}
             pagination={{ clickable: true }}
-            navigation={{ prevEl: prevRef.current, nextEl: nextRef.current }}
-            onBeforeInit={(swiper) => {
-              swiper.params.navigation.prevEl = prevRef.current;
-              swiper.params.navigation.nextEl = nextRef.current;
+            onSwiper={(swiper) => {
+              setSwiperInstance(swiper);
             }}
             breakpoints={{
               640: { slidesPerView: 1 },
@@ -138,7 +138,6 @@ const TopCourses = () => {
                       </div>
 
                       {/* Rating & Duration */}
-                      {/* Rating & Duration */}
                       <div className="flex justify-between items-center text-sm text-gray-700 dark:text-gray-300 py-2 rounded-lg shadow-sm">
                         <span className="flex items-center gap-1 text-yellow-400">
                           ⭐⭐⭐⭐⭐
@@ -147,6 +146,7 @@ const TopCourses = () => {
                           {course?.duration} Hours
                         </span>
                       </div>
+
                       {/* Price & Enroll */}
                       <div className="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
                         <span className="text-xl font-bold text-[#00baff]">
@@ -163,19 +163,22 @@ const TopCourses = () => {
             ))}
           </Swiper>
 
-          {/* Navigation Buttons */}
-          <div
+          {/* ✅ Navigation Buttons */}
+          <button
             ref={prevRef}
-            className="absolute top-1/3 -translate-y-1/2 left-2 md:left-4 z-10 bg-blue-600 text-white dark:bg-gray-400 dark:text-white p-3 rounded-full shadow-lg cursor-pointer hover:bg-blue-700 transition"
+            onClick={() => swiperInstance?.slidePrev()}
+            className="absolute top-1/2 -translate-y-1/2 left-2 md:left-4 z-10 bg-blue-600 text-white dark:bg-gray-400 dark:text-white p-3 rounded-full shadow-lg cursor-pointer hover:bg-blue-700 transition"
           >
             <FiChevronLeft size={24} />
-          </div>
-          <div
+          </button>
+
+          <button
             ref={nextRef}
-            className="absolute top-1/3 -translate-y-1/2 right-2 md:right-4 z-10 bg-blue-600 text-white dark:bg-gray-400 dark:text-white p-3 rounded-full shadow-lg cursor-pointer hover:bg-blue-700 transition"
+            onClick={() => swiperInstance?.slideNext()}
+            className="absolute top-1/2 -translate-y-1/2 right-2 md:right-4 z-10 bg-blue-600 text-white dark:bg-gray-400 dark:text-white p-3 rounded-full shadow-lg cursor-pointer hover:bg-blue-700 transition"
           >
             <FiChevronRight size={24} />
-          </div>
+          </button>
         </div>
       </div>
     </div>
