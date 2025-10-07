@@ -232,6 +232,7 @@ const AdminDashboard = () => {
           : Array.isArray(ordersRes.data)
           ? ordersRes.data
           : [];
+          
         setOrders(ordersArray);
 
         // Courses
