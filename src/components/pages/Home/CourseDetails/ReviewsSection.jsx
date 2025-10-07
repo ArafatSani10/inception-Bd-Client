@@ -1,21 +1,28 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaStar, FaEllipsisH, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
+import AuthContext from "../../../../Content/Authcontext";
+import { useCreateReviewMutation } from "../../../../redux/api/reviewApi";
+import { toast, ToastContainer } from "react-toastify";
 
-const ReviewsSection = () => {
-  const [reviews, setReviews] = useState([]); // Array is now empty
-
+const ReviewsSection = ({ course }) => {
+  const { user } = useContext(AuthContext);
+  const [reviews, setReviews] = useState(course?.reviews || []);
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
+  const [createReview] = useCreateReviewMutation();
 
   // Calculate summary statistics
-  const totalReviews = reviews.length;
-  const averageRating = totalReviews > 0
-    ? (reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews).toFixed(1)
-    : "0.0";
+  const totalReviews = reviews?.length;
+  const averageRating =
+    totalReviews > 0
+      ? (
+          reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews
+        ).toFixed(1)
+      : "0.0";
 
   const starSummary = [5, 4, 3, 2, 1].map((star) => {
-    const count = reviews.filter((r) => r.rating === star).length;
+    const count = reviews?.filter((r) => r.rating === star).length;
     const percentage = totalReviews > 0 ? (count / totalReviews) * 100 : 0;
 
     return {
@@ -25,23 +32,26 @@ const ReviewsSection = () => {
     };
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!reviewText.trim()) return;
-
-    const newReview = {
-      id: Date.now(),
-      userName: "You",
-      role: "Student",
+    const reviewData = {
+      courseId: course._id,
+      review: reviewText,
+      email: user?.email,
       rating,
-      text: reviewText,
-      date: new Date().toLocaleDateString(),
-      reply: null,
     };
 
-    setReviews([newReview, ...reviews]);
-    setReviewText("");
-    setRating(5);
+    try {
+      const res = await createReview(reviewData).unwrap();
+      if (res?.success) {
+        toast.success("Review posted successfully!");
+      }
+      setComments((prev) => [...prev, res]);
+      setNewComment("");
+    } catch (error) {
+      console.error("Failed to create review:", error);
+    }
   };
 
   const StarRating = ({ rating, size = 16 }) => {
@@ -52,11 +62,21 @@ const ReviewsSection = () => {
       <div className="flex items-center space-x-1">
         {[...Array(5)].map((_, index) => {
           if (index < fullStars) {
-            return <FaStar key={index} className="text-yellow-400" size={size} />;
+            return (
+              <FaStar key={index} className="text-yellow-400" size={size} />
+            );
           } else if (index === fullStars && hasHalfStar) {
-            return <FaStarHalfAlt key={index} className="text-yellow-400" size={size} />;
+            return (
+              <FaStarHalfAlt
+                key={index}
+                className="text-yellow-400"
+                size={size}
+              />
+            );
           } else {
-            return <FaRegStar key={index} className="text-yellow-400" size={size} />;
+            return (
+              <FaRegStar key={index} className="text-yellow-400" size={size} />
+            );
           }
         })}
       </div>
@@ -82,8 +102,9 @@ const ReviewsSection = () => {
           <div className="flex justify-center mb-4">
             <div className="relative">
               <div className="w-24 h-24 mt-5 ml-10   rounded-full flex items-center justify-center">
-                <span className="text-6xl font-bold dark:text-white text-black">{averageRating}</span>
-
+                <span className="text-6xl font-bold dark:text-white text-black">
+                  {averageRating}
+                </span>
               </div>
 
               <div className="">
@@ -91,8 +112,6 @@ const ReviewsSection = () => {
               </div>
             </div>
           </div>
-
-
         </div>
 
         {/* Star Breakdown */}
@@ -150,10 +169,11 @@ const ReviewsSection = () => {
                 >
                   <FaStar
                     size={32}
-                    className={`transition-colors ${(hoverRating || rating) >= star
-                      ? "text-yellow-400 drop-shadow-lg"
-                      : "text-gray-300 dark:text-gray-600"
-                      }`}
+                    className={`transition-colors ${
+                      (hoverRating || rating) >= star
+                        ? "text-yellow-400 drop-shadow-lg"
+                        : "text-gray-300 dark:text-gray-600"
+                    }`}
                   />
                 </button>
               ))}
@@ -215,22 +235,56 @@ const ReviewsSection = () => {
           </div>
         ) : (
           reviews.map((review) => (
-            <ReviewCard key={review.id} review={review} StarRating={StarRating} />
+            <ReviewCard
+              key={review.id}
+              review={review}
+              StarRating={StarRating}
+            />
           ))
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 };
 
 const ReviewCard = ({ review, StarRating }) => {
+  const { user } = useContext(AuthContext); 
   const [showReplyBox, setShowReplyBox] = useState(false);
   const [replyText, setReplyText] = useState("");
   const [reply, setReply] = useState(review.reply || null);
   const [optionsOpen, setOptionsOpen] = useState(false);
 
+  /*
+  const handleReplySubmit = async () => {
+    if (!replyText.trim()) return;
+
+    const replyData = {
+      comment: replyText,
+      commentId: comment?._id,
+      email: user?.email,
+    };
+
+    try {
+      const res = await createComment(replyData).unwrap();
+      if (res?.success) {
+        toast.success("Reply posted successfully!");
+      }
+    } catch (error) {
+      console.error("Failed to create comment:", error);
+    }
+  };
+  */
+
   const handleReplySubmit = () => {
     if (!replyText.trim()) return;
+    const replyData = {
+      review: replyText,
+      reviewId: review?._id,
+      email: user?.email,
+    };
+
+    console.log("reply data:", replyData);
 
     const newReply = {
       userName: "Instructor Mike",
@@ -252,31 +306,38 @@ const ReviewCard = ({ review, StarRating }) => {
         <div className="flex items-center space-x-4">
           <div className="relative">
             <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
-              {review.userName[0]}
+              {review?.user?.name[0]?.toUpperCase()}
             </div>
-            {review.role === "Instructor" && (
+            {review?.user?.role === "instructor" && (
               <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white dark:border-gray-900"></div>
             )}
           </div>
           <div>
             <div className="flex items-center space-x-3">
               <h3 className="font-semibold text-gray-900 dark:text-white">
-                {review.userName}
+                {review?.user?.name}
               </h3>
-              {review.role === "Instructor" && (
+              {/* {review?.user?.role === "instructor" && (
                 <span className="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xs font-medium rounded-full shadow-sm">
                   Instructor
                 </span>
-              )}
+              )} */}
             </div>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              {review.date}
+              {new Date(review?.createdAt).toLocaleString(undefined, {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true, // true → 12-hour format (e.g., 3:45 PM), false → 24-hour
+              })}
             </p>
           </div>
         </div>
 
         {/* Options Menu */}
-        <div className="relative">
+        {/* <div className="relative">
           <button
             onClick={() => setOptionsOpen(!optionsOpen)}
             className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
@@ -297,27 +358,25 @@ const ReviewCard = ({ review, StarRating }) => {
               </button>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
 
       {/* Rating */}
       <div className="flex items-center space-x-3 mb-4">
-        <StarRating rating={review.rating} size={18} />
+        <StarRating rating={review?.rating} size={18} />
         <span className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-          {review.rating}
+          {review?.rating}
         </span>
       </div>
 
       {/* Review Text */}
       <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-        {review.text}
+        {review?.review}
       </p>
 
       {/* Actions */}
       <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-800">
         <div className="flex items-center space-x-4">
-
-
           {!reply && (
             <button
               onClick={() => setShowReplyBox(!showReplyBox)}
@@ -390,6 +449,7 @@ const ReviewCard = ({ review, StarRating }) => {
           </div>
         </div>
       )}
+      <ToastContainer />
     </div>
   );
 };

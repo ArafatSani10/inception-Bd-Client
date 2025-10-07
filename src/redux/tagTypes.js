@@ -8,6 +8,7 @@ export const tagTypes = {
   CATEGORY:"category",
   COMMENT:"comment",
   REVIEW:"review",
+  
 };
 
 // if you need a list of all tag types

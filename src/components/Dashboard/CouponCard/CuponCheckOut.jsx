@@ -161,7 +161,7 @@ export default function CheckoutPage() {
             <div className="flex items-center justify-between mt-6">
               <div className="flex items-center gap-3">
                 <img
-                  src={course.instructor?.image || course.instructorImage}
+                  src={course.instructor?.photo || course.instructorImage}
                   alt={course.instructor?.name || "Instructor"}
                   className="w-10 h-10 rounded-full border-2 border-purple-500"
                 />

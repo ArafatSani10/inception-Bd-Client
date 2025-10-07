@@ -374,7 +374,7 @@ const CourseDetails = () => {
 
             {activeTab === "review" && (
               <div>
-                <ReviewsSection />
+                <ReviewsSection course={course}/>
               </div>
             )}
           </div>
