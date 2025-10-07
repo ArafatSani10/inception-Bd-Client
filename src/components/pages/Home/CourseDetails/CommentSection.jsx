@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import AuthContext from "../../../../Content/Authcontext";
 import { useCreateCommentMutation } from "../../../../redux/api/commentApi";
+import { toast, ToastContainer } from "react-toastify";
 
 const CommentSection = ({ comments }) => {
   if (!comments || comments.length === 0) {
@@ -22,7 +23,6 @@ const CommentSection = ({ comments }) => {
 };
 
 const CommentCard = ({ comment }) => {
-  console.log("comment data:", comment);
   const { user } = useContext(AuthContext);
   const [showReplyBox, setShowReplyBox] = useState(false);
   const [replyText, setReplyText] = useState("");
@@ -64,6 +64,9 @@ const CommentCard = ({ comment }) => {
 
     try {
       const res = await createComment(replyData).unwrap();
+      if (res?.success) {
+        toast.success("Reply posted successfully!");
+      }
     } catch (error) {
       console.error("Failed to create comment:", error);
     }
@@ -256,6 +259,7 @@ const CommentCard = ({ comment }) => {
           </div>
         </div>
       ))}
+      <ToastContainer/>
     </div>
   );
 };
