@@ -83,7 +83,7 @@ const CourseList = () => {
           ? res.data.orders
           : [];
         const counts = {};
-        allOrders.forEach((order) => {
+        allOrders?.filter((order) => order.status === "complete").forEach((order) => {
           if (!order.course) return;
           let courseId = order.course;
           if (typeof courseId === "object" && courseId._id)
