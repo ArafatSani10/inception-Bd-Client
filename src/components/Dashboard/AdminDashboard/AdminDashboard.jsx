@@ -263,6 +263,7 @@ const AdminDashboard = () => {
     fetchData();
   }, []);
 
+  console.log("orders from checkout page:", orders);
   // Derived data
   const totalOrders = orders.length;
   const totalCourses = courses.length;
