@@ -138,7 +138,21 @@ const Login = () => {
         });
       })
       .catch((err) => {
-        toast.error(`❌ ${err.message}`, { autoClose: 3000 });
+        console.log("error login ", err);
+        Swal.fire({
+          title: '❌ Email or Password is incorrect!',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 1500,
+          background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)', // stylish gradient bg
+          color: '#fff', // text color
+          padding: '1.5rem',
+          iconColor: '#00baff', // icon color
+          toast: true,
+          position: 'top-end'
+
+
+        })
       })
       .finally(() => setIsLoading(false));
   };
