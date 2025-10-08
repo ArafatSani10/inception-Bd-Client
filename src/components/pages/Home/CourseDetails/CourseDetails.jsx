@@ -514,13 +514,13 @@ const CourseDetails = () => {
                     </span>
                     <h1>{formatDate(course.startingDate)}</h1>
                   </div>
-                  <div className="flex justify-between">
+                  {/* <div className="flex justify-between">
                     <span className="flex items-center gap-2">
                       <PiStudentBold />
                       Total enroll :
                     </span>
                     <h1>{completedOrders.length}</h1>
-                  </div>
+                  </div> */}
 
                   <div className="flex justify-between">
                     <span className="flex items-center gap-2">
