@@ -52,6 +52,13 @@ const Podcast = () => {
             videoUrl: 'https://www.youtube.com/watch?v=i9lyE2t7OyY&list=PLkz_y24mlSJaxfbAROjlkExKJIxSlI61L&index=7',
             // description: 'How AI is shaping the future of work and play.',
         },
+        {
+            id: 5,
+            title: 'AI & Your Career: Opportunities, Challenges, and the Future Ahead | Inception BD podcast Ep 02',
+            host: 'Inception BD',
+            videoUrl: 'https://www.youtube.com/watch?v=oWDiptky4EI',
+            // description: 'How AI is shaping the future of work and play.',
+        },
 
     ];
 

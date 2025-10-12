@@ -140,9 +140,9 @@ const ModulePage = () => {
                         {module.title} ({module.data?.length || 0} Topics)
                       </h3>
                       {expandedIndex === idx ? (
-                        <FaChevronUp className="text-gray-500" />
+                        <FaChevronUp className="text-gray-500 dark:text-white" />
                       ) : (
-                        <FaChevronDown className="text-gray-500" />
+                        <FaChevronDown className="text-gray-500 dark:text-white" />
                       )}
                     </div>
 
@@ -155,26 +155,26 @@ const ModulePage = () => {
                           className="mt-3 pl-3 border-l-2 border-green-500 space-y-2"
                         >
                           {module?.data?.map((mod, i) => (
-  <React.Fragment key={i}>
-    {mod?.contents?.map((content, ci) => (
-      <li
-        key={`${i}-${ci}`}
-        className="p-2 rounded-md cursor-pointer text-sm hover:bg-gray-100 dark:hover:bg-gray-600"
-        onClick={() => {
-          if (module.title === "Recorded Class") {
-            setVideoUrl(content.content);
-          } else if (module.title === "Class Materials") {
-            setResourceUrl(content.content);
-          } else {
-            setClassUrl(content.content);
-          }
-        }}
-      >
-        {content?.title}
-      </li>
-    ))}
-  </React.Fragment>
-))}
+                            <React.Fragment key={i}>
+                              {mod?.contents?.map((content, ci) => (
+                                <li
+                                  key={`${i}-${ci}`}
+                                  className="p-2 rounded-md cursor-pointer text-sm hover:bg-gray-100 dark:hover:bg-gray-600"
+                                  onClick={() => {
+                                    if (module.title === "Recorded Class") {
+                                      setVideoUrl(content.content);
+                                    } else if (module.title === "Class Materials") {
+                                      setResourceUrl(content.content);
+                                    } else {
+                                      setClassUrl(content.content);
+                                    }
+                                  }}
+                                >
+                                  {content?.title}
+                                </li>
+                              ))}
+                            </React.Fragment>
+                          ))}
 
                         </motion.div>
                       )}
