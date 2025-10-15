@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios, { AxiosError } from "axios";
 import AuthContext from "../../../Content/Authcontext";
 import { toast, ToastContainer } from "react-toastify";
@@ -13,6 +13,7 @@ export default function CheckoutPage() {
   const { course } = location.state || {};
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
 
   // console.log("course data",course?.price)
 
@@ -102,6 +103,9 @@ export default function CheckoutPage() {
 
   // Checkout
   const onCheckout = async () => {
+    if (!user) {
+      return navigate("/login");
+    }
     setLoading(true);
     try {
       const payload = {
@@ -113,8 +117,7 @@ export default function CheckoutPage() {
       window.location.href = res?.data?.data?.url;
     } catch (err) {
       console.error("Order failed:", err);
-      setLoading(false);
-      alert("Failed to place order!");
+      setLoading(false);      
     }
   };
 
