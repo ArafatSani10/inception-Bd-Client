@@ -5,7 +5,13 @@ import {
   MdOutlineDone,
   MdOutlineLightbulb,
 } from "react-icons/md";
-import { FaAddressCard, FaHeadphones, FaMinus, FaPlus, FaWhatsapp } from "react-icons/fa";
+import {
+  FaAddressCard,
+  FaHeadphones,
+  FaMinus,
+  FaPlus,
+  FaWhatsapp,
+} from "react-icons/fa";
 import { CiCalendar, CiShare2, CiTimer } from "react-icons/ci";
 import { GrGift } from "react-icons/gr";
 import { GoPersonAdd } from "react-icons/go";
@@ -18,50 +24,56 @@ import axios from "axios";
 // import AuthContext from "../../../Content/Authcontext";
 import { useMyOrdersQuery } from "../../../../redux/api/orderApi";
 import AuthContext from "../../../../Content/Authcontext";
-import CourseContent from "./CourseContent";
 import CourseOutlineTab from "../../../CourseOutlineTab";
 import { Loader } from "lucide-react";
 import CommentSection from "./CommentSection";
+import { useCreateCommentMutation } from "../../../../redux/api/commentApi";
+import { toast, ToastContainer } from "react-toastify";
 
 const CourseDetails = () => {
+  const { user } = useContext(AuthContext);
   const [openIndex, setOpenIndex] = useState(null);
   const [openLearning, setOpenLearning] = useState(null);
   const [activeTab, setActiveTab] = useState("information");
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [completedOrders, setCompletedOrders] = useState([]);
+  const [createComment] = useCreateCommentMutation();
 
   // new add
 
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState(course?.comments || []);
   const [newComment, setNewComment] = useState("");
 
   // ✅ নতুন কমেন্ট যোগ করার ফাংশন
-  const handlePostComment = () => {
-    if (!newComment.trim()) return;
-    const commentObj = {
-      id: Date.now(),
-      userName: user?.displayName || "Anonymous",
-      userImage: user?.photoURL || "https://i.pravatar.cc/50",
-      commentText: newComment,
-      date: new Date().toLocaleString(),
+  const handlePostComment = async () => {
+    const commentData = {
+      courseId: course._id,
+      comment: newComment,
+      email: user?.email,
     };
-    setComments([...comments, commentObj]);
-    setNewComment(""); // textarea খালি করো
+    if (!newComment.trim()) return; // Prevent empty comments
+    try {
+      const res = await createComment(commentData).unwrap();
+      if (res?.success) {
+        toast.success("Comment posted successfully!");
+      }
+      setComments((prev) => [...prev, res]);
+      setNewComment("");
+    } catch (error) {
+      console.error("Failed to create comment:", error);
+    }
   };
-
-
-
 
   const [instructorData, setInstructorData] = useState(null);
 
   const { idOrSlug } = useParams();
 
-  const { user } = useContext(AuthContext);
-
   const { data: orderRes } = useMyOrdersQuery(user?.email, {
     skip: !user?.email,
   });
-  const myOrders = orderRes?.data || [];
+  const myOrders =
+    orderRes?.data?.filter((order) => order.status === "complete") || [];
 
   // চেক করব user এই course কিনেছে কিনা
   const isEnrolled = myOrders.some(
@@ -97,7 +109,6 @@ const CourseDetails = () => {
       try {
         const email = course?.instructor?.email; // or ID
         if (!email) return;
-
         const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
         const allUsers = res?.data?.data || [];
         const instructor = allUsers.find((u) => u.email === email);
@@ -108,6 +119,19 @@ const CourseDetails = () => {
     };
 
     fetchInstructor();
+  }, [course]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/orders`);
+        const completedOrders = response.data?.data?.filter(order => order.status === "complete" && order?.course?._id === course?._id) || [];
+        setCompletedOrders(completedOrders);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchOrders();
   }, [course]);
 
   if (loading || !course) {
@@ -146,8 +170,10 @@ const CourseDetails = () => {
 
       {/* Background Image Section */}
       <div className="relative w-full h-auto">
-        <div className="relative w-full mt-10 max-sm:mt-20 overflow-hidden 
-  h-[400px] lg:h-[400px] md:h-[300px] sm:h-[250px] max-sm:h-auto">
+        <div
+          className="relative w-full mt-10 max-sm:mt-20 overflow-hidden 
+  h-[400px] lg:h-[400px] md:h-[300px] sm:h-[250px] max-sm:h-auto"
+        >
           <img
             src={course.coverPhoto}
             alt="Course Background"
@@ -155,7 +181,6 @@ const CourseDetails = () => {
           />
           <div className="hidden lg:block max-sm:block absolute inset-0"></div>
         </div>
-
 
         <div className="w-full mx-auto    px-2 py-8 rounded-xl  dark:bg-transparent relative z-10">
           <h1 className="text-[#00baff]  text-sm lg:text-3xl font-bold mb-3 leading-tight text-start lg:text-left">
@@ -189,8 +214,6 @@ const CourseDetails = () => {
               {course.instructor?.name || "Unknown"}
             </span>
           </p>
-
-
         </div>
       </div>
 
@@ -204,10 +227,11 @@ const CourseDetails = () => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 py-3 text-center font-semibold uppercase tracking-wide ${activeTab === tab
-                  ? "border-b-4 border-[#00baff] text-[#00baff]"
-                  : "text-gray-500 hover:text-[#00baff]"
-                  }`}
+                className={`flex-1 py-3 text-center font-semibold uppercase tracking-wide ${
+                  activeTab === tab
+                    ? "border-b-4 border-[#00baff] text-[#00baff]"
+                    : "text-gray-500 hover:text-[#00baff]"
+                }`}
               >
                 {tab}
               </button>
@@ -239,7 +263,6 @@ const CourseDetails = () => {
                   </ul>
                 </div>
 
-
                 {/* About */}
                 <h1 className="font-bold max-sm:text-sm text-xl mt-6 text-[#00baff]">
                   About This Course
@@ -254,15 +277,21 @@ const CourseDetails = () => {
                 </h1>
                 <div className=" bg-base-200  space-y-4 rounded-md">
                   {course.requirements?.map((req, i) => (
-                    <p key={i} className="flex items-center max-sm:text-sm  gap-2">
-                      <MdOutlineDone className="text-green-500 text-lg  mt-[2px]" /> {req}
+                    <p
+                      key={i}
+                      className="flex items-center max-sm:text-sm  gap-2"
+                    >
+                      <MdOutlineDone className="text-green-500 text-lg  mt-[2px]" />{" "}
+                      {req}
                     </p>
                   ))}
                 </div>
 
                 {/* FAQ Accordion */}
                 <div className="space-y-4 mt-10">
-                  <h1 className="md:text-lg text-sm text-[#00baff] font-bold ">FAQ</h1>
+                  <h1 className="md:text-lg text-sm text-[#00baff] font-bold ">
+                    FAQ
+                  </h1>
                   {course.faqs?.map((faq, index) => (
                     <div
                       key={faq._id || index}
@@ -302,7 +331,9 @@ const CourseDetails = () => {
                 {/* Comments */}
                 {/* Comments */}
                 <div className="mt-6">
-                  <h1 className="text-lg max-sm:text-sm text-[#00baff] font-semibold">Comments</h1>
+                  <h1 className="text-lg max-sm:text-sm text-[#00baff] font-semibold">
+                    Comments
+                  </h1>
 
                   <textarea
                     className="w-full p-2 mt-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:border-gray-600"
@@ -321,19 +352,18 @@ const CourseDetails = () => {
                 </div>
 
                 {/* Comment গুলো দেখাবে নিচে */}
-                <div className="mt-5 p-4 ">
-                  <CommentSection comments={comments} />
-                </div>
-
+                {course?.comments?.length > 0 && (
+                  <div className="mt-5 p-4 ">
+                    <CommentSection comments={course?.comments} />
+                  </div>
+                )}
 
                 {/* aikhane comment gulo show hobe..!!! */}
-                <div className="mt-5  ">
+                {/* <div className="mt-5  ">
                   <CommentSection></CommentSection>
-                </div>
+                </div> */}
               </>
             )}
-
-
 
             {activeTab === "Course Curriculum" && (
               <>
@@ -344,7 +374,7 @@ const CourseDetails = () => {
 
             {activeTab === "review" && (
               <div>
-                <ReviewsSection />
+                <ReviewsSection course={course}/>
               </div>
             )}
           </div>
@@ -364,10 +394,11 @@ const CourseDetails = () => {
             <div className="card-body">
               <div className="flex items-center justify-center">
                 <h1
-                  className={`text-4xl text-center font-bold my-3 ${isPaid
-                    ? "text-green-500 dark:text-green-300"
-                    : "text-blue-500"
-                    }`}
+                  className={`text-4xl text-center font-bold my-3 ${
+                    isPaid
+                      ? "text-green-500 dark:text-green-300"
+                      : "text-blue-500"
+                  }`}
                 >
                   {isPaid ? (
                     <>
@@ -439,8 +470,6 @@ const CourseDetails = () => {
                     </div>
                   </a>
                 </div>
-
-
               </div>
 
               <div className="border-2 mt-5 shadow-xl rounded-lg p-3 flex items-center justify-between dark:border-gray-700">
@@ -485,15 +514,13 @@ const CourseDetails = () => {
                     </span>
                     <h1>{formatDate(course.startingDate)}</h1>
                   </div>
-                  <div className="flex justify-between">
+                  {/* <div className="flex justify-between">
                     <span className="flex items-center gap-2">
                       <PiStudentBold />
                       Total enroll :
                     </span>
-                    <h1>10</h1>
-                  </div>
-
-
+                    <h1>{completedOrders.length}</h1>
+                  </div> */}
 
                   <div className="flex justify-between">
                     <span className="flex items-center gap-2">
@@ -526,8 +553,6 @@ const CourseDetails = () => {
                   </div>
                 </div>
               </div>
-
-
 
               {instructorData && (
                 <div className="bg-white/30 dark:bg-transparent border border-black/50 dark:border-white/10 rounded-xl mt-4 p-5 hover:shadow-xl max-w-full mx-auto">
@@ -578,6 +603,7 @@ const CourseDetails = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

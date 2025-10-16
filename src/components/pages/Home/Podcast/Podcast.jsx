@@ -23,7 +23,7 @@ const Podcast = () => {
     const [activeVideo, setActiveVideo] = useState(null);
     const swiperRef = useRef(null);
 
-      const podcasts = [
+    const podcasts = [
         {
             id: 1,
             title: 'Generative AI 101 in Bangla: What You Need to Know | Inception BD Podcast Ep 01',

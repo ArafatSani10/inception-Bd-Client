@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios, { AxiosError } from "axios";
 import AuthContext from "../../../Content/Authcontext";
 import { toast, ToastContainer } from "react-toastify";
@@ -13,6 +13,7 @@ export default function CheckoutPage() {
   const { course } = location.state || {};
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
 
   // console.log("course data",course?.price)
 
@@ -102,6 +103,9 @@ export default function CheckoutPage() {
 
   // Checkout
   const onCheckout = async () => {
+    if (!user) {
+      return navigate("/login");
+    }
     setLoading(true);
     try {
       const payload = {
@@ -113,8 +117,7 @@ export default function CheckoutPage() {
       window.location.href = res?.data?.data?.url;
     } catch (err) {
       console.error("Order failed:", err);
-      setLoading(false);
-      alert("Failed to place order!");
+      setLoading(false);      
     }
   };
 
@@ -161,7 +164,7 @@ export default function CheckoutPage() {
             <div className="flex items-center justify-between mt-6">
               <div className="flex items-center gap-3">
                 <img
-                  src={course.instructor?.image || course.instructorImage}
+                  src={course.instructor?.photo || course.instructorImage}
                   alt={course.instructor?.name || "Instructor"}
                   className="w-10 h-10 rounded-full border-2 border-purple-500"
                 />
@@ -194,24 +197,27 @@ export default function CheckoutPage() {
 
           <form onSubmit={handleSubmit(onApplyCoupon)} className="grid gap-6">
             {/* Coupon Field */}
-            <label className="block">
-              <div className="mb-1 text-sm text-gray-600 dark:text-gray-300">
-                Coupon Code
-              </div>
-              <div className="flex gap-2">
-                <input
-                  {...register("couponCode")}
-                  placeholder="Enter coupon code"
-                  className="flex-1 rounded-xl border border-gray-300 dark:border-gray-700 px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-300"
-                />
-                <button
-                  type="submit"
-                  className="px-4 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold shadow-lg hover:opacity-90 transition-all duration-300"
-                >
-                  Apply
-                </button>
-              </div>
-            </label>
+
+            {course?.type === "paid" && (
+              <label className="block">
+                <div className="mb-1 text-sm text-gray-600 dark:text-gray-300">
+                  Coupon Code
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    {...register("couponCode")}
+                    placeholder="Enter coupon code"
+                    className="flex-1 rounded-xl border border-gray-300 dark:border-gray-700 px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-300"
+                  />
+                  <button
+                    type="submit"
+                    className="px-4 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold shadow-lg hover:opacity-90 transition-all duration-300"
+                  >
+                    Apply
+                  </button>
+                </div>
+              </label>
+            )}
 
             {/* Coupon Message */}
             <p className="text-sm mt-2">Price: {discountedPrice}</p>

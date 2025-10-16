@@ -100,7 +100,7 @@ const Footer = () => {
                         </a>
 
                         <a
-                            href="https://github.com/Inceptionbd2024"
+                            href="https://github.com/Inceptionbd"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="relative w-10 h-10 flex items-center justify-center rounded-full overflow-hidden
