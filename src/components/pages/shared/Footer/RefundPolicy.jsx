@@ -122,7 +122,7 @@ export default function RefundPolicy() {
 
               </strong> with the subject line "Refund Request".</li>
               <li>Include your name, registered email, course name, purchase receipt, and reason for the refund request.</li>
-              <li>Refunds will be processed within 7-14 business days after approval, using the original method of payment.</li>
+              <li>Refunds will be processed within 7-10 business days after approval, using the original method of payment.</li>
             </ul>
           </motion.section>
 
@@ -161,7 +161,7 @@ export default function RefundPolicy() {
             </ul>
           </motion.section>
 
-          
+
         </article>
 
 
@@ -173,7 +173,7 @@ export default function RefundPolicy() {
             🖨 Print
           </button>
 
-         
+
         </div>
       </div>
     </main>
