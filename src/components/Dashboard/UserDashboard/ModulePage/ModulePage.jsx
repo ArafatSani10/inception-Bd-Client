@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronDown, FaChevronUp, FaBars, FaTimes } from "react-icons/fa";
-import { Link, useParams } from "react-router";
+import { Link, useParams } from "react-router-dom"; // Link from react-router use kora hoise
 import { useGetSingleCourseQuery } from "../../../../redux/api/courseApi";
 import getYouTubeVideoId from "../../../../utls/getYouTubeVideoId";
 
 const ModulePage = () => {
   const { id } = useParams();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [expandedIndex, setExpandedIndex] = useState(null);
-  const [expandedGroup, setExpandedGroup] = useState(null);
+  const [expandedIndex, setExpandedIndex] = useState(null); // Module contents expand korar jonno
+  const [expandedGroup, setExpandedGroup] = useState(null); // Group Title expand korar jonno
   const { data: courseRes, isLoading } = useGetSingleCourseQuery(id, {
     skip: !id,
   });
@@ -128,6 +128,7 @@ const ModulePage = () => {
               <div className="p-4 space-y-4 overflow-y-auto flex-1">
                 {formatModulesArray.map((group, groupIdx) => (
                   <div key={groupIdx}>
+                    {/* Module Group Header */}
                     <div
                       className="flex justify-between items-center cursor-pointer mb-2"
                       onClick={() =>
@@ -139,13 +140,10 @@ const ModulePage = () => {
                       <h3 className="text-md font-semibold text-gray-600 dark:text-gray-300">
                         {group.title} ({group.data?.length || 0} Topics)
                       </h3>
-<<<<<<< HEAD
-                      {expandedIndex === idx ? (
-                        <FaChevronUp className="text-gray-500 dark:text-white" />
-=======
+
+                      {/* Conflict Thik Kora Hoyeche: Only checking expandedGroup */}
                       {expandedGroup === groupIdx ? (
-                        <FaChevronUp className="text-gray-500" />
->>>>>>> ce9af3bcd1813130e40844580812fcbfb297f765
+                        <FaChevronUp className="text-gray-500 dark:text-white" />
                       ) : (
                         <FaChevronDown className="text-gray-500 dark:text-white" />
                       )}
@@ -159,29 +157,7 @@ const ModulePage = () => {
                           exit={{ opacity: 0, height: 0 }}
                           className="pl-2 space-y-2"
                         >
-<<<<<<< HEAD
-                          {module?.data?.map((mod, i) => (
-                            <React.Fragment key={i}>
-                              {mod?.contents?.map((content, ci) => (
-                                <li
-                                  key={`${i}-${ci}`}
-                                  className="p-2 rounded-md cursor-pointer text-sm hover:bg-gray-100 dark:hover:bg-gray-600"
-                                  onClick={() => {
-                                    if (module.title === "Recorded Class") {
-                                      setVideoUrl(content.content);
-                                    } else if (module.title === "Class Materials") {
-                                      setResourceUrl(content.content);
-                                    } else {
-                                      setClassUrl(content.content);
-                                    }
-                                  }}
-                                >
-                                  {content?.title}
-                                </li>
-                              ))}
-                            </React.Fragment>
-                          ))}
-=======
+                          {/* Conflict Thik Kora Hoyeche: Duto array mapping eksathe kore diyechi, Module and Contents show korar jonno */}
                           {group.data?.map((module, idx) => (
                             <div
                               key={module.id}
@@ -207,7 +183,6 @@ const ModulePage = () => {
                                   <FaChevronDown className="text-gray-500" />
                                 )}
                               </div>
->>>>>>> ce9af3bcd1813130e40844580812fcbfb297f765
 
                               {/* Module Contents */}
                               <AnimatePresence>
@@ -219,10 +194,9 @@ const ModulePage = () => {
                                     className="mt-3 pl-3 border-l-2 border-green-500 space-y-2"
                                   >
                                     {module.contents?.map((content) => (
-                                      <>
+                                      <React.Fragment key={content.id}>
                                         <li
-                                          key={content.id}
-                                          className="p-2 rounded-md cursor-pointer  hover:bg-gray-100 dark:hover:bg-gray-600 font-medium text-gray-700"
+                                          className="p-2 rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 font-medium text-gray-700"
                                           onClick={() => {
                                             if (
                                               group.title === "Recorded Class"
@@ -251,7 +225,6 @@ const ModulePage = () => {
                                                   year: "numeric", // 2025
                                                 })}
                                               </span>
-
                                               <span>
                                                 {new Date(
                                                   `${content.startDate} ${content.startTime}`
@@ -263,7 +236,7 @@ const ModulePage = () => {
                                               </span>
                                             </p>
                                           )}
-                                      </>
+                                      </React.Fragment>
                                     ))}
                                   </motion.div>
                                 )}
