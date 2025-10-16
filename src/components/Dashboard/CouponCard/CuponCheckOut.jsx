@@ -220,7 +220,14 @@ export default function CheckoutPage() {
             )}
 
 
-            <div className="flex items-center justify-between">
+           
+
+
+            {/* Coupon Message */}
+            <p className="text-sm mt-2">Price: {discountedPrice}</p>
+            {/* {couponMessage && <p className="text-sm mt-2">{couponMessage}</p>} */}
+
+             <div className="flex items-center gap-5 ">
               <a
                 href="/terms-and-conditions" 
                 target="_blank"
@@ -246,11 +253,6 @@ export default function CheckoutPage() {
                 Refund Policy
               </a>
             </div>
-
-
-            {/* Coupon Message */}
-            <p className="text-sm mt-2">Price: {discountedPrice}</p>
-            {/* {couponMessage && <p className="text-sm mt-2">{couponMessage}</p>} */}
 
 
             {/* Checkout Button */}
