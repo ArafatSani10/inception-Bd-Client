@@ -222,7 +222,7 @@ export default function CheckoutPage() {
 
             <div className="flex items-center justify-between">
               <a
-                href="/terms-and-conditions" // Apnar shothik route path din
+                href="/terms-and-conditions" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition duration-150 block mb-1"
@@ -230,7 +230,7 @@ export default function CheckoutPage() {
                 Terms & Conditions
               </a>
               <a
-                href="/privacy-and-policy" // Apnar shothik route path din
+                href="/privacy-and-policy"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition duration-150 block mb-1"
@@ -238,7 +238,7 @@ export default function CheckoutPage() {
                 Privacy & Policy
               </a>
               <a
-                href="/refund-and-policy" // Apnar shothik route path din
+                href="/refund-and-policy" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition duration-150 block"
@@ -247,7 +247,7 @@ export default function CheckoutPage() {
               </a>
             </div>
 
-            
+
             {/* Coupon Message */}
             <p className="text-sm mt-2">Price: {discountedPrice}</p>
             {/* {couponMessage && <p className="text-sm mt-2">{couponMessage}</p>} */}
