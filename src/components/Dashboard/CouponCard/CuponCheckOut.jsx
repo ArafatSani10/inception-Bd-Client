@@ -117,7 +117,7 @@ export default function CheckoutPage() {
       window.location.href = res?.data?.data?.url;
     } catch (err) {
       console.error("Order failed:", err);
-      setLoading(false);      
+      setLoading(false);
     }
   };
 
@@ -219,9 +219,41 @@ export default function CheckoutPage() {
               </label>
             )}
 
+
+           
+
+
             {/* Coupon Message */}
             <p className="text-sm mt-2">Price: {discountedPrice}</p>
             {/* {couponMessage && <p className="text-sm mt-2">{couponMessage}</p>} */}
+
+             <div className="flex items-center gap-5 ">
+              <a
+                href="/terms-and-conditions" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition duration-150 block mb-1"
+              >
+                Terms & Conditions
+              </a>
+              <a
+                href="/privacy-and-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition duration-150 block mb-1"
+              >
+                Privacy & Policy
+              </a>
+              <a
+                href="/refund-and-policy" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition duration-150 block"
+              >
+                Refund Policy
+              </a>
+            </div>
+
 
             {/* Checkout Button */}
             <button

@@ -227,11 +227,10 @@ const CourseDetails = () => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 py-3 text-center font-semibold uppercase tracking-wide ${
-                  activeTab === tab
+                className={`flex-1 py-3 text-center font-semibold uppercase tracking-wide ${activeTab === tab
                     ? "border-b-4 border-[#00baff] text-[#00baff]"
                     : "text-gray-500 hover:text-[#00baff]"
-                }`}
+                  }`}
               >
                 {tab}
               </button>
@@ -374,7 +373,7 @@ const CourseDetails = () => {
 
             {activeTab === "review" && (
               <div>
-                <ReviewsSection course={course}/>
+                <ReviewsSection course={course} />
               </div>
             )}
           </div>
@@ -394,11 +393,10 @@ const CourseDetails = () => {
             <div className="card-body">
               <div className="flex items-center justify-center">
                 <h1
-                  className={`text-4xl text-center font-bold my-3 ${
-                    isPaid
+                  className={`text-4xl text-center font-bold my-3 ${isPaid
                       ? "text-green-500 dark:text-green-300"
                       : "text-blue-500"
-                  }`}
+                    }`}
                 >
                   {isPaid ? (
                     <>
