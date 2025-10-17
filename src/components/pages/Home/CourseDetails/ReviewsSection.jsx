@@ -17,8 +17,8 @@ const ReviewsSection = ({ course }) => {
   const averageRating =
     totalReviews > 0
       ? (
-          reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews
-        ).toFixed(1)
+        reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews
+      ).toFixed(1)
       : "0.0";
 
   const starSummary = [5, 4, 3, 2, 1].map((star) => {
@@ -169,11 +169,10 @@ const ReviewsSection = ({ course }) => {
                 >
                   <FaStar
                     size={32}
-                    className={`transition-colors ${
-                      (hoverRating || rating) >= star
+                    className={`transition-colors ${(hoverRating || rating) >= star
                         ? "text-yellow-400 drop-shadow-lg"
                         : "text-gray-300 dark:text-gray-600"
-                    }`}
+                      }`}
                   />
                 </button>
               ))}
@@ -249,7 +248,7 @@ const ReviewsSection = ({ course }) => {
 };
 
 const ReviewCard = ({ review, StarRating }) => {
-  const { user } = useContext(AuthContext); 
+  const { user } = useContext(AuthContext);
   const [showReplyBox, setShowReplyBox] = useState(false);
   const [replyText, setReplyText] = useState("");
   const [reply, setReply] = useState(review.reply || null);

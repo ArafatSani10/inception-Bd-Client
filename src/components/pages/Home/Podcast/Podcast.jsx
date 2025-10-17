@@ -23,7 +23,7 @@ const Podcast = () => {
     const [activeVideo, setActiveVideo] = useState(null);
     const swiperRef = useRef(null);
 
-      const podcasts = [
+    const podcasts = [
         {
             id: 1,
             title: 'Generative AI 101 in Bangla: What You Need to Know | Inception BD Podcast Ep 01',
@@ -50,6 +50,13 @@ const Podcast = () => {
             title: ' Crack the Amazon Interview: Tips & Tricks for Success',
             host: 'Inception BD',
             videoUrl: 'https://www.youtube.com/watch?v=i9lyE2t7OyY&list=PLkz_y24mlSJaxfbAROjlkExKJIxSlI61L&index=7',
+            // description: 'How AI is shaping the future of work and play.',
+        },
+        {
+            id: 5,
+            title: 'AI & Your Career: Opportunities, Challenges, and the Future Ahead | Inception BD podcast Ep 02',
+            host: 'Inception BD',
+            videoUrl: 'https://www.youtube.com/watch?v=oWDiptky4EI',
             // description: 'How AI is shaping the future of work and play.',
         },
 
