@@ -13,7 +13,8 @@ export default function CheckoutPage() {
   const { course } = location.state || {};
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate()
+  const [isAgree, setAgree] = useState(false);
+  const navigate = useNavigate();
 
   // console.log("course data",course?.price)
 
@@ -219,48 +220,56 @@ export default function CheckoutPage() {
               </label>
             )}
 
-
-           
-
-
             {/* Coupon Message */}
             <p className="text-sm mt-2">Price: {discountedPrice}</p>
             {/* {couponMessage && <p className="text-sm mt-2">{couponMessage}</p>} */}
 
-             <div className="flex items-center gap-5 ">
-              <a
-                href="/terms-and-conditions" 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition duration-150 block mb-1"
-              >
-                Terms & Conditions
-              </a>
-              <a
-                href="/privacy-and-policy"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition duration-150 block mb-1"
-              >
-                Privacy & Policy
-              </a>
-              <a
-                href="/refund-and-policy" 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition duration-150 block"
-              >
-                Refund Policy
-              </a>
+            <div className="flex gap-x-3 items-center text-sm  ">
+              <input
+                type="checkbox"
+                className="accent-purple-600 size-4"
+                onChange={() => setAgree(!isAgree)}
+              />
+              <div className="flex uppercase flex-wrap gap-x-2">
+                <p className="text-nowrap">
+                  I Have Read And Agree to the website
+                </p>
+                <a
+                  href="/terms-and-conditions"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-purple-600 underline hover:text-purple-500 transition duration-150 block mb-1 text-nowrap"
+                >
+                  Terms & Conditions,
+                </a>
+                <a
+                  href="/privacy-and-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-purple-600 underline hover:text-purple-500 transition duration-150 block mb-1 text-nowrap"
+                >
+                  Privacy & Policy,
+                </a>
+                <a
+                  href="/refund-and-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-purple-600 underline hover:text-purple-500 transition duration-150 block mb-1 text-nowrap"
+                >
+                  Refund Policy
+                </a>
+              </div>
             </div>
-
 
             {/* Checkout Button */}
             <button
               type="button"
               onClick={onCheckout}
-              disabled={loading}
-              className="disabled:bg-blend-multiply disabled:cursor-not-allowed w-full px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold hover:opacity-90 shadow-lg transition-all duration-300 cursor-pointer"
+              disabled={!isAgree || loading}
+              className={`w-full px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold 
+              shadow-lg transition-all duration-300 cursor-pointer
+              hover:opacity-90
+              disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:opacity-50`}
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
