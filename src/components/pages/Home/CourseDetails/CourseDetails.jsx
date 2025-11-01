@@ -1,10 +1,8 @@
+import axios from "axios";
+import { AnimatePresence, motion } from "framer-motion";
+import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import {
-  MdDone,
-  MdFavorite,
-  MdOutlineDone,
-  MdOutlineLightbulb,
-} from "react-icons/md";
+import { CiCalendar, CiShare2, CiTimer } from "react-icons/ci";
 import {
   FaAddressCard,
   FaHeadphones,
@@ -12,23 +10,23 @@ import {
   FaPlus,
   FaWhatsapp,
 } from "react-icons/fa";
-import { CiCalendar, CiShare2, CiTimer } from "react-icons/ci";
-import { GrGift } from "react-icons/gr";
 import { GoPersonAdd } from "react-icons/go";
-import { PiStudent, PiStudentBold } from "react-icons/pi";
-import { useEffect, useState, useContext } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import ReviewsSection from "./ReviewsSection";
+import { GrGift } from "react-icons/gr";
+import {
+  MdFavorite,
+  MdOutlineDone,
+  MdOutlineLightbulb
+} from "react-icons/md";
 import { Link, useParams } from "react-router";
-import axios from "axios";
+import ReviewsSection from "./ReviewsSection";
 // import AuthContext from "../../../Content/Authcontext";
-import { useMyOrdersQuery } from "../../../../redux/api/orderApi";
-import AuthContext from "../../../../Content/Authcontext";
-import CourseOutlineTab from "../../../CourseOutlineTab";
 import { Loader } from "lucide-react";
-import CommentSection from "./CommentSection";
-import { useCreateCommentMutation } from "../../../../redux/api/commentApi";
 import { toast, ToastContainer } from "react-toastify";
+import AuthContext from "../../../../Content/Authcontext";
+import { useCreateCommentMutation } from "../../../../redux/api/commentApi";
+import { useMyOrdersQuery } from "../../../../redux/api/orderApi";
+import CourseOutlineTab from "../../../CourseOutlineTab";
+import CommentSection from "./CommentSection";
 
 const CourseDetails = () => {
   const { user } = useContext(AuthContext);
@@ -425,8 +423,9 @@ const CourseDetails = () => {
               ) : (
                 <Link to="/checkout" state={{ course }}>
                   <div className="flex justify-center">
-                    <button className="p-2 text-center bg-[#00baff] hover:bg-gray-800 transition-all duration-300 rounded-xl my-2 text-white w-full">
-                      Enroll on course
+                    <button className="cursor-not-allowed p-2 text-center  hover:bg-[#00baff] bg-gray-800 transition-all duration-300 rounded-xl my-2 text-white w-full" disabled>
+                      {/* Enroll on course */}
+                      Enrollment Date Over
                     </button>
                   </div>
                 </Link>
