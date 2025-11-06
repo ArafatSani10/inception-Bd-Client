@@ -86,6 +86,8 @@ const CourseDetails = () => {
     setOpenLearning(openLearning === index ? null : index);
   };
 
+  console.log("job ready course",course?._id)
+
   useEffect(() => {
     const fetchCourse = async () => {
       try {
@@ -423,9 +425,8 @@ const CourseDetails = () => {
               ) : (
                 <Link to="/checkout" state={{ course }}>
                   <div className="flex justify-center">
-                    <button className="cursor-not-allowed p-2 text-center  hover:bg-[#00baff] bg-gray-800 transition-all duration-300 rounded-xl my-2 text-white w-full" disabled>
-                      {/* Enroll on course */}
-                      Enrollment Date Over
+                    <button disabled={course?._id == "68e36eeafe94d958c5a5870f"} className="p-2 text-center bg-[#00baff] hover:bg-indigo-600 transition-all duration-300 rounded-xl my-2 text-white w-full disabled:bg-gray-400 disabled:cursor-not-allowed">
+                      {course?._id == "68e36eeafe94d958c5a5870f" ? "Enrollment Date Over" : "Enroll on course"}
                     </button>
                   </div>
                 </Link>
